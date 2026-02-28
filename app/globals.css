@@ -23,6 +23,15 @@ body {
   overflow-x: hidden;
 }
 
+/* Hide scrollbar for tab nav */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom animation delays */
 .delay-700 {
   animation-delay: 700ms;

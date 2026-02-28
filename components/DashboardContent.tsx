@@ -6,6 +6,7 @@ import SystemMap from '@/components/dashboard/SystemMap';
 import Pipeline from '@/components/dashboard/Pipeline';
 import FleetStatus from '@/components/dashboard/FleetStatus';
 import RevenueTracker from '@/components/dashboard/RevenueTracker';
+import SecretsRegistry from '@/components/dashboard/SecretsRegistry';
 import ClaudeMdViewer from '@/components/dashboard/ClaudeMdViewer';
 
 export default function DashboardContent({ onLogout }: { onLogout: () => void }) {
@@ -37,6 +38,7 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
           {activeTab === 'pipeline' && <Pipeline />}
           {activeTab === 'fleet' && <FleetStatus />}
           {activeTab === 'revenue' && <RevenueTracker />}
+          {activeTab === 'secrets' && <SecretsRegistry />}
           {activeTab === 'claude-md' && <ClaudeMdViewer />}
         </div>
       </div>

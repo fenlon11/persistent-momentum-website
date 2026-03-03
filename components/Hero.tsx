@@ -10,9 +10,15 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm">
-            <div className="w-2 h-2 bg-[#3E8BF5] rounded-full animate-pulse"></div>
-            <span className="text-sm text-[#3E8BF5] font-medium">Software Studio</span>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm">
+              <div className="w-2 h-2 bg-[#3E8BF5] rounded-full animate-pulse"></div>
+              <span className="text-sm text-[#3E8BF5] font-medium">Software Studio</span>
+            </div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-emerald-400 font-medium">Powered by pmOS</span>
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-4">

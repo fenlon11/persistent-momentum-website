@@ -5,7 +5,7 @@ export type DashboardTab = 'system' | 'pipeline' | 'fleet' | 'pmos' | 'revenue' 
 const tabs: { id: DashboardTab; label: string; icon: string }[] = [
   { id: 'system', label: 'System', icon: '🗺️' },
   { id: 'pipeline', label: 'Pipeline', icon: '📊' },
-  { id: 'fleet', label: 'Fleet', icon: '☁️' },
+  { id: 'fleet', label: 'Workers', icon: '☁️' },
   { id: 'pmos', label: 'pmOS', icon: '🧠' },
   { id: 'revenue', label: 'Revenue', icon: '💰' },
   { id: 'secrets', label: 'Secrets', icon: '🔑' },

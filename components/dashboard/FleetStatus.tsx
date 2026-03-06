@@ -57,7 +57,7 @@ function displayName(serviceName: string): string {
 }
 
 export default function FleetStatus() {
-  const [workers, setWorkers] = useState<SystemHealth[]>([]);
+  const [agents, setAgents] = useState<SystemHealth[]>([]);
   const [activity, setActivity] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +70,7 @@ export default function FleetStatus() {
 
       if (healthRes.ok) {
         const data = await healthRes.json();
-        setWorkers(data.workers || []);
+        setAgents(data.workers || []);
       }
 
       if (activityRes.ok) {
@@ -89,23 +89,23 @@ export default function FleetStatus() {
     return () => clearInterval(interval);
   }, [fetchData]);
 
-  const healthyCount = workers.filter(w => w.status === 'healthy').length;
-  const degradedCount = workers.filter(w => w.status === 'degraded' || w.status === 'down').length;
+  const healthyCount = agents.filter(a => a.status === 'healthy').length;
+  const degradedCount = agents.filter(a => a.status === 'degraded' || a.status === 'down').length;
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-white">Worker Fleet</h2>
+        <h2 className="text-xl font-bold text-white">Agent Fleet</h2>
         <p className="text-sm text-slate-400 mt-1">
-          {loading ? 'Loading...' : `${healthyCount}/${workers.length} workers healthy`}
+          {loading ? 'Loading...' : `${healthyCount}/${agents.length} agents healthy`}
         </p>
       </div>
 
       {/* Stats bar */}
-      {!loading && workers.length > 0 && (
+      {!loading && agents.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-white">{workers.length}</div>
+            <div className="text-2xl font-bold text-white">{agents.length}</div>
             <div className="text-xs text-slate-500">Total</div>
           </div>
           <div className="bg-slate-900/80 border border-emerald-500/20 rounded-xl p-3 text-center">
@@ -135,28 +135,28 @@ export default function FleetStatus() {
         </div>
       )}
 
-      {/* Worker grid */}
-      {!loading && workers.length > 0 && (
+      {/* Agent grid */}
+      {!loading && agents.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {workers.map(worker => (
-            <div key={worker.id} className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-3 flex items-start gap-3">
-              <span className="text-2xl flex-shrink-0">{worker.metadata?.icon || '⚡'}</span>
+          {agents.map(agent => (
+            <div key={agent.id} className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-3 flex items-start gap-3">
+              <span className="text-2xl flex-shrink-0">{agent.metadata?.icon || '⚡'}</span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-semibold text-white truncate">
-                    {displayName(worker.service_name)}
+                    {displayName(agent.service_name)}
                   </span>
-                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_DOT[worker.status]}`} />
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_DOT[agent.status]}`} />
                 </div>
                 <div className="text-xs text-slate-400 truncate mt-0.5">
-                  {worker.metadata?.description || worker.service_type}
+                  {agent.metadata?.description || agent.service_type}
                 </div>
                 <div className="flex items-center gap-3 mt-1.5 text-[10px] text-slate-500">
-                  {worker.metadata?.schedule && (
-                    <span>⏰ {worker.metadata.schedule}</span>
+                  {agent.metadata?.schedule && (
+                    <span>⏰ {agent.metadata.schedule}</span>
                   )}
-                  {worker.last_check_at && (
-                    <span>Checked {timeAgo(worker.last_check_at)}</span>
+                  {agent.last_check_at && (
+                    <span>Checked {timeAgo(agent.last_check_at)}</span>
                   )}
                 </div>
               </div>
@@ -166,9 +166,9 @@ export default function FleetStatus() {
       )}
 
       {/* Empty state */}
-      {!loading && workers.length === 0 && (
+      {!loading && agents.length === 0 && (
         <div className="text-center text-slate-500 text-sm py-8 bg-slate-900/50 rounded-xl border border-slate-700/50">
-          No workers registered yet.
+          No agents registered yet.
         </div>
       )}
 

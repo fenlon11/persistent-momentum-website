@@ -1,3 +1,26 @@
+import { products } from '@/lib/products-data';
+
+const statusConfig: Record<string, { label: string; dotClass: string; borderClass: string; bgClass: string }> = {
+  'building': {
+    label: 'In Development',
+    dotClass: 'bg-amber-400 animate-pulse',
+    borderClass: 'border-amber-500/30 hover:border-amber-400/50',
+    bgClass: 'from-amber-500/5 to-transparent',
+  },
+  'coming-soon': {
+    label: 'Coming Soon',
+    dotClass: 'bg-slate-400',
+    borderClass: 'border-slate-700/30 hover:border-[#3E8BF5]/50',
+    bgClass: 'from-[#3E8BF5]/5 to-transparent',
+  },
+  'active': {
+    label: 'Live',
+    dotClass: 'bg-emerald-400 animate-pulse',
+    borderClass: 'border-emerald-500/30 hover:border-emerald-400/50',
+    bgClass: 'from-emerald-500/5 to-transparent',
+  },
+};
+
 export default function Products() {
   return (
     <section id="products" className="relative py-24 bg-gradient-to-b from-slate-900 to-slate-950 overflow-hidden">
@@ -9,101 +32,72 @@ export default function Products() {
             <span className="text-sm text-[#3E8BF5] font-medium">Our Products</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Apps That
+            Products That
             <span className="text-[#3E8BF5]"> Deliver</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Professional utility apps built for people who work with their hands and their heads
+            Standalone tools or add-ons to Persistent Sales — your AI-powered business platform
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Rabbit Golf — Live */}
-          <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-emerald-500/30 p-8 hover:border-emerald-400/50 transition-all duration-500 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <div className="relative space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="inline-flex p-3 rounded-xl bg-emerald-500/10">
-                  <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-medium text-emerald-400">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                  Live in App Store
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-                Rabbit Golf
-              </h3>
-
-              <p className="text-slate-400 leading-relaxed text-sm">
-                Golf scoring and game tracking app. Keep score, track your games, and play with friends.
-              </p>
-
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {products.map((product) => {
+            const config = statusConfig[product.status] || statusConfig['coming-soon'];
+            return (
               <a
-                href="https://apps.apple.com/app/rabbit-golf/id6740487777"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-sm transition-colors group/link"
+                key={product.id}
+                href={`/products/${product.slug}`}
+                className="group relative block"
               >
-                View on App Store
-                <svg className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
+                <div className={`relative h-full bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border ${config.borderClass} p-6 transition-all duration-500 overflow-hidden hover:scale-[1.02]`}>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${config.bgClass} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+
+                  <div className="relative space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${product.gradient} bg-opacity-10`}>
+                        <span className="text-2xl">{product.icon}</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-700/30 border border-slate-600/30 text-xs font-medium text-slate-300">
+                        <span className={`w-1.5 h-1.5 rounded-full ${config.dotClass}`}></span>
+                        {config.label}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors">
+                        {product.name}
+                      </h3>
+                      {product.isPrimary && (
+                        <span className="text-xs text-[#3E8BF5] font-medium">Primary Platform</span>
+                      )}
+                    </div>
+
+                    <p className="text-slate-400 leading-relaxed text-sm">
+                      {product.tagline}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      {product.features.slice(0, 4).map((feature) => (
+                        <div key={feature.title} className="flex items-start gap-1.5 text-slate-300">
+                          <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-[#3E8BF5]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-xs">{feature.title}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-2 text-[#3E8BF5] text-sm font-medium group-hover:gap-3 transition-all">
+                      Learn More
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
               </a>
-            </div>
-          </div>
-
-          {/* Coming Soon Card 1 */}
-          <div className="group relative bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-xl rounded-2xl border border-slate-700/30 border-dashed p-8 transition-all duration-500">
-            <div className="relative space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="inline-flex p-3 rounded-xl bg-slate-700/30">
-                  <svg className="w-6 h-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-slate-700/30 border border-slate-600/30 text-xs font-medium text-slate-500">
-                  Coming Soon
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-bold text-slate-500">
-                Next App
-              </h3>
-
-              <p className="text-slate-600 leading-relaxed text-sm">
-                Another professional utility app in the pipeline. Stay tuned.
-              </p>
-            </div>
-          </div>
-
-          {/* Coming Soon Card 2 */}
-          <div className="group relative bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-xl rounded-2xl border border-slate-700/30 border-dashed p-8 transition-all duration-500">
-            <div className="relative space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="inline-flex p-3 rounded-xl bg-slate-700/30">
-                  <svg className="w-6 h-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-slate-700/30 border border-slate-600/30 text-xs font-medium text-slate-500">
-                  Coming Soon
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-bold text-slate-500">
-                More Coming
-              </h3>
-
-              <p className="text-slate-600 leading-relaxed text-sm">
-                We ship fast. More professional tools on the way.
-              </p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

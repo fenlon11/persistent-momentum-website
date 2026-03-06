@@ -69,7 +69,7 @@ export default function PmosShowcase() {
           <StatItem value="18" label="Skills" />
           <StatItem value="3" label="AI Agents" />
           <StatItem value="3-Tier" label="Memory System" />
-          <StatItem value="24/7" label="Autonomous" />
+          <StatItem value="On Demand" label="Autonomous" />
         </div>
 
         {/* CTA */}

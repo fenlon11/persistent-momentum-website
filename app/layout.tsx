@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Persistent Momentum — We Build Apps That Make Money",
-  description: "Professional utility apps for service professionals. From idea to App Store, powered by AI. App development, automation, and marketing systems.",
+  description: "AI-powered business tools — CRM, marketing, operations, and recruiting. Standalone products or unified through Persistent Sales. Powered by autonomous agents.",
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },

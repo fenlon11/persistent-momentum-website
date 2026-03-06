@@ -1,4 +1,4 @@
-export interface Worker {
+export interface Agent {
   id: string;
   name: string;
   description: string;
@@ -9,11 +9,11 @@ export interface Worker {
   schedule?: string;
 }
 
-export const workers: Worker[] = [
+export const agents: Agent[] = [
   {
     id: 'pm-health-monitor',
     name: 'Health Monitor',
-    description: 'Monitors all Workers and services for uptime. Alerts on failures and tracks response times.',
+    description: 'Monitors all Agents and services for uptime. Alerts on failures and tracks response times.',
     category: 'monitoring',
     status: 'active',
     icon: '🫀',
@@ -51,9 +51,9 @@ export const workers: Worker[] = [
     schedule: 'On new content',
   },
   {
-    id: 'ig-automation',
-    name: 'IG Automation',
-    description: 'Manages Instagram content scheduling and posting for brand accounts. Posts reels, stories, and feed posts.',
+    id: 'meta-automation',
+    name: 'Meta Automation',
+    description: 'Manages Meta content scheduling and posting for brand accounts. Posts reels, stories, and feed posts.',
     category: 'automation',
     status: 'active',
     icon: '📸',
@@ -70,30 +70,10 @@ export const workers: Worker[] = [
     capabilities: ['Multi-source aggregation', 'Weekly reports', 'Trend analysis'],
     schedule: 'Weekly',
   },
-  {
-    id: 'rabbit-golf-ig',
-    name: 'Rabbit Golf IG',
-    description: 'Dedicated Instagram automation for Rabbit Golf brand. Content calendar driven posting.',
-    category: 'marketing',
-    status: 'active',
-    icon: '🐇',
-    capabilities: ['Content calendar', 'Brand-specific posts', 'Engagement tracking'],
-    schedule: '7am / 11am / 5pm',
-  },
-  {
-    id: 'elle-cloud',
-    name: 'Elle Cloud',
-    description: 'Personal automation worker handling custom tasks and integrations.',
-    category: 'automation',
-    status: 'active',
-    icon: '☁️',
-    capabilities: ['Custom automations', 'Integration hub', 'Task orchestration'],
-    schedule: 'On demand',
-  },
 ];
 
 export const categories = [
-  { id: 'all', label: 'All Workers' },
+  { id: 'all', label: 'All Agents' },
   { id: 'automation', label: 'Automation' },
   { id: 'monitoring', label: 'Monitoring' },
   { id: 'marketing', label: 'Marketing' },

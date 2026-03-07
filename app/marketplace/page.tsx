@@ -20,7 +20,7 @@ export default function MarketplacePage() {
             Agent <span className="text-[#3E8BF5]">Marketplace</span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Autonomous Agents that run when you're not. Monitoring, marketing, analytics, and automation — all on demand.
+            Autonomous Agents that run when you&apos;re not. Monitoring, marketing, analytics, and automation — all on demand.
           </p>
         </div>
         <MarketplaceGrid />

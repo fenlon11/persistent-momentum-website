@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero';
 import Products from '@/components/Products';
 import Services from '@/components/Services';
-import PmosShowcase from '@/components/PmosShowcase';
+import CompanyMission from '@/components/CompanyMission';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <Products />
       <Services />
-      <PmosShowcase />
+      <CompanyMission />
       <ContactForm />
       <Footer />
     </main>

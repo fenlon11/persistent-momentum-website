@@ -1,12 +1,12 @@
 'use client';
 
-export type DashboardTab = 'system' | 'pipeline' | 'fleet' | 'pmos' | 'revenue' | 'secrets' | 'claude-md';
+export type DashboardTab = 'system' | 'pipeline' | 'fleet' | 'platform' | 'revenue' | 'secrets' | 'claude-md';
 
 const tabs: { id: DashboardTab; label: string; icon: string }[] = [
   { id: 'system', label: 'System', icon: '🗺️' },
   { id: 'pipeline', label: 'Pipeline', icon: '📊' },
   { id: 'fleet', label: 'Agents', icon: '☁️' },
-  { id: 'pmos', label: 'pmOS', icon: '🧠' },
+  { id: 'platform', label: 'Platform', icon: '🧠' },
   { id: 'revenue', label: 'Revenue', icon: '💰' },
   { id: 'secrets', label: 'Secrets', icon: '🔑' },
   { id: 'claude-md', label: 'CLAUDE.md', icon: '📄' },

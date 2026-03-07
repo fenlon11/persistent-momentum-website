@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { supabasePmos, isPmosConfigured } from '@/lib/supabase-pmos';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -8,9 +8,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isPmosConfigured() || !supabasePmos) {
+  if (!isPlatformConfigured() || !supabasePlatform) {
     return NextResponse.json({
-      error: 'pmOS Supabase not configured',
+      error: 'Platform Supabase not configured',
       logs: [],
       countsByType: {},
     });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Get recent session logs
-    const { data: logs, error: logsError } = await supabasePmos
+    const { data: logs, error: logsError } = await supabasePlatform
       .from('pmos_session_logs')
       .select('*')
       .gte('created_at', since)
@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
       countsByType,
     });
   } catch (error) {
-    console.error('pmOS sessions API error:', error);
+    console.error('Platform sessions API error:', error);
     return NextResponse.json({
-      error: 'Failed to fetch pmOS session data',
+      error: 'Failed to fetch platform session data',
       logs: [],
       countsByType: {},
     });

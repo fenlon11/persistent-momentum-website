@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { supabasePmos, isPmosConfigured } from '@/lib/supabase-pmos';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -8,9 +8,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isPmosConfigured() || !supabasePmos) {
+  if (!isPlatformConfigured() || !supabasePlatform) {
     return NextResponse.json({
-      error: 'pmOS Supabase not configured',
+      error: 'Platform Supabase not configured',
       events: [],
       guardrailBlocksCount: 0,
     });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Get recent telemetry events
-    const { data: events, error: eventsError } = await supabasePmos
+    const { data: events, error: eventsError } = await supabasePlatform
       .from('pmos_telemetry')
       .select('*')
       .gte('created_at', since)
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Count guardrail blocks
-    const { count: guardrailBlocksCount } = await supabasePmos
+    const { count: guardrailBlocksCount } = await supabasePlatform
       .from('pmos_telemetry')
       .select('*', { count: 'exact', head: true })
       .eq('event_type', 'guardrail_block')
@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
       guardrailBlocksCount: guardrailBlocksCount || 0,
     });
   } catch (error) {
-    console.error('pmOS telemetry API error:', error);
+    console.error('Platform telemetry API error:', error);
     return NextResponse.json({
-      error: 'Failed to fetch pmOS telemetry data',
+      error: 'Failed to fetch platform telemetry data',
       events: [],
       guardrailBlocksCount: 0,
     });

@@ -64,7 +64,7 @@ const LOG_TYPE_ICONS: Record<string, string> = {
   error: '❌',
 };
 
-export default function PmosOverview() {
+export default function PlatformOverview() {
   const [memory, setMemory] = useState<MemoryStats | null>(null);
   const [skills, setSkills] = useState<SkillStats | null>(null);
   const [sessions, setSessions] = useState<SessionStats | null>(null);
@@ -73,16 +73,16 @@ export default function PmosOverview() {
   const fetchData = useCallback(async () => {
     try {
       const [memoryRes, skillsRes, sessionsRes] = await Promise.all([
-        fetch('/api/pmos/memory'),
-        fetch('/api/pmos/skills?days=7'),
-        fetch('/api/pmos/sessions?days=7'),
+        fetch('/api/platform/memory'),
+        fetch('/api/platform/skills?days=7'),
+        fetch('/api/platform/sessions?days=7'),
       ]);
 
       if (memoryRes.ok) setMemory(await memoryRes.json());
       if (skillsRes.ok) setSkills(await skillsRes.json());
       if (sessionsRes.ok) setSessions(await sessionsRes.json());
     } catch (e) {
-      console.error('pmOS fetch error:', e);
+      console.error('Platform fetch error:', e);
     }
     setLoading(false);
   }, []);
@@ -110,7 +110,7 @@ export default function PmosOverview() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">pmOS Dashboard</h2>
+        <h2 className="text-xl font-bold text-white">Platform Dashboard</h2>
         <p className="text-sm text-slate-400 mt-1">
           Persistent Momentum Operating System
         </p>

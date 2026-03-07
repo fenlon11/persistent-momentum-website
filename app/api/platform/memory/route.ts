@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { supabasePmos, isPmosConfigured } from '@/lib/supabase-pmos';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -8,9 +8,9 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isPmosConfigured() || !supabasePmos) {
+  if (!isPlatformConfigured() || !supabasePlatform) {
     return NextResponse.json({
-      error: 'pmOS Supabase not configured',
+      error: 'Platform Supabase not configured',
       total: 0,
       byCategory: {},
       recent: [],
@@ -19,12 +19,12 @@ export async function GET() {
 
   try {
     // Get total count
-    const { count: totalCount } = await supabasePmos
+    const { count: totalCount } = await supabasePlatform
       .from('pm_memories')
       .select('*', { count: 'exact', head: true });
 
     // Get all memories for category breakdown
-    const { data: allMemories } = await supabasePmos
+    const { data: allMemories } = await supabasePlatform
       .from('pm_memories')
       .select('category');
 
@@ -36,7 +36,7 @@ export async function GET() {
     });
 
     // Get recent memories
-    const { data: recentMemories } = await supabasePmos
+    const { data: recentMemories } = await supabasePlatform
       .from('pm_memories')
       .select('id, content, category, created_at')
       .order('created_at', { ascending: false })
@@ -48,9 +48,9 @@ export async function GET() {
       recent: recentMemories || [],
     });
   } catch (error) {
-    console.error('pmOS memory API error:', error);
+    console.error('Platform memory API error:', error);
     return NextResponse.json({
-      error: 'Failed to fetch pmOS memory data',
+      error: 'Failed to fetch platform memory data',
       total: 0,
       byCategory: {},
       recent: [],

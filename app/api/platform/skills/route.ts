@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { supabasePmos, isPmosConfigured } from '@/lib/supabase-pmos';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -8,9 +8,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isPmosConfigured() || !supabasePmos) {
+  if (!isPlatformConfigured() || !supabasePlatform) {
     return NextResponse.json({
-      error: 'pmOS Supabase not configured',
+      error: 'Platform Supabase not configured',
       invocations: [],
       stats: [],
     });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Get recent invocations
-    const { data: invocations, error: invocationsError } = await supabasePmos
+    const { data: invocations, error: invocationsError } = await supabasePlatform
       .from('pmos_skill_invocations')
       .select('*')
       .gte('created_at', since)
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     }> = [];
 
     try {
-      const { data: rpcStats } = await supabasePmos.rpc('get_skill_stats', {
+      const { data: rpcStats } = await supabasePlatform.rpc('get_skill_stats', {
         p_since: since,
       });
       if (rpcStats) {
@@ -87,9 +87,9 @@ export async function GET(request: NextRequest) {
       stats,
     });
   } catch (error) {
-    console.error('pmOS skills API error:', error);
+    console.error('Platform skills API error:', error);
     return NextResponse.json({
-      error: 'Failed to fetch pmOS skill data',
+      error: 'Failed to fetch platform skill data',
       invocations: [],
       stats: [],
     });

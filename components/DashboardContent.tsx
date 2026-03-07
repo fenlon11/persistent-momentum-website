@@ -5,7 +5,7 @@ import TabNav, { DashboardTab } from '@/components/dashboard/TabNav';
 import SystemMap from '@/components/dashboard/SystemMap';
 import Pipeline from '@/components/dashboard/Pipeline';
 import FleetStatus from '@/components/dashboard/FleetStatus';
-import PmosOverview from '@/components/dashboard/PmosOverview';
+import PlatformOverview from '@/components/dashboard/PlatformOverview';
 import RevenueTracker from '@/components/dashboard/RevenueTracker';
 import SecretsRegistry from '@/components/dashboard/SecretsRegistry';
 import ClaudeMdViewer from '@/components/dashboard/ClaudeMdViewer';
@@ -38,7 +38,7 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
           {activeTab === 'system' && <SystemMap />}
           {activeTab === 'pipeline' && <Pipeline />}
           {activeTab === 'fleet' && <FleetStatus />}
-          {activeTab === 'pmos' && <PmosOverview />}
+          {activeTab === 'platform' && <PlatformOverview />}
           {activeTab === 'revenue' && <RevenueTracker />}
           {activeTab === 'secrets' && <SecretsRegistry />}
           {activeTab === 'claude-md' && <ClaudeMdViewer />}

@@ -10,15 +10,8 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center space-y-6">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-[#3E8BF5] rounded-full animate-pulse"></div>
-              <span className="text-sm text-[#3E8BF5] font-medium">Software Studio</span>
-            </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-sm text-emerald-400 font-medium">Powered by pmOS</span>
-            </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm">
+            <span className="text-sm text-[#3E8BF5] font-medium">Software Studio</span>
           </div>
 
           <div className="flex items-center justify-center gap-4">
@@ -31,12 +24,12 @@ export default function Hero() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-            We Build Apps That <span className="text-[#3E8BF5]">Make Money</span>
+            Building Tools That Work <span className="text-[#3E8BF5]">as Hard as You Do</span>
           </h2>
 
           <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            Professional utility apps for service professionals.
-            <span className="text-[#3E8BF5] font-medium"> From idea to App Store, powered by AI.</span>
+            We design, build, and ship mobile apps, web platforms, and AI-powered
+            automation for service-based businesses.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">

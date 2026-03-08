@@ -2,13 +2,7 @@ export default function Services() {
   const services = [
     {
       title: 'App Development',
-      description: 'From concept to App Store. Mobile and web apps built with modern frameworks like React Native, Next.js, and Expo.',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      ),
-      gradient: 'from-blue-500 to-cyan-500',
+      description: 'Mobile and web applications built with React Native, Next.js, and Expo. From initial concept through App Store submission.',
       bullets: [
         'iOS & Android with React Native + Expo',
         'Web apps with Next.js & Vercel',
@@ -18,33 +12,21 @@ export default function Services() {
     },
     {
       title: 'AI & Automation',
-      description: "Custom AI integrations, Cloudflare Workers, and workflow automation that runs when you're not.",
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      ),
-      gradient: 'from-cyan-500 to-blue-500',
+      description: 'Custom AI integrations, edge computing with Cloudflare Workers, and workflow automation using tools like n8n and Make.',
       bullets: [
         'AI-powered features & integrations',
-        'Persistent Agents & edge computing',
-        'n8n & Make workflow automation',
+        'Edge computing & serverless functions',
+        'Workflow automation & orchestration',
         'API integrations & data pipelines',
       ],
     },
     {
       title: 'Marketing Systems',
-      description: 'Automated content pipelines, social media automation, and SEO-optimized websites that generate leads on autopilot.',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-        </svg>
-      ),
-      gradient: 'from-blue-500 to-indigo-500',
+      description: 'Content pipelines, social media scheduling, and SEO-optimized websites. Built to run consistently with minimal oversight.',
       bullets: [
         'SEO-optimized websites & landing pages',
         'Automated content pipelines',
-        'Social media automation',
+        'Social media scheduling & distribution',
         'Analytics & conversion tracking',
       ],
     },
@@ -62,11 +44,11 @@ export default function Services() {
             <span className="text-sm text-[#3E8BF5] font-medium">What We Do</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Services That
-            <span className="text-[#3E8BF5]"> Deliver</span>
+            What We
+            <span className="text-[#3E8BF5]"> Build</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            End-to-end solutions from idea to revenue
+            Full-stack development, AI integration, and marketing automation
           </p>
         </div>
 
@@ -75,17 +57,10 @@ export default function Services() {
           {services.map((service, index) => (
             <div key={index} className="group relative">
               <div className="relative h-full bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 hover:border-[#3E8BF5]/50 transition-all duration-500 overflow-hidden">
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
-
                 <div className="relative space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${service.gradient}`}>
-                      <div className="text-white">{service.icon}</div>
-                    </div>
-                    <h3 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors">
-                      {service.title}
-                    </h3>
-                  </div>
+                  <h3 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors">
+                    {service.title}
+                  </h3>
 
                   <p className="text-slate-400 leading-relaxed text-sm">
                     {service.description}

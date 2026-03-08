@@ -25,10 +25,6 @@ export default function Footer() {
             </a>
           </div>
 
-          <p className="text-sm text-slate-500 italic">
-            Built with AI. Shipped with purpose.
-          </p>
-
           <p className="text-sm text-slate-600">
             &copy; {currentYear} Persistent Momentum
           </p>

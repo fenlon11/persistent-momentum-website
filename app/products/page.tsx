@@ -4,7 +4,7 @@ import { products } from '@/lib/products-data';
 
 export const metadata: Metadata = {
   title: 'Products — Persistent Momentum',
-  description: 'AI-powered business tools. CRM, marketing, operations, and recruiting — standalone or unified.',
+  description: 'Business tools for service professionals. CRM, marketing, operations, and recruiting — standalone or integrated.',
 };
 
 export default function ProductsPage() {
@@ -27,12 +27,9 @@ export default function ProductsPage() {
               href={`/products/${product.slug}`}
               className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 hover:border-[#3E8BF5]/50 hover:scale-[1.02] transition-all duration-300"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-3xl">{product.icon}</span>
-                <h2 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors">
-                  {product.name}
-                </h2>
-              </div>
+              <h2 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors mb-3">
+                {product.name}
+              </h2>
               <p className="text-sm text-slate-400 mb-4">{product.tagline}</p>
               <span className="text-[#3E8BF5] text-sm font-medium">Learn more →</span>
             </Link>

@@ -50,8 +50,6 @@ export default async function ProductPage({ params }: PageProps) {
             <span className="text-sm text-slate-300 font-medium">{statusLabel}</span>
           </div>
 
-          <div className="text-5xl mb-4">{product.icon}</div>
-
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
             {product.name}
           </h1>

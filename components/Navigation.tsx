@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const productLinks = [
-  { href: '/products/persistent-sales', label: 'Persistent Sales', icon: '💼' },
-  { href: '/products/persistent-marketing', label: 'Persistent Marketing', icon: '📣' },
-  { href: '/products/persistent-operations', label: 'Persistent Operations', icon: '⚙️' },
-  { href: '/products/persistent-recruiter', label: 'Persistent Recruiter', icon: '🎯' },
+  { href: '/products/persistent-sales', label: 'Persistent Sales' },
+  { href: '/products/persistent-marketing', label: 'Persistent Marketing' },
+  { href: '/products/persistent-operations', label: 'Persistent Operations' },
+  { href: '/products/persistent-recruiter', label: 'Persistent Recruiter' },
 ];
 
 const links = [
@@ -89,7 +89,6 @@ export default function Navigation() {
                           : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                       }`}
                     >
-                      <span>{product.icon}</span>
                       {product.label}
                     </Link>
                   ))}
@@ -176,7 +175,6 @@ export default function Navigation() {
                       pathname === product.href ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    <span>{product.icon}</span>
                     {product.label}
                   </Link>
                 ))}

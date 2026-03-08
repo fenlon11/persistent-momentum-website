@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { agents, categories } from '@/lib/agents-data';
 
 const comingSoon = [
-  { icon: '🧠', label: 'Skills', description: 'Teachable capabilities that Agents can learn and share.' },
-  { icon: '🔧', label: 'Tools', description: 'Plug-and-play utilities for data, APIs, and workflows.' },
-  { icon: '🔗', label: 'Integrations', description: 'Connect Agents to Slack, Notion, Stripe, and more.' },
+  { label: 'Skills', description: 'Teachable capabilities that Agents can learn and share.' },
+  { label: 'Tools', description: 'Plug-and-play utilities for data, APIs, and workflows.' },
+  { label: 'Integrations', description: 'Connect Agents to Slack, Notion, Stripe, and more.' },
 ];
 
 export default function MarketplaceGrid() {
@@ -43,7 +43,6 @@ export default function MarketplaceGrid() {
             className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 transition-all duration-300 hover:border-[#3E8BF5]/50 hover:scale-[1.02]"
           >
             <div className="flex items-start justify-between mb-4">
-              <span className="text-3xl">{agent.icon}</span>
               {agent.status === 'active' && (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                   <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
@@ -88,8 +87,7 @@ export default function MarketplaceGrid() {
               key={item.label}
               className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-xl rounded-2xl border border-slate-700/20 p-6 opacity-50"
             >
-              <span className="text-3xl grayscale">{item.icon}</span>
-              <h3 className="text-lg font-semibold text-slate-500 mt-4 mb-2">{item.label}</h3>
+              <h3 className="text-lg font-semibold text-slate-500 mb-2">{item.label}</h3>
               <p className="text-sm text-slate-600">{item.description}</p>
             </div>
           ))}

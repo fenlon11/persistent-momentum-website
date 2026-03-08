@@ -32,11 +32,11 @@ export default function Products() {
             <span className="text-sm text-[#3E8BF5] font-medium">Our Products</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Products That
-            <span className="text-[#3E8BF5]"> Deliver</span>
+            What We&apos;re
+            <span className="text-[#3E8BF5]"> Working On</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Standalone tools or add-ons to Persistent Sales — your AI-powered business platform
+            Tools for service professionals — available standalone or as part of an integrated platform
           </p>
         </div>
 
@@ -54,9 +54,6 @@ export default function Products() {
 
                   <div className="relative space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${product.gradient} bg-opacity-10`}>
-                        <span className="text-2xl">{product.icon}</span>
-                      </div>
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-700/30 border border-slate-600/30 text-xs font-medium text-slate-300">
                         <span className={`w-1.5 h-1.5 rounded-full ${config.dotClass}`}></span>
                         {config.label}

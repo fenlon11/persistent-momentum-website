@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { supabasePmos, isPmosConfigured } from '@/lib/supabase-pmos';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -8,9 +8,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isPmosConfigured() || !supabasePmos) {
+  if (!isPlatformConfigured() || !supabasePlatform) {
     return NextResponse.json({
-      error: 'pmOS Supabase not configured',
       products: [],
       current: null,
       previous: null,
@@ -29,10 +28,11 @@ export async function GET(request: NextRequest) {
   const today = now.toISOString().slice(0, 10);
 
   try {
-    // Fetch all products
-    const { data: products, error: prodErr } = await supabasePmos
+    // Fetch all active products
+    const { data: products, error: prodErr } = await supabasePlatform
       .from('products')
-      .select('id, slug, name')
+      .select('id, slug, name, status')
+      .eq('status', 'active')
       .order('name');
 
     if (prodErr) {
@@ -51,25 +51,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ products: productList, current: null, previous: null, daily: [], events: [] });
     }
 
-    // Fetch current period metrics
-    const { data: currentMetrics } = await supabasePmos
+    // Fetch current period daily metrics (actual column names from DB)
+    const { data: currentMetrics } = await supabasePlatform
       .from('product_metrics_daily')
-      .select('date, mrr, active_subs, downloads, rating')
+      .select('date, mrr_cents, active_subscriptions, active_trials, downloads, redownloads, revenue_cents, rating_average, rating_count, review_count, sessions, active_devices, crash_count, impressions, product_page_views')
       .eq('product_id', selectedProduct.id)
       .gte('date', currentStart)
       .lte('date', today)
       .order('date', { ascending: true });
 
     // Fetch previous period metrics for comparison
-    const { data: previousMetrics } = await supabasePmos
+    const { data: previousMetrics } = await supabasePlatform
       .from('product_metrics_daily')
-      .select('date, mrr, active_subs, downloads, rating')
+      .select('date, mrr_cents, active_subscriptions, active_trials, downloads, revenue_cents, rating_average, rating_count, review_count')
       .eq('product_id', selectedProduct.id)
       .gte('date', previousStart)
       .lt('date', currentStart)
       .order('date', { ascending: true });
 
-    // Aggregate current period
     const currentRows = currentMetrics || [];
     const previousRows = previousMetrics || [];
 
@@ -79,38 +78,61 @@ export async function GET(request: NextRequest) {
     const totalDownloadsCurrent = currentRows.reduce((sum, r) => sum + (r.downloads || 0), 0);
     const totalDownloadsPrevious = previousRows.reduce((sum, r) => sum + (r.downloads || 0), 0);
 
+    // Normalize to frontend-friendly shape
     const current = latest
       ? {
-          mrr: latest.mrr || 0,
-          active_subs: latest.active_subs || 0,
+          mrr_cents: latest.mrr_cents || 0,
+          active_subscriptions: latest.active_subscriptions || 0,
+          active_trials: latest.active_trials || 0,
           downloads: totalDownloadsCurrent,
-          rating: latest.rating || 0,
+          rating_average: latest.rating_average || 0,
+          rating_count: latest.rating_count || 0,
+          review_count: latest.review_count || 0,
+          revenue_cents: currentRows.reduce((sum, r) => sum + (r.revenue_cents || 0), 0),
         }
       : null;
 
     const previous = prevLatest
       ? {
-          mrr: prevLatest.mrr || 0,
-          active_subs: prevLatest.active_subs || 0,
+          mrr_cents: prevLatest.mrr_cents || 0,
+          active_subscriptions: prevLatest.active_subscriptions || 0,
+          active_trials: prevLatest.active_trials || 0,
           downloads: totalDownloadsPrevious,
-          rating: prevLatest.rating || 0,
+          rating_average: prevLatest.rating_average || 0,
+          rating_count: prevLatest.rating_count || 0,
+          review_count: prevLatest.review_count || 0,
+          revenue_cents: previousRows.reduce((sum, r) => sum + (r.revenue_cents || 0), 0),
         }
       : null;
 
+    // Map daily rows to consistent shape for charts
+    const daily = currentRows.map((r) => ({
+      date: r.date,
+      mrr_cents: r.mrr_cents || 0,
+      active_subscriptions: r.active_subscriptions || 0,
+      active_trials: r.active_trials || 0,
+      downloads: r.downloads || 0,
+      redownloads: r.redownloads || 0,
+      revenue_cents: r.revenue_cents || 0,
+      sessions: r.sessions || 0,
+      active_devices: r.active_devices || 0,
+      rating_average: r.rating_average || 0,
+    }));
+
     // Fetch recent events
-    const { data: events } = await supabasePmos
+    const { data: events } = await supabasePlatform
       .from('product_events')
-      .select('id, event_type, description, created_at')
+      .select('id, event_type, title, details, date, created_at')
       .eq('product_id', selectedProduct.id)
-      .gte('created_at', currentStart)
-      .order('created_at', { ascending: false })
+      .gte('date', currentStart)
+      .order('date', { ascending: false })
       .limit(20);
 
     return NextResponse.json({
       products: productList,
       current,
       previous,
-      daily: currentRows,
+      daily,
       events: events || [],
     });
   } catch (error) {

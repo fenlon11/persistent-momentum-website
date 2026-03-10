@@ -9,6 +9,7 @@ import PlatformOverview from '@/components/dashboard/PlatformOverview';
 import RevenueTracker from '@/components/dashboard/RevenueTracker';
 import SecretsRegistry from '@/components/dashboard/SecretsRegistry';
 import ClaudeMdViewer from '@/components/dashboard/ClaudeMdViewer';
+import Analytics from '@/components/dashboard/Analytics';
 
 export default function DashboardContent({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<DashboardTab>('pipeline');
@@ -40,6 +41,7 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
           {activeTab === 'fleet' && <FleetStatus />}
           {activeTab === 'platform' && <PlatformOverview />}
           {activeTab === 'revenue' && <RevenueTracker />}
+          {activeTab === 'analytics' && <Analytics />}
           {activeTab === 'secrets' && <SecretsRegistry />}
           {activeTab === 'claude-md' && <ClaudeMdViewer />}
         </div>

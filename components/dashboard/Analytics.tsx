@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import MarketingMetrics from './MarketingMetrics';
 import {
   LineChart,
   Line,
@@ -311,6 +312,9 @@ export default function Analytics() {
           </p>
         )}
       </div>
+
+      {/* Marketing Metrics */}
+      <MarketingMetrics range={range} />
     </div>
   );
 }

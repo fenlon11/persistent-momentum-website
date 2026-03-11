@@ -61,7 +61,22 @@ interface AnalyticsData {
   error?: string;
 }
 
-type Range = 30 | 60 | 90;
+type Preset = '7d' | '30d' | '60d' | '90d' | 'all';
+
+function getPresetDates(preset: Preset): { from: string; to: string } {
+  const now = new Date();
+  const to = now.toISOString().slice(0, 10);
+  if (preset === 'all') return { from: '', to: '' };
+  const days = parseInt(preset);
+  const from = new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return { from, to };
+}
+
+function daysBetween(from: string, to: string): number {
+  const start = new Date(from + 'T00:00:00');
+  const end = new Date(to + 'T00:00:00');
+  return Math.max(1, Math.round((end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)));
+}
 
 function formatCurrency(cents: number) {
   const dollars = cents / 100;
@@ -109,12 +124,30 @@ const tooltipStyle = {
 export default function Analytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState<Range>(30);
+  const [preset, setPreset] = useState<Preset | null>('30d');
+  const [dateFrom, setDateFrom] = useState(() => getPresetDates('30d').from);
+  const [dateTo, setDateTo] = useState(() => getPresetDates('30d').to);
   const [selectedProduct, setSelectedProduct] = useState('');
+
+  const handlePreset = (p: Preset) => {
+    setPreset(p);
+    const { from, to } = getPresetDates(p);
+    setDateFrom(from);
+    setDateTo(to);
+  };
+
+  const handleCustomDate = (field: 'from' | 'to', value: string) => {
+    setPreset(null);
+    if (field === 'from') setDateFrom(value);
+    else setDateTo(value);
+  };
 
   useEffect(() => {
     setLoading(true);
-    const params = new URLSearchParams({ range: String(range) });
+    const params = new URLSearchParams();
+    if (dateFrom) params.set('from', dateFrom);
+    if (dateTo) params.set('to', dateTo);
+    if (!dateFrom && !dateTo) params.set('range', '30');
     if (selectedProduct) params.set('product', selectedProduct);
 
     fetch(`/api/analytics?${params}`)
@@ -127,7 +160,7 @@ export default function Analytics() {
       })
       .catch(() => setData(null))
       .finally(() => setLoading(false));
-  }, [range, selectedProduct]);
+  }, [dateFrom, dateTo, selectedProduct]);
 
   if (loading) {
     return (
@@ -197,20 +230,37 @@ export default function Analytics() {
             </select>
           )}
         </div>
-        <div className="flex gap-1">
-          {([30, 60, 90] as Range[]).map((r) => (
-            <button
-              key={r}
-              onClick={() => setRange(r)}
-              className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
-                range === r
-                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                  : 'text-slate-400 hover:text-slate-200 border border-slate-700/50 hover:border-slate-600'
-              }`}
-            >
-              {r}d
-            </button>
-          ))}
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex gap-1">
+            {(['7d', '30d', '60d', '90d', 'all'] as Preset[]).map((p) => (
+              <button
+                key={p}
+                onClick={() => handlePreset(p)}
+                className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                  preset === p
+                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                    : 'text-slate-400 hover:text-slate-200 border border-slate-700/50 hover:border-slate-600'
+                }`}
+              >
+                {p === 'all' ? 'All' : p}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => handleCustomDate('from', e.target.value)}
+              className="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark]"
+            />
+            <span className="text-slate-500 text-xs">to</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => handleCustomDate('to', e.target.value)}
+              className="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark]"
+            />
+          </div>
         </div>
       </div>
 
@@ -314,7 +364,7 @@ export default function Analytics() {
       </div>
 
       {/* Marketing Metrics */}
-      <MarketingMetrics range={range} />
+      <MarketingMetrics range={dateFrom && dateTo ? daysBetween(dateFrom, dateTo) : 30} />
     </div>
   );
 }

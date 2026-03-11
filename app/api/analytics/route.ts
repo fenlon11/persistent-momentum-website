@@ -20,12 +20,32 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = request.nextUrl;
   const productSlug = searchParams.get('product') || '';
+  const fromParam = searchParams.get('from');
+  const toParam = searchParams.get('to');
   const range = parseInt(searchParams.get('range') || '30');
 
   const now = new Date();
-  const currentStart = new Date(now.getTime() - range * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  const previousStart = new Date(now.getTime() - range * 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
+
+  let currentStart: string;
+  let currentEnd: string;
+
+  if (fromParam && toParam) {
+    currentStart = fromParam;
+    currentEnd = toParam;
+  } else if (fromParam) {
+    currentStart = fromParam;
+    currentEnd = today;
+  } else {
+    currentStart = new Date(now.getTime() - range * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    currentEnd = today;
+  }
+
+  // Previous period = same duration before currentStart
+  const startDate = new Date(currentStart + 'T00:00:00');
+  const endDate = new Date(currentEnd + 'T00:00:00');
+  const durationMs = endDate.getTime() - startDate.getTime() + 24 * 60 * 60 * 1000; // inclusive
+  const previousStart = new Date(startDate.getTime() - durationMs).toISOString().slice(0, 10);
 
   try {
     // Fetch all active products
@@ -57,7 +77,7 @@ export async function GET(request: NextRequest) {
       .select('date, mrr_cents, active_subscriptions, active_trials, downloads, redownloads, revenue_cents, rating_average, rating_count, review_count, sessions, active_devices, crash_count, impressions, product_page_views')
       .eq('product_id', selectedProduct.id)
       .gte('date', currentStart)
-      .lte('date', today)
+      .lte('date', currentEnd)
       .order('date', { ascending: true });
 
     // Fetch previous period metrics for comparison
@@ -125,6 +145,7 @@ export async function GET(request: NextRequest) {
       .select('id, event_type, title, details, date, created_at')
       .eq('product_id', selectedProduct.id)
       .gte('date', currentStart)
+      .lte('date', currentEnd)
       .order('date', { ascending: false })
       .limit(20);
 

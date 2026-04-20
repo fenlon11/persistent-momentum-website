@@ -9,18 +9,18 @@ export default function Footer() {
             <img src="/logo.png" alt="Persistent Momentum" className="w-10 h-10" />
             <h3 className="text-xl font-bold">
               <span className="text-white">Persistent</span>
-              <span className="text-[#3E8BF5]"> Momentum</span>
+              <span className="text-[#1E5BFF]"> Momentum</span>
             </h3>
           </div>
 
           <div className="flex items-center gap-6 text-sm">
-            <a href="/privacy" className="text-slate-400 hover:text-[#3E8BF5] transition-colors">
+            <a href="/privacy" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
               Privacy
             </a>
-            <a href="/terms" className="text-slate-400 hover:text-[#3E8BF5] transition-colors">
+            <a href="/terms" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
               Terms
             </a>
-            <a href="#contact" className="text-slate-400 hover:text-[#3E8BF5] transition-colors">
+            <a href="#contact" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
               Contact
             </a>
           </div>
@@ -31,7 +31,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#3E8BF5]/50 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#1E5BFF]/50 to-transparent"></div>
     </footer>
   );
 }

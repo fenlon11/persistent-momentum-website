@@ -4,19 +4,19 @@ import { products } from '@/lib/products-data';
 
 export const metadata: Metadata = {
   title: 'Products — Persistent Momentum',
-  description: 'Business tools for service professionals. CRM, marketing, operations, and recruiting — standalone or integrated.',
+  description: 'Mobile apps, web platforms, and AI-powered automation for your business. Each product stands alone.',
 };
 
 export default function ProductsPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <main className="min-h-screen bg-gradient-to-b from-[#07112C] via-slate-900 to-[#07112C]">
       <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Our <span className="text-[#3E8BF5]">Products</span>
+            Our <span className="text-[#1E5BFF]">products</span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Each product works on its own or plugs into Persistent Sales as an add-on.
+            Each product stands alone. Use what you need.
           </p>
         </div>
 
@@ -25,13 +25,13 @@ export default function ProductsPage() {
             <Link
               key={product.id}
               href={`/products/${product.slug}`}
-              className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 hover:border-[#3E8BF5]/50 hover:scale-[1.02] transition-all duration-300"
+              className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 hover:border-[#1E5BFF]/50 hover:scale-[1.02] transition-all duration-300"
             >
-              <h2 className="text-xl font-bold text-white group-hover:text-[#3E8BF5] transition-colors mb-3">
+              <h2 className="text-xl font-bold text-white group-hover:text-[#1E5BFF] transition-colors mb-3">
                 {product.name}
               </h2>
               <p className="text-sm text-slate-400 mb-4">{product.tagline}</p>
-              <span className="text-[#3E8BF5] text-sm font-medium">Learn more →</span>
+              <span className="text-[#1E5BFF] text-sm font-medium">Learn more →</span>
             </Link>
           ))}
         </div>

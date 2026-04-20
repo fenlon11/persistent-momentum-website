@@ -84,17 +84,17 @@ export default function ContactPage() {
       <section className="relative pt-32 pb-16 overflow-hidden">
         {/* Background elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#3E8BF5]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#3E8BF5]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#1E5BFF]/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#1E5BFF]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm mb-6">
-              <span className="text-sm text-[#3E8BF5] font-medium">Get in Touch</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E5BFF]/10 border border-[#1E5BFF]/20 backdrop-blur-sm mb-6">
+              <span className="text-sm text-[#1E5BFF] font-medium">Get in Touch</span>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
-              Contact <span className="text-[#3E8BF5]">Us</span>
+              Contact <span className="text-[#1E5BFF]">Us</span>
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
               Let&apos;s discuss how automation can transform your business operations
@@ -106,17 +106,17 @@ export default function ContactPage() {
             {/* Email Card */}
             <a
               href="mailto:info@persistentmomentum.com"
-              className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 hover:border-[#3E8BF5]/50 transition-all duration-300"
+              className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 hover:border-[#1E5BFF]/50 transition-all duration-300"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#3E8BF5]/10 rounded-xl flex items-center justify-center group-hover:bg-[#3E8BF5]/20 transition-colors">
-                  <svg className="w-6 h-6 text-[#3E8BF5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#1E5BFF]/10 rounded-xl flex items-center justify-center group-hover:bg-[#1E5BFF]/20 transition-colors">
+                  <svg className="w-6 h-6 text-[#1E5BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Email Us</h3>
-                  <p className="text-[#3E8BF5] group-hover:text-[#3E8BF5]/80 transition-colors">
+                  <p className="text-[#1E5BFF] group-hover:text-[#1E5BFF]/80 transition-colors">
                     info@persistentmomentum.com
                   </p>
                   <p className="text-sm text-slate-400 mt-2">
@@ -129,17 +129,17 @@ export default function ContactPage() {
             {/* Phone Card */}
             <a
               href="tel:+14078012515"
-              className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 hover:border-[#3E8BF5]/50 transition-all duration-300"
+              className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 hover:border-[#1E5BFF]/50 transition-all duration-300"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#3E8BF5]/10 rounded-xl flex items-center justify-center group-hover:bg-[#3E8BF5]/20 transition-colors">
-                  <svg className="w-6 h-6 text-[#3E8BF5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#1E5BFF]/10 rounded-xl flex items-center justify-center group-hover:bg-[#1E5BFF]/20 transition-colors">
+                  <svg className="w-6 h-6 text-[#1E5BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Call Us</h3>
-                  <p className="text-[#3E8BF5] group-hover:text-[#3E8BF5]/80 transition-colors">
+                  <p className="text-[#1E5BFF] group-hover:text-[#1E5BFF]/80 transition-colors">
                     (407) 801-2515
                   </p>
                   <p className="text-sm text-slate-400 mt-2">
@@ -157,7 +157,7 @@ export default function ContactPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Send Us a <span className="text-[#3E8BF5]">Message</span>
+              Send Us a <span className="text-[#1E5BFF]">Message</span>
             </h2>
             <p className="text-slate-400">
               Fill out the form below and we&apos;ll get back to you as soon as possible
@@ -172,13 +172,13 @@ export default function ContactPage() {
                 {/* Name Field */}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
-                    Name <span className="text-[#3E8BF5]">*</span>
+                    Name <span className="text-[#1E5BFF]">*</span>
                   </label>
                   <input
                     type="text"
                     id="name"
                     {...register('name')}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all"
                     placeholder="John Doe"
                   />
                   {errors.name && (
@@ -189,13 +189,13 @@ export default function ContactPage() {
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                    Email <span className="text-[#3E8BF5]">*</span>
+                    Email <span className="text-[#1E5BFF]">*</span>
                   </label>
                   <input
                     type="email"
                     id="email"
                     {...register('email')}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all"
                     placeholder="john@example.com"
                   />
                   {errors.email && (
@@ -209,13 +209,13 @@ export default function ContactPage() {
                 {/* Phone Field */}
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-slate-300 mb-2">
-                    Phone Number <span className="text-[#3E8BF5]">*</span>
+                    Phone Number <span className="text-[#1E5BFF]">*</span>
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     {...register('phone')}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all"
                     placeholder="(555) 123-4567"
                   />
                   {errors.phone && (
@@ -232,7 +232,7 @@ export default function ContactPage() {
                     type="text"
                     id="company"
                     {...register('company')}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all"
                     placeholder="Your Company"
                   />
                 </div>
@@ -244,12 +244,12 @@ export default function ContactPage() {
                   htmlFor="serviceInterest"
                   className="block text-sm font-medium text-slate-300 mb-2"
                 >
-                  Service Interest <span className="text-[#3E8BF5]">*</span>
+                  Service Interest <span className="text-[#1E5BFF]">*</span>
                 </label>
                 <select
                   id="serviceInterest"
                   {...register('serviceInterest')}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all appearance-none cursor-pointer"
                   style={{
                     backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                     backgroundPosition: 'right 0.5rem center',
@@ -271,13 +271,13 @@ export default function ContactPage() {
               {/* Message Field */}
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
-                  Message <span className="text-[#3E8BF5]">*</span>
+                  Message <span className="text-[#1E5BFF]">*</span>
                 </label>
                 <textarea
                   id="message"
                   {...register('message')}
                   rows={5}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#3E8BF5] focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-[#1E5BFF] focus:border-transparent transition-all resize-none"
                   placeholder="Tell us about your automation needs..."
                 />
                 {errors.message && (
@@ -286,13 +286,13 @@ export default function ContactPage() {
               </div>
 
               {/* A2P Compliant SMS Opt-in */}
-              <div className="relative bg-[#3E8BF5]/5 border border-[#3E8BF5]/20 rounded-2xl p-6">
+              <div className="relative bg-[#1E5BFF]/5 border border-[#1E5BFF]/20 rounded-2xl p-6">
                 <div className="flex items-start gap-4">
                   <input
                     type="checkbox"
                     id="smsConsent"
                     {...register('smsConsent')}
-                    className="mt-1 w-5 h-5 rounded border-slate-600 bg-slate-900/50 text-[#3E8BF5] focus:ring-2 focus:ring-[#3E8BF5] focus:ring-offset-0 cursor-pointer"
+                    className="mt-1 w-5 h-5 rounded border-slate-600 bg-slate-900/50 text-[#1E5BFF] focus:ring-2 focus:ring-[#1E5BFF] focus:ring-offset-0 cursor-pointer"
                   />
                   <div className="flex-1">
                     <label htmlFor="smsConsent" className="text-sm text-slate-300 cursor-pointer leading-relaxed">
@@ -303,11 +303,11 @@ export default function ContactPage() {
                     <p className="mt-3 text-xs text-slate-500">
                       By providing your phone number and checking this box, you agree to receive text
                       messages from Persistent Momentum. Review our{' '}
-                      <a href="/privacy" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">
+                      <a href="/privacy" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">
                         Privacy Policy
                       </a>{' '}
                       and{' '}
-                      <a href="/terms" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">
+                      <a href="/terms" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">
                         Terms of Service
                       </a>
                       .
@@ -320,7 +320,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="group relative w-full px-8 py-4 bg-[#3E8BF5] text-white font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#3E8BF5]/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="group relative w-full px-8 py-4 bg-[#1E5BFF] text-white font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#1E5BFF]/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   {isSubmitting ? (
@@ -340,7 +340,7 @@ export default function ContactPage() {
                     </>
                   )}
                 </span>
-                <div className="absolute inset-0 bg-[#3E8BF5]/80 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 bg-[#1E5BFF]/80 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
               {/* Status Messages */}

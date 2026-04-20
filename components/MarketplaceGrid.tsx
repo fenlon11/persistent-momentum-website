@@ -26,7 +26,7 @@ export default function MarketplaceGrid() {
             onClick={() => setActiveCategory(cat.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeCategory === cat.id
-                ? 'bg-[#3E8BF5] text-white shadow-lg shadow-[#3E8BF5]/25'
+                ? 'bg-[#1E5BFF] text-white shadow-lg shadow-[#1E5BFF]/25'
                 : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50 border border-slate-700/30'
             }`}
           >
@@ -40,7 +40,7 @@ export default function MarketplaceGrid() {
         {filtered.map((agent) => (
           <div
             key={agent.id}
-            className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 transition-all duration-300 hover:border-[#3E8BF5]/50 hover:scale-[1.02]"
+            className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/30 p-6 transition-all duration-300 hover:border-[#1E5BFF]/50 hover:scale-[1.02]"
           >
             <div className="flex items-start justify-between mb-4">
               {agent.status === 'active' && (

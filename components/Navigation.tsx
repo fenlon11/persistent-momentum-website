@@ -5,10 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const productLinks = [
-  { href: '/products/persistent-sales', label: 'Persistent Sales' },
-  { href: '/products/persistent-marketing', label: 'Persistent Marketing' },
-  { href: '/products/persistent-operations', label: 'Persistent Operations' },
   { href: '/products/persistent-recruiter', label: 'Persistent Recruiter' },
+  { href: '/products/persistent-marketer', label: 'Persistent Marketer' },
 ];
 
 const links = [
@@ -47,7 +45,7 @@ export default function Navigation() {
             <img src="/logo.png" alt="Persistent Momentum" className="w-8 h-8" />
             <span className="text-lg font-bold">
               <span className="text-white">Persistent</span>
-              <span className="text-[#3E8BF5]"> Momentum</span>
+              <span className="text-[#1E5BFF]"> Momentum</span>
             </span>
           </Link>
 
@@ -56,7 +54,7 @@ export default function Navigation() {
             <Link
               href="/"
               className={`text-sm font-medium transition-colors ${
-                pathname === '/' ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                pathname === '/' ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
               }`}
             >
               Home
@@ -67,7 +65,7 @@ export default function Navigation() {
               <button
                 onClick={() => setProductsOpen(!productsOpen)}
                 className={`flex items-center gap-1 text-sm font-medium transition-colors ${
-                  isProductPage ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                  isProductPage ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 Products
@@ -85,7 +83,7 @@ export default function Navigation() {
                       onClick={() => setProductsOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                         pathname === product.href
-                          ? 'text-[#3E8BF5] bg-[#3E8BF5]/10'
+                          ? 'text-[#1E5BFF] bg-[#1E5BFF]/10'
                           : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                       }`}
                     >
@@ -96,7 +94,7 @@ export default function Navigation() {
                     <Link
                       href="/products"
                       onClick={() => setProductsOpen(false)}
-                      className="block px-4 py-3 text-xs text-slate-500 hover:text-[#3E8BF5] transition-colors"
+                      className="block px-4 py-3 text-xs text-slate-500 hover:text-[#1E5BFF] transition-colors"
                     >
                       View All Products →
                     </Link>
@@ -111,7 +109,7 @@ export default function Navigation() {
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   pathname === link.href
-                    ? 'text-[#3E8BF5]'
+                    ? 'text-[#1E5BFF]'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -145,7 +143,7 @@ export default function Navigation() {
               href="/"
               onClick={() => setMobileOpen(false)}
               className={`block py-2 text-sm font-medium transition-colors ${
-                pathname === '/' ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                pathname === '/' ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
               }`}
             >
               Home
@@ -155,7 +153,7 @@ export default function Navigation() {
             <button
               onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
               className={`flex items-center justify-between w-full py-2 text-sm font-medium transition-colors ${
-                isProductPage ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                isProductPage ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
               }`}
             >
               Products
@@ -172,7 +170,7 @@ export default function Navigation() {
                     href={product.href}
                     onClick={() => { setMobileOpen(false); setMobileProductsOpen(false); }}
                     className={`flex items-center gap-2 py-2 text-sm transition-colors ${
-                      pathname === product.href ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                      pathname === product.href ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     {product.label}
@@ -187,7 +185,7 @@ export default function Navigation() {
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={`block py-2 text-sm font-medium transition-colors ${
-                  pathname === link.href ? 'text-[#3E8BF5]' : 'text-slate-400 hover:text-white'
+                  pathname === link.href ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {link.label}

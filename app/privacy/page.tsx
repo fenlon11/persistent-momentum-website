@@ -6,17 +6,17 @@ export default function PrivacyPolicy() {
       {/* Header Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#3E8BF5]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#3E8BF5]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#1E5BFF]/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#1E5BFF]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm mb-6">
-              <span className="text-sm text-[#3E8BF5] font-medium">Legal</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E5BFF]/10 border border-[#1E5BFF]/20 backdrop-blur-sm mb-6">
+              <span className="text-sm text-[#1E5BFF] font-medium">Legal</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Privacy <span className="text-[#3E8BF5]">Policy</span>
+              Privacy <span className="text-[#1E5BFF]">Policy</span>
             </h1>
             <p className="text-slate-400">
               Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
               {/* Information We Collect */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">1</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">1</span>
                   Information We Collect
                 </h2>
 
@@ -78,7 +78,7 @@ export default function PrivacyPolicy() {
               {/* How We Use Your Information */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">2</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">2</span>
                   How We Use Your Information
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -97,9 +97,9 @@ export default function PrivacyPolicy() {
               </div>
 
               {/* SMS/Text Messaging */}
-              <div className="mb-12 bg-[#3E8BF5]/5 border border-[#3E8BF5]/20 rounded-2xl p-6">
+              <div className="mb-12 bg-[#1E5BFF]/5 border border-[#1E5BFF]/20 rounded-2xl p-6">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">3</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">3</span>
                   SMS and Text Messaging
                 </h2>
 
@@ -140,7 +140,7 @@ export default function PrivacyPolicy() {
               {/* Information Sharing */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">4</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">4</span>
                   How We Share Your Information
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -178,7 +178,7 @@ export default function PrivacyPolicy() {
               {/* Your Rights and Choices */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">5</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">5</span>
                   Your Rights and Choices
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -200,7 +200,7 @@ export default function PrivacyPolicy() {
               {/* Cookies and Tracking */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">6</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">6</span>
                   Cookies and Tracking Technologies
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -214,7 +214,7 @@ export default function PrivacyPolicy() {
               {/* Data Security */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">7</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">7</span>
                   Data Security
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -225,7 +225,7 @@ export default function PrivacyPolicy() {
               {/* Data Retention */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">8</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">8</span>
                   Data Retention
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -236,7 +236,7 @@ export default function PrivacyPolicy() {
               {/* Children's Privacy */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">9</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">9</span>
                   Children&apos;s Privacy
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -247,7 +247,7 @@ export default function PrivacyPolicy() {
               {/* Third-Party Links */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">10</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">10</span>
                   Third-Party Websites and Services
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -258,7 +258,7 @@ export default function PrivacyPolicy() {
               {/* International Users */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">11</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">11</span>
                   International Data Transfers
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -269,7 +269,7 @@ export default function PrivacyPolicy() {
               {/* Changes to Policy */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">12</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">12</span>
                   Changes to This Privacy Policy
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -280,7 +280,7 @@ export default function PrivacyPolicy() {
               {/* Contact Information */}
               <div className="mb-0">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">13</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">13</span>
                   Contact Us
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-4">
@@ -288,8 +288,8 @@ export default function PrivacyPolicy() {
                 </p>
                 <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
                   <p className="text-white font-semibold mb-2">Persistent Momentum</p>
-                  <p className="text-slate-300">Email: <a href="mailto:info@persistentmomentum.com" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">info@persistentmomentum.com</a></p>
-                  <p className="text-slate-300">Phone: <a href="tel:+14078012515" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">(407) 801-2515</a></p>
+                  <p className="text-slate-300">Email: <a href="mailto:info@persistentmomentum.com" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">info@persistentmomentum.com</a></p>
+                  <p className="text-slate-300">Phone: <a href="tel:+14078012515" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">(407) 801-2515</a></p>
                 </div>
               </div>
             </div>

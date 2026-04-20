@@ -41,7 +41,7 @@ export default async function PricingPage({ params }: PageProps) {
         </Link>
 
         <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-          {product.name} <span className="text-[#3E8BF5]">Pricing</span>
+          {product.name} <span className="text-[#1E5BFF]">Pricing</span>
         </h1>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
           {product.tagline}. Choose the plan that fits your needs.
@@ -56,12 +56,12 @@ export default async function PricingPage({ params }: PageProps) {
               key={tier.name}
               className={`relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border p-6 transition-all duration-300 ${
                 tier.highlighted
-                  ? 'border-[#3E8BF5]/50 scale-[1.02] shadow-xl shadow-[#3E8BF5]/10'
+                  ? 'border-[#1E5BFF]/50 scale-[1.02] shadow-xl shadow-[#1E5BFF]/10'
                   : 'border-slate-700/30 hover:border-slate-600/50'
               }`}
             >
               {tier.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#3E8BF5] text-white text-xs font-semibold rounded-full">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#1E5BFF] text-white text-xs font-semibold rounded-full">
                   Most Popular
                 </div>
               )}
@@ -81,7 +81,7 @@ export default async function PricingPage({ params }: PageProps) {
                 <div className="border-t border-slate-700/50 pt-4 space-y-3">
                   {tier.features.map((feature) => (
                     <div key={feature} className="flex items-start gap-2">
-                      <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#3E8BF5]" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#1E5BFF]" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       <span className="text-sm text-slate-300">{feature}</span>
@@ -93,7 +93,7 @@ export default async function PricingPage({ params }: PageProps) {
                   disabled
                   className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
                     tier.highlighted
-                      ? 'bg-[#3E8BF5] text-white opacity-75 cursor-not-allowed'
+                      ? 'bg-[#1E5BFF] text-white opacity-75 cursor-not-allowed'
                       : 'bg-slate-700/50 text-slate-300 cursor-not-allowed'
                   }`}
                 >
@@ -105,23 +105,11 @@ export default async function PricingPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Add-on note */}
-      {!product.isPrimary && (
-        <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
-          <div className="bg-slate-800/30 border border-slate-700/30 rounded-xl p-6">
-            <p className="text-slate-400 text-sm">
-              <span className="text-white font-medium">Already using Persistent Sales?</span>{' '}
-              Add {product.shortName} as an add-on for seamless CRM integration.
-            </p>
-          </div>
-        </section>
-      )}
-
       {/* Back link */}
       <section className="py-12 px-4 text-center">
         <Link
           href="/products"
-          className="text-[#3E8BF5] text-sm font-medium hover:underline"
+          className="text-[#1E5BFF] text-sm font-medium hover:underline"
         >
           ← View All Products
         </Link>

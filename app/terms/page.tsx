@@ -6,17 +6,17 @@ export default function TermsOfService() {
       {/* Header Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#3E8BF5]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#3E8BF5]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#1E5BFF]/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#1E5BFF]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E8BF5]/10 border border-[#3E8BF5]/20 backdrop-blur-sm mb-6">
-              <span className="text-sm text-[#3E8BF5] font-medium">Legal</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E5BFF]/10 border border-[#1E5BFF]/20 backdrop-blur-sm mb-6">
+              <span className="text-sm text-[#1E5BFF] font-medium">Legal</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Terms of <span className="text-[#3E8BF5]">Service</span>
+              Terms of <span className="text-[#1E5BFF]">Service</span>
             </h1>
             <p className="text-slate-400">
               Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -43,7 +43,7 @@ export default function TermsOfService() {
               {/* Acceptance of Terms */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">1</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">1</span>
                   Acceptance of Terms
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -60,7 +60,7 @@ export default function TermsOfService() {
               {/* Services Description */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">2</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">2</span>
                   Description of Services
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -78,9 +78,9 @@ export default function TermsOfService() {
               </div>
 
               {/* SMS Terms - TCPA Compliant */}
-              <div className="mb-12 bg-[#3E8BF5]/5 border border-[#3E8BF5]/20 rounded-2xl p-6">
+              <div className="mb-12 bg-[#1E5BFF]/5 border border-[#1E5BFF]/20 rounded-2xl p-6">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">3</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">3</span>
                   SMS Text Messaging Terms
                 </h2>
 
@@ -146,14 +146,14 @@ export default function TermsOfService() {
 
                 <h3 className="text-xl font-semibold text-white mb-3 mt-6">3.9 Privacy</h3>
                 <p className="text-slate-300 leading-relaxed">
-                  We will not share your phone number with third parties for their marketing purposes without your consent. Please review our <a href="/privacy" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">Privacy Policy</a> for more information about how we collect, use, and protect your information.
+                  We will not share your phone number with third parties for their marketing purposes without your consent. Please review our <a href="/privacy" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">Privacy Policy</a> for more information about how we collect, use, and protect your information.
                 </p>
               </div>
 
               {/* User Responsibilities */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">4</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">4</span>
                   User Responsibilities and Prohibited Conduct
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -175,7 +175,7 @@ export default function TermsOfService() {
               {/* Intellectual Property */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">5</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">5</span>
                   Intellectual Property Rights
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -189,7 +189,7 @@ export default function TermsOfService() {
               {/* Disclaimers */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">6</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">6</span>
                   Disclaimers
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -208,7 +208,7 @@ export default function TermsOfService() {
               {/* Limitation of Liability */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">7</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">7</span>
                   Limitation of Liability
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -228,7 +228,7 @@ export default function TermsOfService() {
               {/* Indemnification */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">8</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">8</span>
                   Indemnification
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -245,7 +245,7 @@ export default function TermsOfService() {
               {/* Termination */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">9</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">9</span>
                   Termination
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-3">
@@ -264,7 +264,7 @@ export default function TermsOfService() {
               {/* Governing Law */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">10</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">10</span>
                   Governing Law and Dispute Resolution
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-4">
@@ -278,7 +278,7 @@ export default function TermsOfService() {
               {/* Changes to Terms */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">11</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">11</span>
                   Changes to These Terms
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -289,7 +289,7 @@ export default function TermsOfService() {
               {/* Severability */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">12</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">12</span>
                   Severability and Waiver
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-4">
@@ -303,7 +303,7 @@ export default function TermsOfService() {
               {/* Entire Agreement */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">13</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">13</span>
                   Entire Agreement
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
@@ -314,7 +314,7 @@ export default function TermsOfService() {
               {/* Contact Information */}
               <div className="mb-0">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#3E8BF5]/10 rounded-lg flex items-center justify-center text-[#3E8BF5] text-sm">14</span>
+                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">14</span>
                   Contact Us
                 </h2>
                 <p className="text-slate-300 leading-relaxed mb-4">
@@ -322,8 +322,8 @@ export default function TermsOfService() {
                 </p>
                 <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
                   <p className="text-white font-semibold mb-2">Persistent Momentum</p>
-                  <p className="text-slate-300">Email: <a href="mailto:info@persistentmomentum.com" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">info@persistentmomentum.com</a></p>
-                  <p className="text-slate-300">Phone: <a href="tel:+14078012515" className="text-[#3E8BF5] hover:text-[#3E8BF5]/80 transition-colors">(407) 801-2515</a></p>
+                  <p className="text-slate-300">Email: <a href="mailto:info@persistentmomentum.com" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">info@persistentmomentum.com</a></p>
+                  <p className="text-slate-300">Phone: <a href="tel:+14078012515" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">(407) 801-2515</a></p>
                 </div>
               </div>
             </div>

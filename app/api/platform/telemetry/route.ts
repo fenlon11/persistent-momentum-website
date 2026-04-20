@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   try {
     // Get recent telemetry events
     const { data: events, error: eventsError } = await supabasePlatform
-      .from('pmos_telemetry')
+      .from('pm_telemetry')
       .select('*')
       .gte('created_at', since)
       .order('created_at', { ascending: false })
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // Count guardrail blocks
     const { count: guardrailBlocksCount } = await supabasePlatform
-      .from('pmos_telemetry')
+      .from('pm_telemetry')
       .select('*', { count: 'exact', head: true })
       .eq('event_type', 'guardrail_block')
       .gte('created_at', since);

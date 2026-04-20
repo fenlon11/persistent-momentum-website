@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   try {
     // Get recent invocations
     const { data: invocations, error: invocationsError } = await supabasePlatform
-      .from('pmos_skill_invocations')
+      .from('pm_skill_invocations')
       .select('*')
       .gte('created_at', since)
       .order('created_at', { ascending: false })

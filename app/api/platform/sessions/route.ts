@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   try {
     // Get recent session logs
     const { data: logs, error: logsError } = await supabasePlatform
-      .from('pmos_session_logs')
+      .from('pm_session_logs')
       .select('*')
       .gte('created_at', since)
       .order('created_at', { ascending: false })

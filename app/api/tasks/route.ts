@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabasePlatform, isPlatformConfigured } from '@/lib/supabase-platform';
 
 async function checkAuth() {
   const cookieStore = await cookies();
@@ -11,69 +11,66 @@ export async function GET(request: NextRequest) {
   if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  if (!supabase) {
-    return NextResponse.json({ tasks: [], brands: [] });
+  if (!isPlatformConfigured() || !supabasePlatform) {
+    return NextResponse.json({ tasks: [] });
   }
 
   const { searchParams } = request.nextUrl;
   const statusFilter = searchParams.get('status');
-  const brandFilter = searchParams.get('brand_id');
+  const productFilter = searchParams.get('product_slug');
 
-  let query = supabase
-    .from('build_queue')
-    .select('*, brands(id, name, slug)')
-    .order('priority', { ascending: false })
-    .order('created_at', { ascending: false });
+  let query = supabasePlatform
+    .from('cc_task_queue')
+    .select('id, title, prompt, target_worker, priority, status, source, product_slug, loop_type, attempt_count, max_attempts, result_summary, assigned_at, completed_at, created_at')
+    .order('priority', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
+    .limit(200);
 
   if (statusFilter) {
     const statuses = statusFilter.split(',');
     query = query.in('status', statuses);
   }
-  if (brandFilter) {
-    query = query.eq('brand_id', brandFilter);
+  if (productFilter) {
+    query = query.eq('product_slug', productFilter);
   }
 
-  const [tasksResult, brandsResult] = await Promise.all([
-    query,
-    supabase.from('brands').select('id, name, slug').eq('is_active', true).order('name'),
-  ]);
+  const { data, error } = await query;
 
-  if (tasksResult.error) {
-    return NextResponse.json({ error: tasksResult.error.message }, { status: 500 });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({
-    tasks: tasksResult.data ?? [],
-    brands: brandsResult.data ?? [],
-  });
+  return NextResponse.json({ tasks: data ?? [] });
 }
 
 export async function POST(request: NextRequest) {
   if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  if (!supabase) {
-    return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 });
+  if (!isPlatformConfigured() || !supabasePlatform) {
+    return NextResponse.json({ error: 'Platform Supabase not configured' }, { status: 503 });
   }
 
   const body = await request.json();
-  const { brand_id, title, description, priority, tags } = body;
+  const { title, prompt, product_slug, priority, target_worker, loop_type, source } = body;
 
-  if (!brand_id || !title) {
-    return NextResponse.json({ error: 'brand_id and title are required' }, { status: 400 });
+  if (!title || !prompt) {
+    return NextResponse.json({ error: 'title and prompt are required' }, { status: 400 });
   }
 
-  const { data, error } = await supabase
-    .from('build_queue')
+  const { data, error } = await supabasePlatform
+    .from('cc_task_queue')
     .insert({
-      brand_id,
       title,
-      description: description || null,
+      prompt,
+      product_slug: product_slug || null,
       priority: priority ?? 0,
-      status: 'queued',
-      tags: tags || [],
+      status: 'pending',
+      source: source || 'dashboard',
+      target_worker: target_worker || null,
+      loop_type: loop_type || null,
     })
-    .select('*, brands(id, name, slug)')
+    .select()
     .single();
 
   if (error) {

@@ -42,29 +42,10 @@ export const systemConnections: SystemConnection[] = [
 ];
 
 // ===== PROJECT PIPELINE =====
-// These are the canonical PM products shown in Project Pipeline.
-// Live `project_state` table in pmOS Supabase will eventually back this — for now static.
+// The live `project_state` table in pmOS Supabase is the source of truth —
+// ProjectPipeline + RevenueTracker fetch from /api/projects. Only the phase
+// definitions live here (static UI scaffold, not project data).
 export type Phase = 'research' | 'plan' | 'build' | 'market' | 'monetize' | 'analyze' | 'scale';
-
-export interface ProjectMilestone {
-  label: string;
-  completed: boolean;
-  date?: string;
-}
-
-export interface Project {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  currentPhase: Phase;
-  phases: Record<Phase, { status: 'completed' | 'active' | 'upcoming'; notes?: string }>;
-  milestones: ProjectMilestone[];
-  nextActions: string[];
-  pricing?: string;
-  mrr: number;
-  domain?: string;
-}
 
 export const phases: { id: Phase; label: string; icon: string }[] = [
   { id: 'research', label: 'Research', icon: '🔬' },
@@ -76,103 +57,9 @@ export const phases: { id: Phase; label: string; icon: string }[] = [
   { id: 'scale', label: 'Scale', icon: '🚀' },
 ];
 
-export const projects: Project[] = [
-  {
-    id: 'persistent-recruiter',
-    name: 'Persistent Recruiter',
-    icon: '🎯',
-    description: 'Recruiting software small teams actually use. Next.js + Supabase. v1 launch sprint in flight.',
-    currentPhase: 'build',
-    domain: 'persistentrecruiter.com',
-    pricing: 'Recruiter $49/mo · Company $149/mo',
-    mrr: 0,
-    phases: {
-      research: { status: 'completed' },
-      plan: { status: 'completed', notes: 'PRD 2026-04-19' },
-      build: { status: 'active', notes: 'Rewire + merge + decommission per PRD' },
-      market: { status: 'upcoming' },
-      monetize: { status: 'upcoming' },
-      analyze: { status: 'upcoming' },
-      scale: { status: 'upcoming' },
-    },
-    milestones: [
-      { label: 'PRD signed', completed: true, date: '2026-04-19' },
-      { label: 'pr-funnel merged into app', completed: false },
-      { label: 'pm-CRM Railway decommissioned', completed: false },
-      { label: 'Stripe checkout live', completed: false },
-      { label: 'persistentrecruiter.com domain', completed: false },
-      { label: 'First paying customer', completed: false, date: '2026-05-10' },
-    ],
-    nextActions: [
-      'Rewire pr-funnel/api/submit to Supabase direct',
-      'Merge pr-funnel routes into persistent-recruiter',
-      'Stripe checkout + webhook',
-      'Discovery Video migration into PR dashboard',
-      'Playwright smoke suite',
-    ],
-  },
-  {
-    id: 'persistent-marketer',
-    name: 'Persistent Marketer',
-    icon: '📣',
-    description: 'AI-powered content and social automation for business. Next up after Recruiter launch.',
-    currentPhase: 'research',
-    pricing: 'TBA',
-    mrr: 0,
-    phases: {
-      research: { status: 'active', notes: 'Scoping MVP after PR launch' },
-      plan: { status: 'upcoming' },
-      build: { status: 'upcoming' },
-      market: { status: 'upcoming' },
-      monetize: { status: 'upcoming' },
-      analyze: { status: 'upcoming' },
-      scale: { status: 'upcoming' },
-    },
-    milestones: [
-      { label: 'Concept validated via Rabbit Golf pipeline', completed: true },
-      { label: 'MVP scope defined', completed: false },
-      { label: 'PRD', completed: false },
-      { label: 'First customer', completed: false },
-    ],
-    nextActions: [
-      'Define MVP scope post-PR-launch',
-      'Decide pricing model',
-      'Write PRD',
-    ],
-  },
-  {
-    id: 'pm-portfolio',
-    name: 'Persistent Momentum (portfolio)',
-    icon: '🏗️',
-    description: 'The portfolio operator itself — corporate site, dashboard, pmOS. Path to $100k MRR across 10–12 products in 2026.',
-    currentPhase: 'build',
-    domain: 'persistentmomentum.com',
-    mrr: 0,
-    phases: {
-      research: { status: 'completed' },
-      plan: { status: 'completed', notes: 'Canonical BUSINESS-PLAN.md + BRAND.md v0.1 (2026-04-20)' },
-      build: { status: 'active', notes: 'Corporate site live; dashboard being fixed' },
-      market: { status: 'upcoming' },
-      monetize: { status: 'upcoming', notes: 'Revenue comes through individual products' },
-      analyze: { status: 'upcoming' },
-      scale: { status: 'upcoming' },
-    },
-    milestones: [
-      { label: 'Canonical PM docs (v0.1)', completed: true, date: '2026-04-20' },
-      { label: 'Corporate site rebranded', completed: true, date: '2026-04-20' },
-      { label: 'Command Center dashboard working', completed: false },
-      { label: 'First PM product shipped (Recruiter)', completed: false },
-      { label: 'Second PM product shipped (Marketer)', completed: false },
-    ],
-    nextActions: [
-      'Wire PMOS_SUPABASE_* env vars in Vercel',
-      'Ship Recruiter v1',
-      'Start Marketer v1 scoping',
-    ],
-  },
-];
-
 // ===== REVENUE TARGETS =====
+// Current MRR / ARR / shipped-product count are derived live in RevenueTracker
+// from /api/projects (backed by project_state). Only targets live here.
 export interface RevenueTarget {
   period: string;
   target: number;
@@ -180,12 +67,9 @@ export interface RevenueTarget {
 }
 
 export const revenueTargets = {
-  currentMRR: 0,
-  currentARR: 0,
   targetMRR2026: 10000,
   targetARR2026: 120000,
   longTermTargetMRR: 100000,
-  productCount: 0, // live products shipped
   targetProducts2026: 12,
   monthlyTargets: [
     { period: 'May 2026', target: 500, current: 0 },

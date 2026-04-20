@@ -1,11 +1,24 @@
 'use client';
-import { revenueTargets, projects } from '@/lib/dashboard-data';
+
+import { useEffect, useState } from 'react';
+import { revenueTargets } from '@/lib/dashboard-data';
+
+interface ApiProject {
+  id: string;
+  slug: string;
+  name: string;
+  icon: string;
+  stage: string;
+  mrr: number;
+}
 
 const fmt = (n: number) =>
   n >= 1000 ? `$${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k` : `$${n}`;
 
 const pct = (current: number, target: number) =>
   target === 0 ? 0 : Math.min(Math.round((current / target) * 100), 100);
+
+const SHIPPED_STAGES = new Set(['live', 'shipped', 'scaling', 'monetizing']);
 
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
@@ -41,7 +54,7 @@ function ProgressRing({ current, target }: { current: number; target: number }) 
             cy={100}
             r={radius}
             fill="none"
-            stroke="#3E8BF5"
+            stroke="#1E5BFF"
             strokeWidth={stroke}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -66,7 +79,7 @@ function MonthlyBars() {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-white">Monthly Targets</h3>
+      <h3 className="text-sm font-semibold text-white">Monthly targets</h3>
       <div className="space-y-2">
         {revenueTargets.monthlyTargets.map((m) => {
           const isCurrent = m.period === currentLabel;
@@ -78,7 +91,7 @@ function MonthlyBars() {
             <div key={m.period} className="flex items-center gap-3">
               <span
                 className={`w-20 text-xs shrink-0 ${
-                  isCurrent ? 'text-[#3E8BF5] font-semibold' : 'text-slate-400'
+                  isCurrent ? 'text-[#1E5BFF] font-semibold' : 'text-slate-400'
                 }`}
               >
                 {m.period}
@@ -89,7 +102,7 @@ function MonthlyBars() {
                     isPast
                       ? 'bg-slate-600/60'
                       : isCurrent
-                        ? 'border border-[#3E8BF5]/40 bg-[#3E8BF5]/10'
+                        ? 'border border-[#1E5BFF]/40 bg-[#1E5BFF]/10'
                         : 'border border-slate-600/40'
                   }`}
                   style={{ width: `${targetWidth}%` }}
@@ -97,7 +110,7 @@ function MonthlyBars() {
                 {m.current > 0 && (
                   <div
                     className={`absolute inset-y-0 left-0 rounded ${
-                      isCurrent ? 'bg-[#3E8BF5]' : 'bg-emerald-500/70'
+                      isCurrent ? 'bg-[#1E5BFF]' : 'bg-emerald-500/70'
                     }`}
                     style={{ width: `${currentWidth}%` }}
                   />
@@ -114,13 +127,12 @@ function MonthlyBars() {
   );
 }
 
-function ProductBreakdown() {
+function ProductBreakdown({ projects, totalMRR }: { projects: ApiProject[]; totalMRR: number }) {
   const productsWithMRR = projects.filter((p) => p.mrr > 0);
-  const totalMRR = revenueTargets.currentMRR;
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-white">Per-Product MRR</h3>
+      <h3 className="text-sm font-semibold text-white">Per-product MRR</h3>
       {productsWithMRR.length > 0 ? (
         <div className="grid grid-cols-2 gap-2">
           {productsWithMRR.map((p) => (
@@ -164,13 +176,13 @@ function ProductBreakdown() {
   );
 }
 
-function RevenueRunway() {
-  const { currentMRR, targetMRR2026 } = revenueTargets;
+function RevenueRunway({ currentMRR }: { currentMRR: number }) {
+  const { targetMRR2026 } = revenueTargets;
 
   if (currentMRR === 0) {
     return (
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
-        <h3 className="text-sm font-semibold text-white">Revenue Runway</h3>
+        <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
         <p className="text-xs text-slate-500 mt-2">
           Not enough data — start generating MRR to project your runway to {fmt(targetMRR2026)}.
         </p>
@@ -182,7 +194,7 @@ function RevenueRunway() {
   if (monthsWithRevenue.length < 2) {
     return (
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
-        <h3 className="text-sm font-semibold text-white">Revenue Runway</h3>
+        <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
         <p className="text-xs text-slate-500 mt-2">
           Need at least 2 months of data to project growth rate.
         </p>
@@ -204,7 +216,7 @@ function RevenueRunway() {
 
   return (
     <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
-      <h3 className="text-sm font-semibold text-white">Revenue Runway</h3>
+      <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
       <div className="mt-2 space-y-1">
         <p className="text-xs text-slate-400">
           Growth rate: <span className="text-white font-medium">+{fmt(monthlyGrowth)}/mo</span>
@@ -212,7 +224,7 @@ function RevenueRunway() {
         {targetDate ? (
           <p className="text-xs text-slate-400">
             {fmt(targetMRR2026)} target:{' '}
-            <span className="text-[#3E8BF5] font-semibold">
+            <span className="text-[#1E5BFF] font-semibold">
               {targetDate.toLocaleString('en', { month: 'short', year: 'numeric' })}
             </span>{' '}
             ({monthsToTarget} months)
@@ -226,14 +238,37 @@ function RevenueRunway() {
 }
 
 export default function RevenueTracker() {
-  const { currentMRR, currentARR, targetMRR2026, targetARR2026, productCount, targetProducts2026 } =
-    revenueTargets;
+  const [projects, setProjects] = useState<ApiProject[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch('/api/projects');
+        const data = await res.json();
+        if (!cancelled && res.ok) setProjects(data.projects || []);
+      } catch {
+        /* silent — empty state renders */
+      }
+    }
+    load();
+    const interval = setInterval(load, 60000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const { targetMRR2026, targetARR2026, targetProducts2026 } = revenueTargets;
+  const currentMRR = projects.reduce((sum, p) => sum + p.mrr, 0);
+  const currentARR = currentMRR * 12;
+  const shippedCount = projects.filter((p) => SHIPPED_STAGES.has(p.stage.toLowerCase())).length;
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-white">Revenue Tracker</h2>
-        <p className="text-sm text-slate-400 mt-1">Progress toward $10k MRR by end of 2026</p>
+        <p className="text-sm text-slate-400 mt-1">Progress toward $10k MRR by end of 2026 · {fmt(revenueTargets.longTermTargetMRR)} long-term</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -241,9 +276,9 @@ export default function RevenueTracker() {
         <StatCard label="Target MRR 2026" value={fmt(targetMRR2026)} sub="End of year goal" />
         <StatCard label="Current ARR" value={fmt(currentARR)} sub={`of ${fmt(targetARR2026)} target`} />
         <StatCard
-          label="Products"
-          value={`${productCount}/${targetProducts2026}`}
-          sub={`${targetProducts2026 - productCount} more to build`}
+          label="Products shipped"
+          value={`${shippedCount}/${targetProducts2026}`}
+          sub={`${Math.max(0, targetProducts2026 - shippedCount)} more to build`}
         />
       </div>
 
@@ -258,9 +293,9 @@ export default function RevenueTracker() {
 
       <div className="grid lg:grid-cols-2 gap-4">
         <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
-          <ProductBreakdown />
+          <ProductBreakdown projects={projects} totalMRR={currentMRR} />
         </div>
-        <RevenueRunway />
+        <RevenueRunway currentMRR={currentMRR} />
       </div>
     </div>
   );

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import TabNav, { DashboardTab } from '@/components/dashboard/TabNav';
 import SystemMap from '@/components/dashboard/SystemMap';
 import Pipeline from '@/components/dashboard/Pipeline';
-import FleetStatus from '@/components/dashboard/FleetStatus';
+import AgentsStatus from '@/components/dashboard/AgentsStatus';
+import SkillsView from '@/components/dashboard/SkillsView';
 import PlatformOverview from '@/components/dashboard/PlatformOverview';
 import RevenueTracker from '@/components/dashboard/RevenueTracker';
 import SecretsRegistry from '@/components/dashboard/SecretsRegistry';
@@ -38,7 +39,8 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
         <div className="mt-6">
           {activeTab === 'system' && <SystemMap />}
           {activeTab === 'pipeline' && <Pipeline />}
-          {activeTab === 'fleet' && <FleetStatus />}
+          {activeTab === 'agents' && <AgentsStatus />}
+          {activeTab === 'skills' && <SkillsView />}
           {activeTab === 'platform' && <PlatformOverview />}
           {activeTab === 'revenue' && <RevenueTracker />}
           {activeTab === 'analytics' && <Analytics />}

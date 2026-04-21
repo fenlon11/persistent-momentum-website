@@ -60,7 +60,7 @@ function displayName(name: string): string {
   return name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-export default function FleetStatus() {
+export default function AgentsStatus() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [activity, setActivity] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,7 +102,7 @@ export default function FleetStatus() {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-xl font-bold text-white">Fleet</h2>
+          <h2 className="text-xl font-bold text-white">Agents</h2>
           <p className="text-sm text-slate-400 mt-1">
             {activeCount} active · {retiredCount} retired · {activity.length} recent event{activity.length !== 1 ? 's' : ''}
           </p>

@@ -2,16 +2,16 @@
 
 export type DashboardTab = 'system' | 'pipeline' | 'agents' | 'skills' | 'platform' | 'revenue' | 'analytics' | 'secrets' | 'claude-md';
 
-const tabs: { id: DashboardTab; label: string; icon: string }[] = [
-  { id: 'system', label: 'System', icon: '🗺️' },
-  { id: 'pipeline', label: 'Pipeline', icon: '📊' },
-  { id: 'agents', label: 'Agents', icon: '☁️' },
-  { id: 'skills', label: 'Skills', icon: '🛠️' },
-  { id: 'platform', label: 'Platform', icon: '🧠' },
-  { id: 'revenue', label: 'Revenue', icon: '💰' },
-  { id: 'analytics', label: 'Analytics', icon: '📈' },
-  { id: 'secrets', label: 'Secrets', icon: '🔑' },
-  { id: 'claude-md', label: 'CLAUDE.md', icon: '📄' },
+const tabs: { id: DashboardTab; label: string }[] = [
+  { id: 'system', label: 'System' },
+  { id: 'pipeline', label: 'Pipeline' },
+  { id: 'agents', label: 'Agents' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'platform', label: 'Platform' },
+  { id: 'revenue', label: 'Revenue' },
+  { id: 'analytics', label: 'Analytics' },
+  { id: 'secrets', label: 'Secrets' },
+  { id: 'claude-md', label: 'CLAUDE.md' },
 ];
 
 interface TabNavProps {
@@ -21,20 +21,19 @@ interface TabNavProps {
 
 export default function TabNav({ activeTab, onTabChange }: TabNavProps) {
   return (
-    <div className="sticky top-16 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
-      <div className="flex overflow-x-auto scrollbar-hide max-w-6xl mx-auto">
+    <div className="sticky top-16 z-40 border-b border-white/8 bg-navy/90 backdrop-blur-md">
+      <div className="scrollbar-hide flex overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap
-              ${activeTab === tab.id
-                ? 'text-blue-400 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-200 border-b-2 border-transparent'
-              }`}
+            className={`flex-shrink-0 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+              activeTab === tab.id
+                ? 'border-electric text-white'
+                : 'border-transparent text-mid hover:text-glow'
+            }`}
           >
-            <span>{tab.icon}</span>
-            <span>{tab.label}</span>
+            {tab.label}
           </button>
         ))}
       </div>

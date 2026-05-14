@@ -1,130 +1,60 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-const productLinks = [
-  { href: '/products/persistent-recruiter', label: 'Persistent Recruiter' },
-  { href: '/products/persistent-marketer', label: 'Persistent Marketer' },
-];
-
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/marketplace', label: 'Marketplace' },
-  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/products', label: 'Products' },
+  { href: '/careers', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
 ];
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
-  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const pathname = usePathname();
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setProductsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const isProductPage = pathname.startsWith('/products');
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <img src="/logo.png" alt="Persistent Momentum" className="w-8 h-8" />
-            <span className="text-lg font-bold">
-              <span className="text-white">Persistent</span>
-              <span className="text-[#1E5BFF]"> Momentum</span>
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/8 bg-navy/80 backdrop-blur-xl">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo + wordmark */}
+          <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
+            <Image src="/logo.png" alt="Persistent Momentum" width={30} height={30} priority className="h-7 w-auto" />
+            <span className="text-[15px] font-semibold tracking-tight text-white">
+              Persistent Momentum
             </span>
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              href="/"
-              className={`text-sm font-medium transition-colors ${
-                pathname === '/' ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Home
-            </Link>
-
-            {/* Products dropdown */}
-            <div ref={dropdownRef} className="relative">
-              <button
-                onClick={() => setProductsOpen(!productsOpen)}
-                className={`flex items-center gap-1 text-sm font-medium transition-colors ${
-                  isProductPage ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Products
-                <svg className={`w-3.5 h-3.5 transition-transform ${productsOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {productsOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl shadow-black/50 overflow-hidden">
-                  {productLinks.map((product) => (
-                    <Link
-                      key={product.href}
-                      href={product.href}
-                      onClick={() => setProductsOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
-                        pathname === product.href
-                          ? 'text-[#1E5BFF] bg-[#1E5BFF]/10'
-                          : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-                      }`}
-                    >
-                      {product.label}
-                    </Link>
-                  ))}
-                  <div className="border-t border-slate-700/50">
-                    <Link
-                      href="/products"
-                      onClick={() => setProductsOpen(false)}
-                      className="block px-4 py-3 text-xs text-slate-500 hover:text-[#1E5BFF] transition-colors"
-                    >
-                      View All Products →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {links.slice(1).map((link) => (
+          <div className="hidden items-center gap-8 md:flex">
+            {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
-                  pathname === link.href
-                    ? 'text-[#1E5BFF]'
-                    : 'text-slate-400 hover:text-white'
+                  pathname === link.href ? 'text-white' : 'text-mid hover:text-white'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/contact"
+              className="rounded-lg bg-electric px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0]"
+            >
+              Work with us
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            className="p-2 text-mid transition-colors hover:text-white md:hidden"
             aria-label="Toggle menu"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {mobileOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -137,60 +67,27 @@ export default function Navigation() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/50">
-          <div className="px-4 py-4 space-y-1">
-            <Link
-              href="/"
-              onClick={() => setMobileOpen(false)}
-              className={`block py-2 text-sm font-medium transition-colors ${
-                pathname === '/' ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Home
-            </Link>
-
-            {/* Mobile products sub-menu */}
-            <button
-              onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
-              className={`flex items-center justify-between w-full py-2 text-sm font-medium transition-colors ${
-                isProductPage ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Products
-              <svg className={`w-3.5 h-3.5 transition-transform ${mobileProductsOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {mobileProductsOpen && (
-              <div className="pl-4 space-y-1">
-                {productLinks.map((product) => (
-                  <Link
-                    key={product.href}
-                    href={product.href}
-                    onClick={() => { setMobileOpen(false); setMobileProductsOpen(false); }}
-                    className={`flex items-center gap-2 py-2 text-sm transition-colors ${
-                      pathname === product.href ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {product.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {links.slice(1).map((link) => (
+        <div className="border-t border-white/8 bg-navy/95 backdrop-blur-xl md:hidden">
+          <div className="space-y-1 px-5 py-4">
+            {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`block py-2 text-sm font-medium transition-colors ${
-                  pathname === link.href ? 'text-[#1E5BFF]' : 'text-slate-400 hover:text-white'
+                className={`block py-2.5 text-sm font-medium transition-colors ${
+                  pathname === link.href ? 'text-white' : 'text-mid hover:text-white'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 block rounded-lg bg-electric px-4 py-2.5 text-center text-sm font-semibold text-white"
+            >
+              Work with us
+            </Link>
           </div>
         </div>
       )}

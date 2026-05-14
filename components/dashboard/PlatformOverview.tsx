@@ -46,12 +46,12 @@ interface SessionStats {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  preference: 'bg-blue-500',
+  preference: 'bg-electric',
   fact: 'bg-emerald-500',
   decision: 'bg-purple-500',
   goal: 'bg-amber-500',
   behavior: 'bg-cyan-500',
-  technical: 'bg-slate-500',
+  technical: 'bg-mid',
   blocker: 'bg-red-500',
   uncategorized: 'bg-gray-500',
 };
@@ -98,10 +98,10 @@ export default function PlatformOverview() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-24 bg-slate-900/80 rounded-xl animate-pulse" />
+            <div key={i} className="h-24 bg-navy-raised rounded-xl animate-pulse" />
           ))}
         </div>
-        <div className="h-64 bg-slate-900/80 rounded-xl animate-pulse" />
+        <div className="h-64 bg-navy-raised rounded-xl animate-pulse" />
       </div>
     );
   }
@@ -111,7 +111,7 @@ export default function PlatformOverview() {
       {/* Header */}
       <div>
         <h2 className="text-xl font-bold text-white">Platform Dashboard</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-mid mt-1">
           Persistent Momentum Operating System
         </p>
       </div>
@@ -147,7 +147,7 @@ export default function PlatformOverview() {
 
       {/* Memory by Category */}
       {memory && Object.keys(memory.byCategory).length > 0 && (
-        <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4">
+        <div className="bg-navy-raised border border-white/8 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-white mb-3">
             Memory by Category
           </h3>
@@ -157,7 +157,7 @@ export default function PlatformOverview() {
               .map(([category, count]) => (
                 <span
                   key={category}
-                  className={`text-xs px-3 py-1.5 rounded-full text-white ${CATEGORY_COLORS[category] || 'bg-slate-600'}`}
+                  className={`text-xs px-3 py-1.5 rounded-full text-white ${CATEGORY_COLORS[category] || 'bg-white/15'}`}
                 >
                   {category}: {count}
                 </span>
@@ -169,7 +169,7 @@ export default function PlatformOverview() {
       {/* Two Column Layout */}
       <div className="grid md:grid-cols-2 gap-4">
         {/* Recent Skills */}
-        <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4">
+        <div className="bg-navy-raised border border-white/8 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-white mb-3">
             Recent Skill Invocations
           </h3>
@@ -189,15 +189,15 @@ export default function PlatformOverview() {
                   {inv.skill_name}
                 </span>
                 {inv.model_used && (
-                  <span className="text-slate-500">{inv.model_used}</span>
+                  <span className="text-mid">{inv.model_used}</span>
                 )}
                 {inv.duration_ms && (
-                  <span className="text-slate-600">{inv.duration_ms}ms</span>
+                  <span className="text-mid/70">{inv.duration_ms}ms</span>
                 )}
               </div>
             ))}
             {!skills?.invocations.length && (
-              <p className="text-slate-500 text-xs">
+              <p className="text-mid text-xs">
                 No skill invocations recorded yet
               </p>
             )}
@@ -205,7 +205,7 @@ export default function PlatformOverview() {
         </div>
 
         {/* Session Log */}
-        <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4">
+        <div className="bg-navy-raised border border-white/8 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-white mb-3">
             Session Log (7d)
           </h3>
@@ -217,12 +217,12 @@ export default function PlatformOverview() {
                 </span>
                 <div className="flex-1 min-w-0">
                   <span className="text-white line-clamp-2">{log.content}</span>
-                  <span className="text-slate-600 ml-2">{log.log_date}</span>
+                  <span className="text-mid/70 ml-2">{log.log_date}</span>
                 </div>
               </div>
             ))}
             {!sessions?.logs.length && (
-              <p className="text-slate-500 text-xs">No session logs recorded yet</p>
+              <p className="text-mid text-xs">No session logs recorded yet</p>
             )}
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function PlatformOverview() {
 
       {/* Recent Memories */}
       {memory?.recent && memory.recent.length > 0 && (
-        <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4">
+        <div className="bg-navy-raised border border-white/8 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-white mb-3">
             Recent Memories
           </h3>
@@ -238,9 +238,9 @@ export default function PlatformOverview() {
             {memory.recent.map((mem) => (
               <div key={mem.id} className="flex items-start gap-2 text-xs">
                 <span
-                  className={`w-2 h-2 mt-1 rounded-full flex-shrink-0 ${CATEGORY_COLORS[mem.category] || 'bg-slate-500'}`}
+                  className={`w-2 h-2 mt-1 rounded-full flex-shrink-0 ${CATEGORY_COLORS[mem.category] || 'bg-mid'}`}
                 />
-                <span className="text-slate-300 flex-1 line-clamp-2">
+                <span className="text-glow/80 flex-1 line-clamp-2">
                   {mem.content}
                 </span>
               </div>
@@ -251,14 +251,14 @@ export default function PlatformOverview() {
 
       {/* Skill Stats Table */}
       {skills?.stats && skills.stats.length > 0 && (
-        <div className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4">
+        <div className="bg-navy-raised border border-white/8 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-white mb-3">
             Skill Performance (7d)
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-700">
+                <tr className="text-mid border-b border-white/10">
                   <th className="text-left py-2">Skill</th>
                   <th className="text-right py-2">Total</th>
                   <th className="text-right py-2">Success</th>
@@ -268,11 +268,11 @@ export default function PlatformOverview() {
               </thead>
               <tbody>
                 {skills.stats.slice(0, 10).map((stat) => (
-                  <tr key={stat.skill_name} className="border-b border-slate-800">
+                  <tr key={stat.skill_name} className="border-b border-white/8">
                     <td className="py-2 text-white font-medium">
                       {stat.skill_name}
                     </td>
-                    <td className="py-2 text-right text-slate-300">
+                    <td className="py-2 text-right text-glow/80">
                       {stat.total_count}
                     </td>
                     <td className="py-2 text-right text-emerald-400">
@@ -281,7 +281,7 @@ export default function PlatformOverview() {
                     <td className="py-2 text-right text-red-400">
                       {stat.failed_count}
                     </td>
-                    <td className="py-2 text-right text-slate-400">
+                    <td className="py-2 text-right text-mid">
                       {stat.avg_duration_ms
                         ? `${Math.round(stat.avg_duration_ms)}ms`
                         : '-'}
@@ -308,18 +308,18 @@ function StatCard({
 }) {
   const colorClasses: Record<string, string> = {
     emerald: 'border-emerald-500/20 text-emerald-400',
-    blue: 'border-blue-500/20 text-blue-400',
+    blue: 'border-electric/25 text-electric',
     purple: 'border-purple-500/20 text-purple-400',
     red: 'border-red-500/20 text-red-400',
-    slate: 'border-slate-700/50 text-slate-400',
+    slate: 'border-white/8 text-mid',
   };
 
   return (
     <div
-      className={`bg-slate-900/80 border ${colorClasses[color]} rounded-xl p-3 text-center`}
+      className={`bg-navy-raised border ${colorClasses[color]} rounded-xl p-3 text-center`}
     >
       <div className={`text-2xl font-bold ${colorClasses[color]}`}>{value}</div>
-      <div className="text-xs text-slate-500">{label}</div>
+      <div className="text-xs text-mid">{label}</div>
     </div>
   );
 }

@@ -13,9 +13,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "We design, build, and ship mobile apps, web platforms, and AI-powered automation for your business. Persistent Momentum is a portfolio operator — each product stands alone, pmOS is how we ship them.";
+
 export const metadata: Metadata = {
-  title: "Persistent Momentum — Mobile apps, web platforms, and AI-powered automation",
-  description: "We design, build, and ship mobile apps, web platforms, and AI-powered automation for your business. A portfolio of modern work-automation products.",
+  metadataBase: new URL("https://persistentmomentum.com"),
+  title: {
+    default: "Persistent Momentum — Mobile apps, web platforms, and AI-powered automation",
+    template: "%s",
+  },
+  description,
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -24,6 +31,20 @@ export const metadata: Metadata = {
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Persistent Momentum',
+    title: 'Persistent Momentum — Mobile apps, web platforms, and AI-powered automation',
+    description,
+    url: 'https://persistentmomentum.com',
+    images: [{ url: '/logo.png', width: 762, height: 720, alt: 'Persistent Momentum' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Persistent Momentum',
+    description,
+    images: ['/logo.png'],
   },
 };
 

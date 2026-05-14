@@ -1,18 +1,18 @@
 import Hero from '@/components/Hero';
-import Products from '@/components/Products';
-import Services from '@/components/Services';
-import CompanyMission from '@/components/CompanyMission';
-import ContactForm from '@/components/ContactForm';
+import Positioning from '@/components/Positioning';
+import PortfolioProducts from '@/components/PortfolioProducts';
+import PmosSystem from '@/components/PmosSystem';
+import ClosingCTA from '@/components/ClosingCTA';
 import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-navy">
       <Hero />
-      <Products />
-      <Services />
-      <CompanyMission />
-      <ContactForm />
+      <Positioning />
+      <PortfolioProducts />
+      <PmosSystem />
+      <ClosingCTA />
       <Footer />
     </main>
   );

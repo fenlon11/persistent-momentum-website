@@ -3,15 +3,20 @@
 :root {
   --background: #07112C;
   --foreground: #E6EEFF;
-  --brand-navy: #07112C;
-  --brand-electric: #1E5BFF;
-  --brand-ice: #A8C5FF;
-  --brand-glow: #E6EEFF;
 }
 
+/* Brand palette — canonical source: projects/persistent-momentum/BRAND.md */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-navy: #07112C;        /* primary surface */
+  --color-navy-raised: #0C1838; /* raised cards / panels */
+  --color-electric: #1E5BFF;    /* THE accent — one per surface */
+  --color-ice: #A8C5FF;         /* secondary accent / highlights */
+  --color-glow: #E6EEFF;        /* near-white text on dark */
+  --color-mid: #6B7A99;         /* secondary text, dividers */
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -25,6 +30,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Mono eyebrow / label — the "builder" texture */
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6B7A99;
 }
 
 /* Hide scrollbar for tab nav */

@@ -1,37 +1,50 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-slate-950 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col items-center gap-6">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Persistent Momentum" className="w-10 h-10" />
-            <h3 className="text-xl font-bold">
-              <span className="text-white">Persistent</span>
-              <span className="text-[#1E5BFF]"> Momentum</span>
-            </h3>
+    <footer className="border-t border-white/8 bg-navy">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
+        <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-sm">
+            <Link href="/" className="flex items-center gap-2.5">
+              <Image src="/logo.png" alt="Persistent Momentum" width={30} height={30} className="h-7 w-auto" />
+              <span className="text-[15px] font-semibold tracking-tight text-white">
+                Persistent Momentum
+              </span>
+            </Link>
+            <p className="mt-4 text-sm leading-relaxed text-mid">
+              We design, build, and ship mobile apps, web platforms, and AI-powered
+              automation for your business.
+            </p>
           </div>
 
-          <div className="flex items-center gap-6 text-sm">
-            <a href="/privacy" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
-              Privacy
-            </a>
-            <a href="/terms" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
-              Terms
-            </a>
-            <a href="#contact" className="text-slate-400 hover:text-[#1E5BFF] transition-colors">
-              Contact
-            </a>
+          <div className="flex gap-16">
+            <div>
+              <p className="eyebrow mb-3">Company</p>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/products" className="text-mid transition-colors hover:text-white">Products</Link></li>
+                <li><Link href="/careers" className="text-mid transition-colors hover:text-white">Careers</Link></li>
+                <li><Link href="/contact" className="text-mid transition-colors hover:text-white">Contact</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="eyebrow mb-3">Legal</p>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/privacy" className="text-mid transition-colors hover:text-white">Privacy</Link></li>
+                <li><Link href="/terms" className="text-mid transition-colors hover:text-white">Terms</Link></li>
+              </ul>
+            </div>
           </div>
+        </div>
 
-          <p className="text-sm text-slate-600">
-            &copy; {currentYear} Persistent Momentum
-          </p>
+        <div className="mt-12 flex flex-col gap-2 border-t border-white/8 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-mid">&copy; {year} Persistent Momentum. All rights reserved.</p>
+          <p className="font-mono text-xs text-mid/70">Built with pmOS.</p>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#1E5BFF]/50 to-transparent"></div>
     </footer>
   );
 }

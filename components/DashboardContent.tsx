@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import TabNav, { DashboardTab } from '@/components/dashboard/TabNav';
 import SystemMap from '@/components/dashboard/SystemMap';
 import Pipeline from '@/components/dashboard/Pipeline';
@@ -16,19 +17,22 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
   const [activeTab, setActiveTab] = useState<DashboardTab>('pipeline');
 
   return (
-    <div className="min-h-screen bg-slate-950 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-navy pb-16 pt-20">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Command Center</h1>
-            <p className="text-sm text-slate-400 mt-1">Persistent Momentum HQ</p>
+        <div className="mb-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="Persistent Momentum" width={34} height={34} className="h-8 w-auto" />
+            <div>
+              <p className="eyebrow">pmOS</p>
+              <h1 className="text-xl font-semibold tracking-tight text-white">Command Center</h1>
+            </div>
           </div>
           <button
             onClick={onLogout}
-            className="px-4 py-2 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-600 rounded-lg transition-colors"
+            className="rounded-lg border border-white/10 px-4 py-2 text-sm text-mid transition-colors hover:border-white/25 hover:text-white"
           >
-            Logout
+            Log out
           </button>
         </div>
 

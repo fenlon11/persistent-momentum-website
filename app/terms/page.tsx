@@ -2,33 +2,22 @@ import Footer from '@/components/Footer';
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {/* Header Section */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#1E5BFF]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#1E5BFF]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
-        </div>
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E5BFF]/10 border border-[#1E5BFF]/20 backdrop-blur-sm mb-6">
-              <span className="text-sm text-[#1E5BFF] font-medium">Legal</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Terms of <span className="text-[#1E5BFF]">Service</span>
-            </h1>
-            <p className="text-slate-400">
-              Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-          </div>
+    <div className="min-h-screen bg-navy">
+      <section className="border-b border-white/8 bg-navy">
+        <div className="mx-auto max-w-3xl px-5 pb-12 pt-36 sm:px-8 sm:pt-44">
+          <p className="eyebrow mb-5">Legal</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Terms of Service
+          </h1>
+          <p className="mt-3 text-sm text-mid">
+            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="relative pb-32">
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-3xl border border-slate-700/50 p-8 sm:p-12">
+      <section className="pb-28 pt-12">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <div className="rounded-xl border border-white/8 bg-navy-raised p-7 sm:p-10">
             <div className="prose prose-invert prose-slate max-w-none">
               {/* Introduction */}
               <div className="mb-12">

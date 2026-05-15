@@ -33,17 +33,11 @@ export default function FeaturedProducts() {
               letterSpacing: '-0.02em',
             }}
           >
-            Products that grow with you.
-            <br />
-            <span
-              style={{
-                fontStyle: 'italic',
-                fontWeight: 300,
-                color: 'var(--color-text-dark-muted)',
-              }}
-            >
-              And scale with your business.
+            Supporting business owners scale and grow with{' '}
+            <span style={{ color: 'var(--color-primary)' }}>
+              Persistent Momentum
             </span>
+            .
           </h2>
           <p
             className="text-lg"

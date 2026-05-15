@@ -56,10 +56,10 @@ export default function Navigation() {
           <Image
             src="/logo.png"
             alt=""
-            width={36}
-            height={36}
+            width={44}
+            height={44}
             priority
-            style={{ height: '32px', width: 'auto' }}
+            style={{ height: '40px', width: 'auto' }}
           />
           <span
             className="font-semibold text-base tracking-tight hidden sm:inline"

@@ -5,11 +5,27 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-const links = [
+type NavLink = {
+  href: string;
+  label: string;
+  external?: boolean;
+};
+
+// Two product domains get top-billing in the parent nav.
+// Internal pages follow. No "pmOS" link — pmOS is internal.
+const links: NavLink[] = [
+  {
+    href: 'https://recruiter.persistentmomentum.com',
+    label: 'Recruiter',
+    external: true,
+  },
+  {
+    href: 'https://sales.persistentmomentum.com',
+    label: 'Sales',
+    external: true,
+  },
   { href: '/portfolio', label: 'Portfolio' },
-  { href: '/pmos', label: 'pmOS' },
   { href: '/careers', label: 'Careers' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export default function Navigation() {
@@ -22,62 +38,89 @@ export default function Navigation() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-navy/85 backdrop-blur-xl"
+      className="sticky top-0 z-50"
+      style={{
+        background: 'rgba(255, 255, 255, 0.92)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid var(--color-border)',
+      }}
     >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo + wordmark + role label */}
-          <Link
-            href="/"
-            className="group flex items-center gap-3"
-            onClick={() => setMobileOpen(false)}
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-8">
+        {/* Logo + wordmark */}
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 flex-shrink-0"
+          onClick={() => setMobileOpen(false)}
+        >
+          <Image
+            src="/logo.png"
+            alt=""
+            width={36}
+            height={36}
+            priority
+            style={{ height: '32px', width: 'auto' }}
+          />
+          <span
+            className="font-semibold text-base tracking-tight hidden sm:inline"
+            style={{ color: 'var(--color-text)' }}
           >
-            <Image
-              src="/logo.png"
-              alt=""
-              width={30}
-              height={30}
-              priority
-              className="h-7 w-auto"
-            />
-            <span className="text-[15px] font-semibold tracking-tight text-white">
-              Persistent Momentum
-            </span>
-            <span aria-hidden className="hidden h-3 w-px bg-white/15 md:inline-block" />
-            <span aria-hidden className="annotation hidden md:inline-block">
-              Portfolio Operator
-            </span>
-          </Link>
+            Persistent Momentum
+          </span>
+        </Link>
 
-          {/* Desktop links */}
-          <div className="hidden items-center gap-9 md:flex">
-            {links.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative text-sm font-medium transition-colors ${
-                    active ? 'text-white' : 'text-mid hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                  {active && (
-                    <span
-                      aria-hidden
-                      className="absolute -bottom-[22px] left-0 right-0 h-px bg-electric"
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </div>
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-7">
+          {links.map((link) => {
+            const active = !link.external && pathname === link.href;
+            const className =
+              'text-sm font-medium transition-colors';
+            const sharedStyle = {
+              color: active ? 'var(--color-text)' : 'var(--color-text-muted)',
+            };
+            return link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={className}
+                style={sharedStyle}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={className}
+                style={sharedStyle}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Right-side contact CTA */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/contact"
+            className="text-sm font-semibold text-white px-4 py-2 transition-colors hidden sm:inline-block"
+            style={{
+              background: 'var(--color-primary)',
+              borderRadius: 'var(--radius)',
+            }}
+          >
+            Contact
+          </Link>
 
           {/* Mobile hamburger */}
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-mid transition-colors hover:text-white md:hidden"
+            className="p-2 md:hidden"
+            style={{ color: 'var(--color-text-muted)' }}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
           >
@@ -100,20 +143,50 @@ export default function Navigation() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-white/8 bg-navy/95 backdrop-blur-xl md:hidden">
-          <div className="space-y-1 px-5 py-4">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className={`block py-2.5 text-sm font-medium transition-colors ${
-                  pathname === link.href ? 'text-white' : 'text-mid hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div
+          className="md:hidden"
+          style={{
+            background: 'rgba(255, 255, 255, 0.98)',
+            borderTop: '1px solid var(--color-border)',
+          }}
+        >
+          <div className="space-y-1 px-6 py-4">
+            {links.map((link) =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
+                  className="block py-2.5 text-sm font-medium"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block py-2.5 text-sm font-medium"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
+            <Link
+              href="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 block py-2.5 text-center text-sm font-semibold text-white"
+              style={{
+                background: 'var(--color-primary)',
+                borderRadius: 'var(--radius)',
+              }}
+            >
+              Contact
+            </Link>
           </div>
         </div>
       )}

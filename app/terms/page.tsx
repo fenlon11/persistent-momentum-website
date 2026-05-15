@@ -12,35 +12,48 @@ export default function TermsOfService() {
   const lastUpdated = '2026-05-15';
 
   return (
-    <main className="min-h-screen bg-navy">
-      <section className="relative border-b border-white/8 bg-navy">
-        <div className="mx-auto max-w-3xl px-5 pb-12 pt-36 sm:px-8 sm:pt-44">
-          <div className="flex items-center gap-4">
-            <span aria-hidden className="h-px flex-1 bg-white/12" />
-            <span className="annotation-bright">Sheet F &middot; Legal &middot; Terms</span>
-          </div>
-          <p className="annotation mt-12">Legal</p>
-          <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl">
+    <main>
+      {/* Header */}
+      <section className="px-6 pt-20 pb-12" style={{ background: 'var(--color-bg)' }}>
+        <div className="max-w-3xl mx-auto">
+          <p
+            className="text-xs font-semibold uppercase tracking-widest mb-4"
+            style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}
+          >
+            Legal
+          </p>
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
+            style={{
+              color: 'var(--color-text-dark)',
+              letterSpacing: '-0.02em',
+            }}
+          >
             Terms of Service
           </h1>
-          <p className="mt-5 font-mono text-xs uppercase tracking-widest text-mid">
+          <p
+            className="text-sm"
+            style={{ color: 'var(--color-text-dark-muted)' }}
+          >
             Last updated &middot; {lastUpdated}
           </p>
         </div>
       </section>
 
-      <section className="pb-28 pt-12">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <div className="relative border border-white/12 bg-navy-raised p-7 sm:p-10">
-            <span
-              aria-hidden
-              className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
-            />
-            <span
-              aria-hidden
-              className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
-            />
-
+      {/* Body */}
+      <section
+        className="px-6 pb-24 pt-4"
+        style={{ background: 'var(--color-bg-light)' }}
+      >
+        <div className="max-w-3xl mx-auto">
+          <div
+            className="p-7 sm:p-10"
+            style={{
+              background: 'var(--color-bg-light-card)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-lg)',
+            }}
+          >
             <Intro>
               <p>
                 These Terms of Service (&ldquo;Terms&rdquo;) govern your access
@@ -68,16 +81,18 @@ export default function TermsOfService() {
             <Section num="02" title="Description of services">
               <p>
                 Persistent Momentum is a portfolio operator that designs,
-                builds, and ships mobile apps, web platforms, and AI-powered
-                automation. Our products are sold a la carte through their own
-                product brands and websites. The corporate site at{' '}
+                builds, and ships software products. Our products are sold
+                through their own product brands and websites. The corporate
+                site at{' '}
                 <Link
                   href="/"
-                  className="text-electric underline-offset-4 hover:underline"
+                  className="underline-offset-4 hover:underline"
+                  style={{ color: 'var(--color-primary)' }}
                 >
                   persistentmomentum.com
                 </Link>{' '}
-                is a holdco surface for investors, partners, talent, and press.
+                is a corporate surface for investors, partners, talent, and
+                press.
               </p>
               <p>
                 We reserve the right to modify, suspend, or discontinue any
@@ -225,7 +240,8 @@ export default function TermsOfService() {
                 These Terms, together with our{' '}
                 <Link
                   href="/privacy"
-                  className="text-electric underline-offset-4 hover:underline"
+                  className="underline-offset-4 hover:underline"
+                  style={{ color: 'var(--color-primary)' }}
                 >
                   Privacy Policy
                 </Link>
@@ -236,22 +252,42 @@ export default function TermsOfService() {
 
             <Section num="13" title="Contact us" last>
               <p>Questions about these Terms?</p>
-              <div className="mt-4 border border-white/12 bg-navy p-5">
-                <p className="font-semibold text-white">Persistent Momentum</p>
-                <p className="mt-2 text-sm text-mid">
+              <div
+                className="mt-4 p-5"
+                style={{
+                  background: 'var(--color-bg-light-secondary)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius)',
+                }}
+              >
+                <p
+                  className="font-bold"
+                  style={{ color: 'var(--color-text-dark)' }}
+                >
+                  Persistent Momentum
+                </p>
+                <p
+                  className="mt-2 text-sm"
+                  style={{ color: 'var(--color-text-dark-muted)' }}
+                >
                   Email:{' '}
                   <a
                     href="mailto:info@persistentmomentum.com"
-                    className="text-electric underline-offset-4 hover:underline"
+                    className="underline-offset-4 hover:underline"
+                    style={{ color: 'var(--color-primary)' }}
                   >
                     info@persistentmomentum.com
                   </a>
                 </p>
-                <p className="text-sm text-mid">
+                <p
+                  className="text-sm"
+                  style={{ color: 'var(--color-text-dark-muted)' }}
+                >
                   Phone:{' '}
                   <a
                     href="tel:+14078012515"
-                    className="text-electric underline-offset-4 hover:underline"
+                    className="underline-offset-4 hover:underline"
+                    style={{ color: 'var(--color-primary)' }}
                   >
                     (407) 801-2515
                   </a>
@@ -268,15 +304,12 @@ export default function TermsOfService() {
 }
 
 function Intro({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="legal-prose space-y-4 text-glow/85">{children}</div>
-  );
+  return <div className="legal-prose space-y-4">{children}</div>;
 }
 
 function Section({
   num,
   title,
-  last = false,
   children,
 }: {
   num: string;
@@ -285,16 +318,28 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className={last ? 'mt-12' : 'mt-12'}>
+    <section className="mt-12">
       <header className="mb-5 flex items-baseline gap-4">
-        <span className="font-mono text-xs tracking-widest text-electric">
+        <span
+          className="text-xs font-semibold tracking-widest"
+          style={{
+            color: 'var(--color-primary)',
+            letterSpacing: '0.12em',
+          }}
+        >
           {num}
         </span>
-        <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+        <h2
+          className="text-xl sm:text-2xl font-bold tracking-tight"
+          style={{
+            color: 'var(--color-text-dark)',
+            letterSpacing: '-0.01em',
+          }}
+        >
           {title}
         </h2>
       </header>
-      <div className="legal-prose space-y-3 text-glow/85">{children}</div>
+      <div className="legal-prose space-y-3">{children}</div>
     </section>
   );
 }

@@ -36,7 +36,7 @@ const LAST_STATUS_BADGE: Record<string, string> = {
   error: 'bg-red-500/10 text-red-400 border-red-500/20',
   failed: 'bg-red-500/10 text-red-400 border-red-500/20',
   running: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  info: 'bg-electric/10 text-electric border-electric/25',
+  info: 'bg-[rgba(21,68,142,0.10)] text-[var(--color-primary)] border-[rgba(21,68,142,0.25)]',
 };
 
 const ACTIVITY_BADGE: Record<string, string> = {
@@ -44,7 +44,7 @@ const ACTIVITY_BADGE: Record<string, string> = {
   completed: 'bg-emerald-500/10 text-emerald-400',
   error: 'bg-red-500/10 text-red-400',
   failed: 'bg-red-500/10 text-red-400',
-  info: 'bg-electric/10 text-electric',
+  info: 'bg-[rgba(21,68,142,0.10)] text-[var(--color-primary)]',
 };
 
 function timeAgo(dateStr: string | null): string {
@@ -103,13 +103,13 @@ export default function AgentsStatus() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-xl font-bold text-white">Agents</h2>
-          <p className="text-sm text-mid mt-1">
+          <p className="text-sm text-[var(--color-text-dark-muted)] mt-1">
             {activeCount} active · {retiredCount} retired · {activity.length} recent event{activity.length !== 1 ? 's' : ''}
           </p>
         </div>
         <button
           onClick={() => setShowRetired(!showRetired)}
-          className="text-xs px-2.5 py-1 rounded-full border border-white/8 text-mid hover:border-white/15 hover:text-white transition-colors"
+          className="text-xs px-2.5 py-1 rounded-full border border-[var(--color-border-light)] text-[var(--color-text-dark-muted)] hover:border-[var(--color-border)] hover:text-white transition-colors"
         >
           {showRetired ? 'Hide retired' : 'Show retired'}
         </button>
@@ -118,7 +118,7 @@ export default function AgentsStatus() {
       {loading && workers.length === 0 && (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-20 bg-navy-raised rounded-xl animate-pulse" />
+            <div key={i} className="h-20 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />
           ))}
         </div>
       )}
@@ -128,7 +128,7 @@ export default function AgentsStatus() {
         {visibleWorkers.map(worker => (
           <div
             key={worker.id}
-            className="bg-navy-raised border border-white/8 rounded-xl p-4"
+            className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-xl p-4"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -139,13 +139,13 @@ export default function AgentsStatus() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-semibold text-white">{displayName(worker.name)}</span>
                     {worker.last_status && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded border ${LAST_STATUS_BADGE[worker.last_status] || 'bg-white/5 text-mid border-white/12'}`}>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded border ${LAST_STATUS_BADGE[worker.last_status] || 'bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)] border-[var(--color-border)]'}`}>
                         {worker.last_status}
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-mid mt-1">{worker.role}</div>
-                  <div className="flex items-center gap-3 text-[11px] text-mid mt-2 flex-wrap">
+                  <div className="text-xs text-[var(--color-text-dark-muted)] mt-1">{worker.role}</div>
+                  <div className="flex items-center gap-3 text-[11px] text-[var(--color-text-dark-muted)] mt-2 flex-wrap">
                     {worker.cron_schedule && (
                       <span className="font-mono">{worker.cron_schedule}</span>
                     )}
@@ -168,7 +168,7 @@ export default function AgentsStatus() {
         ))}
 
         {!loading && visibleWorkers.length === 0 && (
-          <div className="text-center py-8 text-sm text-mid">
+          <div className="text-center py-8 text-sm text-[var(--color-text-dark-muted)]">
             {workers.length === 0
               ? 'No workers registered. Configure PMOS_SUPABASE_URL and PMOS_SUPABASE_SERVICE_KEY in Vercel.'
               : 'No active workers (all retired).'}
@@ -184,18 +184,18 @@ export default function AgentsStatus() {
             {activity.slice(0, 20).map(log => (
               <div
                 key={log.id}
-                className="flex items-start gap-3 bg-navy-raised border border-white/8 rounded-lg p-3"
+                className="flex items-start gap-3 bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-lg p-3"
               >
-                <span className={`text-[10px] px-2 py-0.5 rounded ${ACTIVITY_BADGE[log.status] || 'bg-white/5 text-mid'} flex-shrink-0 mt-0.5`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded ${ACTIVITY_BADGE[log.status] || 'bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)]'} flex-shrink-0 mt-0.5`}>
                   {log.status}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-glow/80">
-                    <span className="text-mid">{displayName(log.worker_name)}</span>
+                  <div className="text-xs text-[var(--color-text-dark)]">
+                    <span className="text-[var(--color-text-dark-muted)]">{displayName(log.worker_name)}</span>
                     {' · '}
                     <span>{log.action}</span>
                   </div>
-                  <div className="text-[11px] text-mid mt-0.5">
+                  <div className="text-[11px] text-[var(--color-text-dark-muted)] mt-0.5">
                     {timeAgo(log.created_at)}
                     {log.brand_id && (
                       <>

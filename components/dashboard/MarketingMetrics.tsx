@@ -68,10 +68,10 @@ const tooltipStyle = {
 
 function StatCard({ label, value, icon }: { label: string; value: string | number; icon: string }) {
   return (
-    <div className="rounded-xl border border-white/8 bg-navy-raised p-3">
+    <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-3">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-sm">{icon}</span>
-        <span className="text-xs text-mid uppercase tracking-wider">{label}</span>
+        <span className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">{label}</span>
       </div>
       <p className="text-xl font-bold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
     </div>
@@ -96,7 +96,7 @@ export default function MarketingMetrics({ range }: { range: number }) {
       <div className="space-y-4 mt-8">
         <h3 className="text-lg font-bold text-white">Marketing</h3>
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
-          {[...Array(6)].map((_, i) => <div key={i} className="h-20 bg-white/5 rounded-xl animate-pulse" />)}
+          {[...Array(6)].map((_, i) => <div key={i} className="h-20 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />)}
         </div>
       </div>
     );
@@ -106,9 +106,9 @@ export default function MarketingMetrics({ range }: { range: number }) {
     return (
       <div className="mt-8">
         <h3 className="text-lg font-bold text-white mb-3">Marketing</h3>
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-6 text-center">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-6 text-center">
           <div className="text-3xl mb-2">📱</div>
-          <p className="text-mid text-sm">No marketing posts found in this period. Content from Instagram and other platforms will appear here once the AME pipeline posts and the analyzer collects metrics.</p>
+          <p className="text-[var(--color-text-dark-muted)] text-sm">No marketing posts found in this period. Content from Instagram and other platforms will appear here once the AME pipeline posts and the analyzer collects metrics.</p>
         </div>
       </div>
     );
@@ -136,7 +136,7 @@ export default function MarketingMetrics({ range }: { range: number }) {
     <div className="mt-8 space-y-6">
       <div className="flex items-center gap-3">
         <h3 className="text-lg font-bold text-white">Marketing</h3>
-        <span className="text-xs text-mid bg-white/5 px-2 py-0.5 rounded-full">Instagram</span>
+        <span className="text-xs text-[var(--color-text-dark-muted)] bg-[var(--color-bg-light-secondary)] px-2 py-0.5 rounded-full">Instagram</span>
       </div>
 
       {/* Totals row */}
@@ -152,29 +152,29 @@ export default function MarketingMetrics({ range }: { range: number }) {
       {/* Content type breakdown + posting frequency */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* By content type */}
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
           <h4 className="text-sm font-semibold text-white mb-3">By Content Type</h4>
           {byType.length > 0 ? (
             <div className="space-y-2">
               {byType.map((t, i) => (
                 <div key={t.type} className="flex items-center gap-3">
                   <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                  <span className="text-sm text-glow/80 capitalize w-16">{t.type}</span>
-                  <span className="text-xs text-mid">{t.count} posts</span>
+                  <span className="text-sm text-[var(--color-text-dark)] capitalize w-16">{t.type}</span>
+                  <span className="text-xs text-[var(--color-text-dark-muted)]">{t.count} posts</span>
                   <div className="flex-1" />
-                  <span className="text-xs text-mid">{t.reach.toLocaleString()} reach</span>
-                  <span className="text-xs font-medium text-electric">{(t.avg_score * 100).toFixed(0)}%</span>
+                  <span className="text-xs text-[var(--color-text-dark-muted)]">{t.reach.toLocaleString()} reach</span>
+                  <span className="text-xs font-medium text-[var(--color-primary)]">{(t.avg_score * 100).toFixed(0)}%</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-mid">No type data</p>
+            <p className="text-xs text-[var(--color-text-dark-muted)]">No type data</p>
           )}
         </div>
 
         {/* Posting frequency */}
         {dailyPosts.length > 1 && (
-          <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+          <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
             <h4 className="text-sm font-semibold text-white mb-3">Posting Frequency</h4>
             <ResponsiveContainer width="100%" height={140}>
               <BarChart data={dailyPosts}>
@@ -191,21 +191,21 @@ export default function MarketingMetrics({ range }: { range: number }) {
 
       {/* Top performing posts */}
       {topPosts.length > 0 && topPosts.some(p => p.reach > 0) && (
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
           <h4 className="text-sm font-semibold text-white mb-3">Top Posts</h4>
           <div className="space-y-2">
             {topPosts.filter(p => p.reach > 0).map((post, i) => (
-              <div key={post.id} className="flex items-center gap-3 text-xs bg-white/5 rounded-lg p-2.5">
-                <span className="text-mid font-mono w-5">{i + 1}</span>
+              <div key={post.id} className="flex items-center gap-3 text-xs bg-[var(--color-bg-light-secondary)] rounded-lg p-2.5">
+                <span className="text-[var(--color-text-dark-muted)] font-mono w-5">{i + 1}</span>
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium capitalize ${
                   post.content_type === 'reel' ? 'bg-purple-500/20 text-purple-400' :
                   post.content_type === 'story' ? 'bg-amber-500/20 text-amber-400' :
-                  'bg-electric/20 text-electric'
+                  'bg-[rgba(21,68,142,0.20)] text-[var(--color-primary)]'
                 }`}>{post.content_type}</span>
-                <span className="text-glow/80 truncate flex-1">{post.hook_text || 'Untitled'}</span>
-                <span className="text-mid">{post.reach.toLocaleString()} reach</span>
-                <span className="text-mid">{post.likes} ❤️</span>
-                <span className={`font-medium ${post.performance_score >= 0.5 ? 'text-emerald-400' : post.performance_score >= 0.2 ? 'text-amber-400' : 'text-mid'}`}>
+                <span className="text-[var(--color-text-dark)] truncate flex-1">{post.hook_text || 'Untitled'}</span>
+                <span className="text-[var(--color-text-dark-muted)]">{post.reach.toLocaleString()} reach</span>
+                <span className="text-[var(--color-text-dark-muted)]">{post.likes} ❤️</span>
+                <span className={`font-medium ${post.performance_score >= 0.5 ? 'text-emerald-400' : post.performance_score >= 0.2 ? 'text-amber-400' : 'text-[var(--color-text-dark-muted)]'}`}>
                   {(post.performance_score * 100).toFixed(0)}%
                 </span>
               </div>

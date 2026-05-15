@@ -19,9 +19,20 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
   const [area, setArea] = useState<DashboardArea>('console');
 
   return (
-    <div className="min-h-screen bg-navy pb-16">
-      {/* Console chrome — sticky header with command-center title + logout */}
-      <div className="border-b border-white/10 bg-navy/95 backdrop-blur-md">
+    <div
+      className="min-h-screen pb-16"
+      style={{ background: 'var(--color-bg-light)' }}
+    >
+      {/* Console chrome */}
+      <div
+        className="sticky top-0 z-20"
+        style={{
+          background: 'rgba(255, 255, 255, 0.92)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid var(--color-border)',
+        }}
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <div className="flex items-center gap-3">
             <Image
@@ -29,13 +40,22 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
               alt=""
               width={28}
               height={28}
-              className="h-6 w-auto"
+              style={{ height: 24, width: 'auto' }}
             />
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-mid">
+              <p
+                className="text-[10px] font-semibold uppercase tracking-widest"
+                style={{
+                  color: 'var(--color-primary)',
+                  letterSpacing: '0.12em',
+                }}
+              >
                 pmOS &middot; Command Center
               </p>
-              <p className="text-sm font-semibold text-white">
+              <p
+                className="text-sm font-bold"
+                style={{ color: 'var(--color-text-dark)' }}
+              >
                 Operator console
               </p>
             </div>
@@ -43,7 +63,13 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
           <button
             type="button"
             onClick={onLogout}
-            className="border border-white/12 px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest text-mid transition-colors hover:border-electric/60 hover:text-glow"
+            className="px-3 py-1.5 text-xs font-medium uppercase tracking-widest transition-colors"
+            style={{
+              color: 'var(--color-text-dark-muted)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-sm)',
+              letterSpacing: '0.1em',
+            }}
           >
             Log out
           </button>
@@ -56,9 +82,7 @@ export default function DashboardContent({ onLogout }: { onLogout: () => void })
 
         <div className="mt-8">
           {area === 'console' && (
-            <Overview
-              onJumpTo={(target) => setArea(target)}
-            />
+            <Overview onJumpTo={(target) => setArea(target)} />
           )}
 
           {area === 'operations' && (
@@ -130,13 +154,23 @@ function AreaShell({
   return (
     <div className="space-y-14">
       <header className="flex items-center gap-3">
-        <span className="font-mono text-[10px] tracking-widest text-electric">
+        <span
+          className="text-[10px] tracking-widest font-semibold"
+          style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}
+        >
           {code}
         </span>
-        <h2 className="text-2xl font-semibold tracking-tight text-white">
+        <h2
+          className="text-2xl font-bold tracking-tight"
+          style={{ color: 'var(--color-text-dark)' }}
+        >
           {title}
         </h2>
-        <span aria-hidden className="h-px flex-1 bg-white/10" />
+        <span
+          aria-hidden
+          className="h-px flex-1"
+          style={{ background: 'var(--color-border)' }}
+        />
       </header>
       {children}
     </div>
@@ -153,12 +187,23 @@ function Group({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-white/10 pt-10">
+    <section
+      className="pt-10"
+      style={{ borderTop: '1px solid var(--color-border)' }}
+    >
       <header className="mb-6 flex items-baseline gap-3">
-        <span className="font-mono text-[10px] tracking-widest text-electric">
+        <span
+          className="text-[10px] tracking-widest font-semibold"
+          style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}
+        >
           {code}
         </span>
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3
+          className="text-lg font-bold"
+          style={{ color: 'var(--color-text-dark)' }}
+        >
+          {title}
+        </h3>
       </header>
       {children}
     </section>

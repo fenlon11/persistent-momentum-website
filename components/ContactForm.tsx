@@ -14,7 +14,14 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 const fieldShell =
-  'w-full border border-white/12 bg-navy px-4 py-3 text-sm text-white placeholder-mid transition-colors focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric';
+  'w-full px-4 py-3 text-sm transition-colors focus:outline-none';
+
+const fieldStyle = {
+  background: 'var(--color-bg-light-card)',
+  border: '1px solid var(--color-border)',
+  color: 'var(--color-text-dark)',
+  borderRadius: 'var(--radius)',
+};
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,26 +73,27 @@ export default function ContactForm() {
     }
   };
 
+  const labelStyle = {
+    color: 'var(--color-text-dark)',
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative border border-white/12 bg-navy-raised p-6 sm:p-8"
+      className="p-7 sm:p-8"
+      style={{
+        background: 'var(--color-bg-light-card)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-lg)',
+      }}
     >
-      {/* corner ticks */}
-      <span
-        aria-hidden
-        className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
-      />
-      <span
-        aria-hidden
-        className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
-      />
-
-      <p className="annotation-bright mb-6">Message form</p>
-
-      <div className="space-y-6">
+      <div className="space-y-5">
         <div>
-          <label htmlFor="name" className="annotation mb-2 block">
+          <label
+            htmlFor="name"
+            className="mb-2 block text-sm font-medium"
+            style={labelStyle}
+          >
             Name
           </label>
           <input
@@ -93,15 +101,20 @@ export default function ContactForm() {
             type="text"
             {...register('name')}
             className={fieldShell}
+            style={fieldStyle}
             placeholder="Your name"
           />
           {errors.name && (
-            <p className="mt-2 text-sm text-red-400">{errors.name.message}</p>
+            <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="email" className="annotation mb-2 block">
+          <label
+            htmlFor="email"
+            className="mb-2 block text-sm font-medium"
+            style={labelStyle}
+          >
             Email
           </label>
           <input
@@ -109,15 +122,20 @@ export default function ContactForm() {
             type="email"
             {...register('email')}
             className={fieldShell}
+            style={fieldStyle}
             placeholder="you@company.com"
           />
           {errors.email && (
-            <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>
+            <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="message" className="annotation mb-2 block">
+          <label
+            htmlFor="message"
+            className="mb-2 block text-sm font-medium"
+            style={labelStyle}
+          >
             Message
           </label>
           <textarea
@@ -125,34 +143,46 @@ export default function ContactForm() {
             rows={5}
             {...register('message')}
             className={`${fieldShell} resize-none`}
+            style={fieldStyle}
             placeholder="Investors, partners, talent, press — what brings you here?"
           />
           {errors.message && (
-            <p className="mt-2 text-sm text-red-400">{errors.message.message}</p>
+            <p className="mt-2 text-sm text-red-600">{errors.message.message}</p>
           )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="group inline-flex w-full items-center justify-center gap-2 bg-electric px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full inline-flex items-center justify-center gap-2 text-base font-semibold py-3.5 text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          style={{
+            background: 'var(--color-primary)',
+            borderRadius: 'var(--radius)',
+          }}
         >
           {isSubmitting ? 'Sending…' : 'Send message'}
-          {!isSubmitting && (
-            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-              →
-            </span>
-          )}
+          {!isSubmitting && <span aria-hidden>→</span>}
         </button>
 
         {submitStatus.type && (
           <div
             role="status"
-            className={`border p-4 text-sm ${
-              submitStatus.type === 'success'
-                ? 'border-emerald-500/30 bg-emerald-500/8 text-emerald-300'
-                : 'border-red-500/30 bg-red-500/8 text-red-300'
-            }`}
+            className="p-4 text-sm"
+            style={{
+              background:
+                submitStatus.type === 'success'
+                  ? 'rgba(16, 185, 129, 0.08)'
+                  : 'rgba(220, 38, 38, 0.08)',
+              border:
+                submitStatus.type === 'success'
+                  ? '1px solid rgba(16, 185, 129, 0.3)'
+                  : '1px solid rgba(220, 38, 38, 0.3)',
+              color:
+                submitStatus.type === 'success'
+                  ? 'rgb(6, 95, 70)'
+                  : 'rgb(153, 27, 27)',
+              borderRadius: 'var(--radius)',
+            }}
           >
             {submitStatus.message}
           </div>

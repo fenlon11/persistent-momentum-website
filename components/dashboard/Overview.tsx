@@ -60,7 +60,7 @@ export default function Overview({
       }
     }
     load();
-    const id = setInterval(load, 60_000); // refresh once a minute
+    const id = setInterval(load, 60_000);
     return () => {
       alive = false;
       clearInterval(id);
@@ -77,19 +77,28 @@ export default function Overview({
 
   return (
     <div className="space-y-8">
-      {/* Status line — terminal-style */}
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-white/10 pb-4 font-mono text-[11px] uppercase tracking-widest text-mid">
+      {/* Status line */}
+      <div
+        className="flex flex-wrap items-center gap-x-6 gap-y-2 pb-4 text-[11px] uppercase tracking-widest font-semibold"
+        style={{
+          color: 'var(--color-text-dark-muted)',
+          borderBottom: '1px solid var(--color-border)',
+          letterSpacing: '0.12em',
+        }}
+      >
         <span className="flex items-center gap-2">
           <span
             className={`h-1.5 w-1.5 rounded-full ${
               error
-                ? 'bg-red-400'
+                ? 'bg-red-500'
                 : agentTotals.degraded > 0
-                  ? 'bg-amber-400'
-                  : 'bg-emerald-400'
+                  ? 'bg-amber-500'
+                  : 'bg-emerald-500'
             }`}
           />
-          <span className="text-glow">pmOS {error ? 'offline' : 'operating'}</span>
+          <span style={{ color: 'var(--color-text-dark)' }}>
+            pmOS {error ? 'offline' : 'operating'}
+          </span>
         </span>
         <span>
           {agentTotals.active} active · {agentTotals.degraded} degraded ·{' '}
@@ -100,13 +109,21 @@ export default function Overview({
       </div>
 
       {error && (
-        <div className="border border-red-500/30 bg-red-500/8 p-4 font-mono text-xs text-red-300">
+        <div
+          className="p-4 text-xs"
+          style={{
+            background: 'rgba(220, 38, 38, 0.08)',
+            border: '1px solid rgba(220, 38, 38, 0.3)',
+            color: 'rgb(153, 27, 27)',
+            borderRadius: 'var(--radius)',
+          }}
+        >
           {error}
         </div>
       )}
 
       {/* 4 console tiles */}
-      <div className="grid gap-px overflow-hidden border border-white/12 bg-white/12 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Tile
           code="01"
           label="Agents"
@@ -147,24 +164,56 @@ export default function Overview({
       <div className="grid gap-8 lg:grid-cols-2">
         <Panel title="Now running" code="OPS-A" onMore={() => onJumpTo('operations')}>
           {tasks === null ? (
-            <p className="font-mono text-xs text-mid">Loading…</p>
+            <p
+              className="text-xs"
+              style={{ color: 'var(--color-text-dark-muted)' }}
+            >
+              Loading…
+            </p>
           ) : running.length === 0 && pending.length === 0 ? (
-            <p className="font-mono text-xs text-mid">Queue is empty.</p>
+            <p
+              className="text-xs"
+              style={{ color: 'var(--color-text-dark-muted)' }}
+            >
+              Queue is empty.
+            </p>
           ) : (
-            <ul className="space-y-px overflow-hidden border border-white/12 bg-white/12">
-              {[...running, ...pending].slice(0, 6).map((t) => (
+            <ul
+              className="overflow-hidden"
+              style={{
+                background: 'var(--color-bg-light-card)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-lg)',
+              }}
+            >
+              {[...running, ...pending].slice(0, 6).map((t, i) => (
                 <li
                   key={t.id}
-                  className="flex items-baseline gap-3 bg-navy px-4 py-3 text-sm"
+                  className="flex items-baseline gap-3 px-4 py-3 text-sm"
+                  style={{
+                    borderTop:
+                      i > 0 ? '1px solid var(--color-border-light)' : 'none',
+                  }}
                 >
                   <span
                     aria-hidden
                     className={`mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full ${
-                      t.status === 'running' ? 'bg-amber-400' : 'bg-electric'
+                      t.status === 'running' ? 'bg-amber-500' : 'bg-sky-500'
                     }`}
                   />
-                  <span className="flex-1 truncate text-glow">{t.title}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-mid">
+                  <span
+                    className="flex-1 truncate"
+                    style={{ color: 'var(--color-text-dark)' }}
+                  >
+                    {t.title}
+                  </span>
+                  <span
+                    className="text-[10px] uppercase tracking-wider font-medium"
+                    style={{
+                      color: 'var(--color-text-dark-muted)',
+                      letterSpacing: '0.1em',
+                    }}
+                  >
                     {t.status}
                   </span>
                 </li>
@@ -179,33 +228,66 @@ export default function Overview({
           onMore={() => onJumpTo('operations')}
         >
           {agents === null ? (
-            <p className="font-mono text-xs text-mid">Loading…</p>
+            <p
+              className="text-xs"
+              style={{ color: 'var(--color-text-dark-muted)' }}
+            >
+              Loading…
+            </p>
           ) : agents.length === 0 ? (
-            <p className="font-mono text-xs text-mid">No agents registered.</p>
+            <p
+              className="text-xs"
+              style={{ color: 'var(--color-text-dark-muted)' }}
+            >
+              No agents registered.
+            </p>
           ) : (
-            <ul className="space-y-px overflow-hidden border border-white/12 bg-white/12">
-              {agents.slice(0, 6).map((a) => (
+            <ul
+              className="overflow-hidden"
+              style={{
+                background: 'var(--color-bg-light-card)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-lg)',
+              }}
+            >
+              {agents.slice(0, 6).map((a, i) => (
                 <li
                   key={a.id}
-                  className="grid grid-cols-[12px_minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-3 bg-navy px-4 py-3"
+                  className="grid grid-cols-[12px_minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3"
+                  style={{
+                    borderTop:
+                      i > 0 ? '1px solid var(--color-border-light)' : 'none',
+                  }}
                 >
                   <span
                     aria-hidden
                     className={`h-1.5 w-1.5 rounded-full ${
                       a.status === 'active'
-                        ? 'bg-emerald-400'
+                        ? 'bg-emerald-500'
                         : a.status === 'degraded'
-                          ? 'bg-amber-400'
-                          : 'bg-red-400'
+                          ? 'bg-amber-500'
+                          : 'bg-red-500'
                     }`}
                   />
-                  <span className="truncate text-sm font-medium text-glow">
+                  <span
+                    className="truncate text-sm font-medium"
+                    style={{ color: 'var(--color-text-dark)' }}
+                  >
                     {a.name}
                   </span>
-                  <span className="truncate font-mono text-[11px] text-mid">
+                  <span
+                    className="truncate text-[11px]"
+                    style={{ color: 'var(--color-text-dark-muted)' }}
+                  >
                     {a.role}
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-mid">
+                  <span
+                    className="text-[10px] uppercase tracking-wider font-medium"
+                    style={{
+                      color: 'var(--color-text-dark-muted)',
+                      letterSpacing: '0.1em',
+                    }}
+                  >
                     {a.last_status ?? a.status}
                   </span>
                 </li>
@@ -261,28 +343,48 @@ function Tile({
 }) {
   const figColor =
     tone === 'warn'
-      ? 'text-amber-300'
+      ? 'rgb(180, 83, 9)' // amber-700
       : tone === 'ok'
-        ? 'text-emerald-300'
-        : 'text-electric';
+        ? 'rgb(4, 120, 87)' // emerald-700
+        : 'var(--color-primary)';
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex flex-col bg-navy px-5 py-5 text-left transition-colors hover:bg-navy-raised"
+      className="group p-5 text-left transition-colors hover:shadow"
+      style={{
+        background: 'var(--color-bg-light-card)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-lg)',
+      }}
     >
-      <span
-        aria-hidden
-        className="absolute left-0 top-0 h-2 w-2 border-l border-t border-electric/60"
-      />
-      <p className="font-mono text-[10px] tracking-widest text-electric">{code}</p>
-      <p className="mt-2 annotation">{label}</p>
       <p
-        className={`mt-3 font-mono text-3xl font-semibold leading-none tracking-tight ${figColor}`}
+        className="text-[10px] tracking-widest font-semibold"
+        style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}
+      >
+        {code}
+      </p>
+      <p
+        className="mt-2 text-xs font-semibold uppercase tracking-widest"
+        style={{
+          color: 'var(--color-text-dark-muted)',
+          letterSpacing: '0.12em',
+        }}
+      >
+        {label}
+      </p>
+      <p
+        className="mt-3 text-3xl font-bold leading-none tracking-tight"
+        style={{ color: figColor, letterSpacing: '-0.02em' }}
       >
         {figure}
       </p>
-      <p className="mt-2 text-xs text-mid">{detail}</p>
+      <p
+        className="mt-2 text-xs"
+        style={{ color: 'var(--color-text-dark-muted)' }}
+      >
+        {detail}
+      </p>
     </button>
   );
 }
@@ -301,15 +403,27 @@ function Panel({
   return (
     <section>
       <header className="mb-4 flex items-center gap-3">
-        <span className="font-mono text-[10px] tracking-widest text-electric">
+        <span
+          className="text-[10px] tracking-widest font-semibold"
+          style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}
+        >
           {code}
         </span>
-        <h3 className="text-sm font-semibold text-white">{title}</h3>
+        <h3
+          className="text-sm font-bold"
+          style={{ color: 'var(--color-text-dark)' }}
+        >
+          {title}
+        </h3>
         {onMore && (
           <button
             type="button"
             onClick={onMore}
-            className="ml-auto font-mono text-[10px] uppercase tracking-widest text-mid transition-colors hover:text-electric"
+            className="ml-auto text-[10px] uppercase tracking-widest font-semibold transition-colors"
+            style={{
+              color: 'var(--color-text-dark-muted)',
+              letterSpacing: '0.12em',
+            }}
           >
             view all →
           </button>

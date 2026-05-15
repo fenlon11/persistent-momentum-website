@@ -95,12 +95,12 @@ function KPICard({ label, value, subtitle, change }: { label: string; value: str
   const isNegative = change && change.startsWith('-');
 
   return (
-    <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
-      <p className="text-xs text-mid uppercase tracking-wider">{label}</p>
+    <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
+      <p className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">{label}</p>
       <p className="text-2xl font-bold text-white mt-1">{value}</p>
-      {subtitle && <p className="text-xs text-mid mt-0.5">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-[var(--color-text-dark-muted)] mt-0.5">{subtitle}</p>}
       {change && (
-        <p className={`text-xs mt-1 font-medium ${isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-mid'}`}>
+        <p className={`text-xs mt-1 font-medium ${isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-[var(--color-text-dark-muted)]'}`}>
           {isPositive ? '↑' : isNegative ? '↓' : ''} {change} vs prev period
         </p>
       )}
@@ -168,10 +168,10 @@ export default function Analytics() {
         <h2 className="text-xl font-bold text-white">Analytics</h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-24 bg-white/5 rounded-xl animate-pulse" />
+            <div key={i} className="h-24 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />
           ))}
         </div>
-        <div className="h-64 bg-white/5 rounded-xl animate-pulse" />
+        <div className="h-64 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />
       </div>
     );
   }
@@ -180,10 +180,10 @@ export default function Analytics() {
     return (
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-white">Analytics</h2>
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-8 text-center">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-8 text-center">
           <div className="text-4xl mb-3">📈</div>
-          <p className="text-glow/80 text-lg mb-2">Analytics Dashboard</p>
-          <p className="text-mid text-sm max-w-md mx-auto">
+          <p className="text-[var(--color-text-dark)] text-lg mb-2">Analytics Dashboard</p>
+          <p className="text-[var(--color-text-dark-muted)] text-sm max-w-md mx-auto">
             {data?.error === 'pmOS Supabase not configured'
               ? 'Connect your pmOS Supabase to see product metrics. Add PMOS_SUPABASE_URL and PMOS_SUPABASE_SERVICE_KEY to your environment.'
               : 'Analytics data will appear here once the sync worker starts collecting metrics from RevenueCat and App Store Connect.'}
@@ -220,7 +220,7 @@ export default function Analytics() {
             <select
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-electric/40"
+              className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border)] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-electric/40"
             >
               {products.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -238,8 +238,8 @@ export default function Analytics() {
                 onClick={() => handlePreset(p)}
                 className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
                   preset === p
-                    ? 'bg-electric/20 text-electric border border-electric/30'
-                    : 'text-mid hover:text-glow border border-white/8 hover:border-white/15'
+                    ? 'bg-[rgba(21,68,142,0.20)] text-[var(--color-primary)] border border-[rgba(21,68,142,0.30)]'
+                    : 'text-[var(--color-text-dark-muted)] hover:text-[var(--color-text-dark)] border border-[var(--color-border-light)] hover:border-[var(--color-border)]'
                 }`}
               >
                 {p === 'all' ? 'All' : p}
@@ -251,14 +251,14 @@ export default function Analytics() {
               type="date"
               value={dateFrom}
               onChange={(e) => handleCustomDate('from', e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-electric/40 [color-scheme:dark]"
+              className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border)] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-electric/40 [color-scheme:dark]"
             />
-            <span className="text-mid text-xs">to</span>
+            <span className="text-[var(--color-text-dark-muted)] text-xs">to</span>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => handleCustomDate('to', e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-electric/40 [color-scheme:dark]"
+              className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border)] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:ring-2 focus:ring-electric/40 [color-scheme:dark]"
             />
           </div>
         </div>
@@ -266,11 +266,11 @@ export default function Analytics() {
 
       {/* Empty state when no metrics data */}
       {!current && (
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-8 text-center">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-8 text-center">
           <div className="text-4xl mb-3">📊</div>
-          <p className="text-glow/80 text-lg mb-2">Waiting for metrics</p>
-          <p className="text-mid text-sm max-w-md mx-auto">
-            Product metrics will appear here once the <code className="text-electric">pm-analytics-sync</code> worker starts collecting data from RevenueCat and App Store Connect.
+          <p className="text-[var(--color-text-dark)] text-lg mb-2">Waiting for metrics</p>
+          <p className="text-[var(--color-text-dark-muted)] text-sm max-w-md mx-auto">
+            Product metrics will appear here once the <code className="text-[var(--color-primary)]">pm-analytics-sync</code> worker starts collecting data from RevenueCat and App Store Connect.
           </p>
         </div>
       )}
@@ -306,7 +306,7 @@ export default function Analytics() {
 
       {/* MRR Line Chart */}
       {chartData.length > 0 && (
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
           <h3 className="text-sm font-semibold text-white mb-4">Revenue Trend</h3>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={chartData}>
@@ -322,7 +322,7 @@ export default function Analytics() {
 
       {/* Downloads Bar Chart */}
       {chartData.length > 0 && (
-        <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
           <h3 className="text-sm font-semibold text-white mb-4">Daily Downloads</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
@@ -337,27 +337,27 @@ export default function Analytics() {
       )}
 
       {/* Recent Events */}
-      <div className="rounded-xl border border-white/8 bg-navy-raised p-4">
+      <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
         <h3 className="text-sm font-semibold text-white mb-3">Recent Events</h3>
         {events.length > 0 ? (
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {events.map((event) => (
-              <div key={event.id} className="flex items-start gap-3 text-xs bg-white/5 rounded-lg p-3">
-                <span className="text-mid whitespace-nowrap">{new Date(event.date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}</span>
+              <div key={event.id} className="flex items-start gap-3 text-xs bg-[var(--color-bg-light-secondary)] rounded-lg p-3">
+                <span className="text-[var(--color-text-dark-muted)] whitespace-nowrap">{new Date(event.date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}</span>
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                  event.event_type === 'release' ? 'bg-electric/20 text-electric' :
+                  event.event_type === 'release' ? 'bg-[rgba(21,68,142,0.20)] text-[var(--color-primary)]' :
                   event.event_type === 'review' ? 'bg-amber-500/20 text-amber-400' :
                   event.event_type === 'marketing' ? 'bg-purple-500/20 text-purple-400' :
-                  'bg-white/10 text-mid'
+                  'bg-white/10 text-[var(--color-text-dark-muted)]'
                 }`}>
                   {event.event_type}
                 </span>
-                <span className="text-glow/80">{event.title}</span>
+                <span className="text-[var(--color-text-dark)]">{event.title}</span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-mid py-3 text-center">
+          <p className="text-xs text-[var(--color-text-dark-muted)] py-3 text-center">
             Events like app releases, reviews, and marketing campaigns will appear here.
           </p>
         )}

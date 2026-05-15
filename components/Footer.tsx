@@ -1,15 +1,29 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-// Footer = drafting titleblock. Real metadata in cells, not decoration.
-// Linkable site sections sit above the titleblock as columns.
-
-const navColumns: { heading: string; links: { href: string; label: string }[] }[] = [
+const columns: {
+  heading: string;
+  links: { href: string; label: string; external?: boolean }[];
+}[] = [
   {
-    heading: 'The site',
+    heading: 'Products',
+    links: [
+      {
+        href: 'https://recruiter.persistentmomentum.com',
+        label: 'Persistent Recruiter',
+        external: true,
+      },
+      {
+        href: 'https://sales.persistentmomentum.com',
+        label: 'Persistent Sales',
+        external: true,
+      },
+    ],
+  },
+  {
+    heading: 'Company',
     links: [
       { href: '/portfolio', label: 'Portfolio' },
-      { href: '/pmos', label: 'pmOS' },
       { href: '/careers', label: 'Careers' },
       { href: '/contact', label: 'Contact' },
     ],
@@ -24,86 +38,98 @@ const navColumns: { heading: string; links: { href: string; label: string }[] }[
 ];
 
 export default function Footer() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const rev = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}`;
-
-  const titleblockCells: { label: string; value: string }[] = [
-    { label: 'Project', value: 'Persistent Momentum' },
-    { label: 'Drawn by', value: 'fenlon11' },
-    { label: 'Sheet', value: '01 / 01' },
-    { label: 'Issue', value: rev },
-  ];
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 bg-navy">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
-        {/* Identity + nav columns */}
-        <div className="grid gap-12 sm:grid-cols-12">
-          <div className="sm:col-span-6">
-            <Link href="/" className="inline-flex items-center gap-3">
+    <footer
+      style={{
+        background: 'var(--color-bg-secondary)',
+        borderTop: '1px solid var(--color-border)',
+      }}
+    >
+      <div className="max-w-6xl mx-auto px-6 py-14">
+        <div className="grid gap-10 sm:grid-cols-12">
+          <div className="sm:col-span-5">
+            <Link href="/" className="flex items-center gap-2.5">
               <Image
                 src="/logo.png"
                 alt=""
-                width={30}
-                height={30}
-                className="h-7 w-auto"
+                width={32}
+                height={32}
+                style={{ height: 28, width: 'auto' }}
               />
-              <span className="text-[15px] font-semibold tracking-tight text-white">
+              <span
+                className="font-semibold text-base tracking-tight"
+                style={{ color: 'var(--color-text)' }}
+              >
                 Persistent Momentum
               </span>
             </Link>
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-mid">
-              A portfolio operator. We design, build, and ship mobile apps, web
-              platforms, and AI-powered automation. pmOS is the build system that
-              makes it work.
+            <p
+              className="mt-4 max-w-xs text-sm leading-relaxed"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              We build products. Each one stands alone.
             </p>
-            <p className="annotation mt-6">Each product stands alone</p>
           </div>
 
-          {navColumns.map((col) => (
-            <div key={col.heading} className="sm:col-span-3">
-              <p className="annotation mb-4">{col.heading}</p>
+          {columns.map((col) => (
+            <div key={col.heading} className="sm:col-span-2">
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mb-4"
+                style={{
+                  color: 'var(--color-text-muted)',
+                  letterSpacing: '0.12em',
+                }}
+              >
+                {col.heading}
+              </p>
               <ul className="space-y-2.5 text-sm">
-                {col.links.map((l) => (
-                  <li key={l.href}>
-                    <Link
-                      href={l.href}
-                      className="text-mid transition-colors hover:text-white"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((l) =>
+                  l.external ? (
+                    <li key={l.href}>
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors"
+                        style={{ color: 'var(--color-text)' }}
+                      >
+                        {l.label}
+                      </a>
+                    </li>
+                  ) : (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="transition-colors"
+                        style={{ color: 'var(--color-text)' }}
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           ))}
         </div>
 
-        {/* Titleblock — drafting metadata grid */}
-        <div className="mt-14 grid grid-cols-2 overflow-hidden border border-white/15 sm:grid-cols-4">
-          {titleblockCells.map((cell, i) => (
-            <div
-              key={cell.label}
-              className={`px-5 py-4 ${i > 0 ? 'border-l border-white/15' : ''} ${
-                i >= 2 ? 'border-t border-white/15 sm:border-t-0' : ''
-              } ${i === 2 ? 'border-l-0 sm:border-l' : ''}`}
-            >
-              <p className="annotation mb-1.5">{cell.label}</p>
-              <p className="font-mono text-xs leading-tight text-glow">
-                {cell.value}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Copyright + tagline */}
-        <div className="mt-6 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mid/70">
+        <div
+          className="mt-12 pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+          style={{ borderTop: '1px solid var(--color-border)' }}
+        >
+          <p
+            className="text-xs"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             &copy; {year} Persistent Momentum &middot; All rights reserved
           </p>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mid/70">
-            Built with pmOS
+          <p
+            className="text-xs"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            persistentmomentum.com
           </p>
         </div>
       </div>

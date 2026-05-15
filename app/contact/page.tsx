@@ -27,7 +27,7 @@ export default function ContactPage() {
   return (
     <main>
       {/* Header + form */}
-      <section className="px-6 pt-20 pb-24" style={{ background: 'var(--color-bg)' }}>
+      <section className="px-6 pt-12 pb-16 md:pt-20 md:pb-24" style={{ background: 'var(--color-bg)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -41,7 +41,7 @@ export default function ContactPage() {
                 Contact
               </p>
               <h1
-                className="text-5xl md:text-6xl font-bold mb-6 leading-[1.05]"
+                className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 md:mb-6 leading-[1.1] md:leading-[1.05]"
                 style={{
                   color: 'var(--color-text-dark)',
                   letterSpacing: '-0.02em',

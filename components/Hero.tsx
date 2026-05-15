@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 export default function Hero() {
   return (
-    <section className="px-6 pt-20 pb-24" style={{ background: 'var(--color-bg)' }}>
+    <section className="px-6 pt-12 pb-16 md:pt-20 md:pb-24" style={{ background: 'var(--color-bg)' }}>
       <div className="max-w-6xl mx-auto">
         <span
-          className="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1.5 mb-7"
+          className="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1.5 mb-5 md:mb-7"
           style={{
             color: 'var(--color-primary)',
             background: 'rgba(21,68,142,0.06)',
@@ -18,7 +18,7 @@ export default function Hero() {
         </span>
 
         <h1
-          className="text-5xl md:text-6xl font-bold mb-6 leading-[1.05] max-w-4xl"
+          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 md:mb-6 leading-[1.1] md:leading-[1.05] max-w-4xl"
           style={{
             color: 'var(--color-text)',
             letterSpacing: '-0.02em',
@@ -38,7 +38,7 @@ export default function Hero() {
         </h1>
 
         <p
-          className="text-lg md:text-xl mb-9 max-w-2xl leading-relaxed"
+          className="text-base md:text-xl mb-7 md:mb-9 max-w-2xl leading-relaxed"
           style={{ color: 'var(--color-text-muted)' }}
         >
           Persistent Momentum is the company behind{' '}

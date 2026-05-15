@@ -20,7 +20,7 @@ interface Task {
 }
 
 const STATUS_CONFIG: Record<string, { icon: string; label: string; color: string; border: string }> = {
-  pending: { icon: '🔵', label: 'Pending', color: 'bg-electric/10 text-electric', border: 'border-electric/25' },
+  pending: { icon: '🔵', label: 'Pending', color: 'bg-[rgba(21,68,142,0.10)] text-[var(--color-primary)]', border: 'border-[rgba(21,68,142,0.25)]' },
   running: { icon: '🟡', label: 'Running', color: 'bg-amber-500/10 text-amber-400', border: 'border-amber-500/20' },
   completed: { icon: '✅', label: 'Completed', color: 'bg-emerald-500/10 text-emerald-400', border: 'border-emerald-500/20' },
   failed: { icon: '🔴', label: 'Failed', color: 'bg-red-500/10 text-red-400', border: 'border-red-500/20' },
@@ -114,7 +114,7 @@ export default function Pipeline() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-xl font-bold text-white">Task Pipeline</h2>
-          <p className="text-sm text-mid mt-1">
+          <p className="text-sm text-[var(--color-text-dark-muted)] mt-1">
             {tasks.length} task{tasks.length !== 1 ? 's' : ''} across {Object.keys(grouped).length} product{Object.keys(grouped).length !== 1 ? 's' : ''}
             {' · '}from <span className="font-mono">cc_task_queue</span>
           </p>
@@ -123,7 +123,7 @@ export default function Pipeline() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-mid mr-1">Status:</span>
+        <span className="text-xs text-[var(--color-text-dark-muted)] mr-1">Status:</span>
         {ALL_STATUSES.map(s => {
           const cfg = STATUS_CONFIG[s];
           const active = statusFilter.includes(s);
@@ -132,7 +132,7 @@ export default function Pipeline() {
               key={s}
               onClick={() => toggleStatus(s)}
               className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                active ? `${cfg.color} ${cfg.border}` : 'text-mid border-white/8 hover:border-white/15'
+                active ? `${cfg.color} ${cfg.border}` : 'text-[var(--color-text-dark-muted)] border-[var(--color-border-light)] hover:border-[var(--color-border)]'
               }`}
             >
               {cfg.icon} {cfg.label}
@@ -143,7 +143,7 @@ export default function Pipeline() {
           <select
             value={productFilter}
             onChange={e => setProductFilter(e.target.value)}
-            className="text-xs bg-navy-raised border border-white/8 rounded-lg px-2 py-1 text-glow/80 ml-auto"
+            className="text-xs bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-lg px-2 py-1 text-[var(--color-text-dark)] ml-auto"
           >
             <option value="all">All products</option>
             {productSlugs.map(slug => (
@@ -157,18 +157,18 @@ export default function Pipeline() {
       {loading && tasks.length === 0 && (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-32 bg-navy-raised rounded-xl animate-pulse" />
+            <div key={i} className="h-32 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />
           ))}
         </div>
       )}
 
       {/* Grouped */}
       {Object.entries(grouped).map(([key, { slug, tasks: groupTasks }]) => (
-        <div key={key} className="bg-navy-raised border border-white/8 rounded-xl p-4 space-y-3">
+        <div key={key} className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-white">{groupLabel(slug)}</span>
-              <span className="text-xs text-mid bg-white/5 px-2 py-0.5 rounded-full">{groupTasks.length}</span>
+              <span className="text-xs text-[var(--color-text-dark-muted)] bg-[var(--color-bg-light-secondary)] px-2 py-0.5 rounded-full">{groupTasks.length}</span>
             </div>
           </div>
 
@@ -185,18 +185,18 @@ export default function Pipeline() {
                         <span className="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded">P{task.priority}</span>
                       )}
                       {task.loop_type && (
-                        <span className="text-[10px] bg-white/5 text-mid px-1.5 py-0.5 rounded">{task.loop_type}</span>
+                        <span className="text-[10px] bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)] px-1.5 py-0.5 rounded">{task.loop_type}</span>
                       )}
                       {task.target_worker && (
-                        <span className="text-[10px] bg-white/5 text-mid px-1.5 py-0.5 rounded font-mono">{task.target_worker}</span>
+                        <span className="text-[10px] bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)] px-1.5 py-0.5 rounded font-mono">{task.target_worker}</span>
                       )}
                     </div>
                     {(task.result_summary || task.prompt) && (
-                      <p className="text-xs text-mid mt-0.5 line-clamp-2">
+                      <p className="text-xs text-[var(--color-text-dark-muted)] mt-0.5 line-clamp-2">
                         {task.result_summary || task.prompt}
                       </p>
                     )}
-                    <div className="text-[11px] text-mid/70 mt-1">
+                    <div className="text-[11px] text-[color:rgba(100,116,139,0.7)] mt-1">
                       {timeAgo(task.created_at)}
                       {task.attempt_count != null && task.max_attempts != null && task.attempt_count > 0 && (
                         <> · attempt {task.attempt_count}/{task.max_attempts}</>
@@ -216,7 +216,7 @@ export default function Pipeline() {
                     <select
                       value={task.status}
                       onChange={e => updateStatus(task.id, e.target.value)}
-                      className="text-[10px] bg-white/5 border border-white/8 rounded px-1 py-0.5 text-mid"
+                      className="text-[10px] bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded px-1 py-0.5 text-[var(--color-text-dark-muted)]"
                     >
                       {ALL_STATUSES.map(s => (
                         <option key={s} value={s}>{STATUS_CONFIG[s].label}</option>
@@ -232,7 +232,7 @@ export default function Pipeline() {
 
       {/* Empty state */}
       {!loading && tasks.length === 0 && (
-        <div className="text-center py-12 text-mid text-sm">
+        <div className="text-center py-12 text-[var(--color-text-dark-muted)] text-sm">
           No tasks match the current filters.
         </div>
       )}

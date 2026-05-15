@@ -1,25 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const description =
-  "Persistent Momentum is a portfolio operator. We design, build, and ship mobile apps, web platforms, and AI-powered automation. pmOS is the build system that makes it work.";
+  "Persistent Momentum builds products. Persistent Recruiter is live. Persistent Sales is coming. Each product stands alone.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://persistentmomentum.com"),
   title: {
-    default: "Persistent Momentum — Portfolio operator",
+    default: "Persistent Momentum — We build products",
     template: "%s",
   },
   description,
@@ -35,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Persistent Momentum',
-    title: 'Persistent Momentum — Portfolio operator',
+    title: 'Persistent Momentum — We build products',
     description,
     url: 'https://persistentmomentum.com',
     images: [{ url: '/logo.png', width: 762, height: 720, alt: 'Persistent Momentum' }],
@@ -54,10 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased blueprint-grid`}
-      >
+    <html lang="en" data-theme="light">
+      <body className={`${openSans.variable} antialiased`}>
         <Navigation />
         {children}
       </body>

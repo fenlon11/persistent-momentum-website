@@ -28,13 +28,13 @@ export default function ClaudeMdViewer() {
   const renderContent = (text: string) => {
     return text.split('\n').map((line, i) => {
       if (line.startsWith('# ')) return <h1 key={i} className="text-xl font-bold text-white mt-6 mb-2">{line.slice(2)}</h1>;
-      if (line.startsWith('## ')) return <h2 key={i} className="text-lg font-semibold text-electric mt-5 mb-2">{line.slice(3)}</h2>;
-      if (line.startsWith('### ')) return <h3 key={i} className="text-sm font-semibold text-glow/80 mt-4 mb-1">{line.slice(4)}</h3>;
-      if (line.startsWith('- ')) return <div key={i} className="text-sm text-mid pl-4 py-0.5">• {line.slice(2)}</div>;
-      if (line.startsWith('---')) return <hr key={i} className="border-white/10 my-4" />;
+      if (line.startsWith('## ')) return <h2 key={i} className="text-lg font-semibold text-[var(--color-primary)] mt-5 mb-2">{line.slice(3)}</h2>;
+      if (line.startsWith('### ')) return <h3 key={i} className="text-sm font-semibold text-[var(--color-text-dark)] mt-4 mb-1">{line.slice(4)}</h3>;
+      if (line.startsWith('- ')) return <div key={i} className="text-sm text-[var(--color-text-dark-muted)] pl-4 py-0.5">• {line.slice(2)}</div>;
+      if (line.startsWith('---')) return <hr key={i} className="border-[var(--color-border)] my-4" />;
       if (line.trim() === '') return <div key={i} className="h-2"></div>;
       const formatted = line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
-      return <p key={i} className="text-sm text-mid py-0.5" dangerouslySetInnerHTML={{ __html: formatted }}></p>;
+      return <p key={i} className="text-sm text-[var(--color-text-dark-muted)] py-0.5" dangerouslySetInnerHTML={{ __html: formatted }}></p>;
     });
   };
 
@@ -43,26 +43,26 @@ export default function ClaudeMdViewer() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">CLAUDE.md</h2>
-          <p className="text-sm text-mid mt-1">Live system config from GitHub</p>
+          <p className="text-sm text-[var(--color-text-dark-muted)] mt-1">Live system config from GitHub</p>
         </div>
-        <button onClick={fetchClaudeMd} className="text-xs bg-white/5 text-mid hover:text-white px-3 py-1.5 rounded-lg transition-colors">
+        <button onClick={fetchClaudeMd} className="text-xs bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)] hover:text-white px-3 py-1.5 rounded-lg transition-colors">
           Refresh
         </button>
       </div>
 
-      {lastFetched && <div className="text-xs text-mid/70">Last fetched: {lastFetched.toLocaleTimeString()}</div>}
+      {lastFetched && <div className="text-xs text-[color:rgba(100,116,139,0.7)]">Last fetched: {lastFetched.toLocaleTimeString()}</div>}
 
-      <div className="bg-navy-raised border border-white/8 rounded-xl p-4 sm:p-6 max-h-[70vh] overflow-y-auto">
+      <div className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-xl p-4 sm:p-6 max-h-[70vh] overflow-y-auto">
         {loading ? (
           <div className="space-y-3">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-4 bg-white/5 rounded animate-pulse" style={{ width: `${60 + Math.random() * 40}%` }}></div>
+              <div key={i} className="h-4 bg-[var(--color-bg-light-secondary)] rounded animate-pulse" style={{ width: `${60 + Math.random() * 40}%` }}></div>
             ))}
           </div>
         ) : content ? (
           <div className="font-mono text-xs sm:text-sm leading-relaxed">{renderContent(content)}</div>
         ) : (
-          <div className="text-mid text-center py-8">No content loaded</div>
+          <div className="text-[var(--color-text-dark-muted)] text-center py-8">No content loaded</div>
         )}
       </div>
     </div>

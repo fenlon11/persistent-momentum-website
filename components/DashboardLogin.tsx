@@ -38,39 +38,54 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-navy px-5">
-      <div className="relative w-full max-w-sm border border-white/12 bg-navy-raised p-8">
-        {/* corner ticks */}
-        <span
-          aria-hidden
-          className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
-        />
-        <span
-          aria-hidden
-          className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
-        />
-
+    <div
+      className="flex min-h-screen items-center justify-center px-5"
+      style={{ background: 'var(--color-bg-light)' }}
+    >
+      <div
+        className="w-full max-w-sm p-8"
+        style={{
+          background: 'var(--color-bg-light-card)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: '0 12px 32px -12px rgba(15,23,42,0.08)',
+        }}
+      >
         {/* identity strip */}
-        <div className="mb-7 flex items-center gap-3">
+        <div className="mb-6 flex items-center gap-3">
           <Image
             src="/logo.png"
             alt=""
             width={32}
             height={32}
             priority
-            className="h-7 w-auto"
+            style={{ height: 28, width: 'auto' }}
           />
-          <div className="flex-1">
-            <p className="annotation">pmOS &middot; Command Center</p>
-            <p className="text-sm font-semibold text-white">Operator console</p>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-widest"
+              style={{
+                color: 'var(--color-primary)',
+                letterSpacing: '0.12em',
+              }}
+            >
+              pmOS
+            </p>
+            <p
+              className="text-base font-bold"
+              style={{ color: 'var(--color-text-dark)' }}
+            >
+              Command Center
+            </p>
           </div>
-          <span
-            aria-hidden
-            className="h-2 w-2 rounded-full bg-emerald-400/80 shadow-[0_0_6px_rgba(52,211,153,0.6)]"
-          />
         </div>
 
-        <p className="annotation mb-3">Auth &middot; Enter 6-digit PIN</p>
+        <p
+          className="text-sm mb-4"
+          style={{ color: 'var(--color-text-dark-muted)' }}
+        >
+          Enter your PIN to continue.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -80,7 +95,13 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
             placeholder="••••••"
-            className="w-full border border-white/15 bg-navy px-4 py-3 text-center text-2xl tracking-[0.5em] text-white transition-colors placeholder:tracking-[0.3em] placeholder:text-mid focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric"
+            className="w-full px-4 py-3 text-center text-2xl tracking-[0.5em] focus:outline-none"
+            style={{
+              background: 'var(--color-bg-light-secondary)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius)',
+              color: 'var(--color-text-dark)',
+            }}
             autoFocus
             aria-label="6-digit PIN"
           />
@@ -88,7 +109,13 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
           {error && (
             <p
               role="alert"
-              className="border border-red-500/30 bg-red-500/8 px-3 py-2 text-center font-mono text-xs uppercase tracking-widest text-red-300"
+              className="text-center text-sm font-medium px-3 py-2"
+              style={{
+                color: 'rgb(153, 27, 27)',
+                background: 'rgba(220, 38, 38, 0.08)',
+                border: '1px solid rgba(220, 38, 38, 0.3)',
+                borderRadius: 'var(--radius)',
+              }}
             >
               {error}
             </p>
@@ -97,14 +124,14 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
           <button
             type="submit"
             disabled={loading || pin.length === 0}
-            className="group inline-flex w-full items-center justify-center gap-2 bg-electric py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full inline-flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: 'var(--color-primary)',
+              borderRadius: 'var(--radius)',
+            }}
           >
             {loading ? 'Verifying…' : 'Unlock'}
-            {!loading && (
-              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            )}
+            {!loading && <span aria-hidden>→</span>}
           </button>
         </form>
       </div>

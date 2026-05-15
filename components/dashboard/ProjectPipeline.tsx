@@ -46,7 +46,7 @@ function PhaseTimeline({ project }: { project: ApiProject }) {
                     ? 'bg-emerald-500 border-emerald-400'
                     : status === 'active'
                     ? 'border-[#1E5BFF] bg-[#1E5BFF] animate-pulse'
-                    : 'bg-white/5 border-white/15'
+                    : 'bg-[var(--color-bg-light-secondary)] border-[var(--color-border)]'
                 }`}
               >
                 {status === 'completed' ? '✓' : ''}
@@ -57,7 +57,7 @@ function PhaseTimeline({ project }: { project: ApiProject }) {
                     ? 'text-emerald-400'
                     : status === 'active'
                     ? 'text-[#1E5BFF] font-medium'
-                    : 'text-mid/70'
+                    : 'text-[color:rgba(100,116,139,0.7)]'
                 }`}
               >
                 {phase.label}
@@ -90,13 +90,13 @@ function ProjectCard({ project }: { project: ApiProject }) {
   const totalMilestones = project.milestones.length;
 
   return (
-    <div className="bg-gradient-to-br from-white/5 to-navy-raised border border-white/8 backdrop-blur-xl rounded-2xl p-5">
+    <div className="bg-gradient-to-br from-white/5 to-navy-raised border border-[var(--color-border-light)] backdrop-blur-xl rounded-2xl p-5">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{project.icon}</span>
           <div>
             <h3 className="text-white font-semibold text-sm">{project.name}</h3>
-            <p className="text-mid text-xs mt-0.5">{project.description}</p>
+            <p className="text-[var(--color-text-dark-muted)] text-xs mt-0.5">{project.description}</p>
           </div>
         </div>
         <MRRBadge mrr={project.mrr} />
@@ -114,9 +114,9 @@ function ProjectCard({ project }: { project: ApiProject }) {
               {project.domain}
             </a>
           )}
-          {project.pricing && <span className="text-mid">{project.pricing}</span>}
+          {project.pricing && <span className="text-[var(--color-text-dark-muted)]">{project.pricing}</span>}
           {project.completionPct !== null && (
-            <span className="text-mid">{project.completionPct}% complete</span>
+            <span className="text-[var(--color-text-dark-muted)]">{project.completionPct}% complete</span>
           )}
         </div>
       )}
@@ -125,7 +125,7 @@ function ProjectCard({ project }: { project: ApiProject }) {
 
       {totalMilestones > 0 && (
         <div className="mt-4">
-          <h4 className="text-xs font-medium text-mid uppercase tracking-wider mb-2">
+          <h4 className="text-xs font-medium text-[var(--color-text-dark-muted)] uppercase tracking-wider mb-2">
             Milestones ({completedMilestones}/{totalMilestones})
           </h4>
           <div className="space-y-1.5">
@@ -135,7 +135,7 @@ function ProjectCard({ project }: { project: ApiProject }) {
                   className={`w-3.5 h-3.5 rounded border flex-shrink-0 flex items-center justify-center ${
                     m.completed
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                      : 'border-white/15 bg-white/5'
+                      : 'border-[var(--color-border)] bg-[var(--color-bg-light-secondary)]'
                   }`}
                 >
                   {m.completed && (
@@ -144,8 +144,8 @@ function ProjectCard({ project }: { project: ApiProject }) {
                     </svg>
                   )}
                 </span>
-                <span className={m.completed ? 'text-mid line-through' : 'text-glow/80'}>{m.label}</span>
-                {m.date && <span className="text-mid/70 ml-auto">{m.date}</span>}
+                <span className={m.completed ? 'text-[var(--color-text-dark-muted)] line-through' : 'text-[var(--color-text-dark)]'}>{m.label}</span>
+                {m.date && <span className="text-[color:rgba(100,116,139,0.7)] ml-auto">{m.date}</span>}
               </label>
             ))}
           </div>
@@ -154,10 +154,10 @@ function ProjectCard({ project }: { project: ApiProject }) {
 
       {project.nextActions.length > 0 && (
         <div className="mt-4">
-          <h4 className="text-xs font-medium text-mid uppercase tracking-wider mb-2">Next actions</h4>
+          <h4 className="text-xs font-medium text-[var(--color-text-dark-muted)] uppercase tracking-wider mb-2">Next actions</h4>
           <div className="border-l-2 border-[#1E5BFF]/30 pl-3 space-y-1.5">
             {project.nextActions.map((action, i) => (
-              <p key={i} className="text-xs text-glow/80">
+              <p key={i} className="text-xs text-[var(--color-text-dark)]">
                 {action}
               </p>
             ))}
@@ -165,7 +165,7 @@ function ProjectCard({ project }: { project: ApiProject }) {
         </div>
       )}
 
-      <div className="mt-4 pt-3 border-t border-white/8 text-[10px] text-mid/70 flex items-center justify-between">
+      <div className="mt-4 pt-3 border-t border-[var(--color-border-light)] text-[10px] text-[color:rgba(100,116,139,0.7)] flex items-center justify-between">
         <span className="font-mono">{project.stage}</span>
         <span>synced {timeAgo(project.lastSyncedAt)}</span>
       </div>
@@ -214,10 +214,10 @@ export default function ProjectPipeline() {
     <div>
       {/* Overall progress — hidden if no milestones tracked yet */}
       {totalMilestones > 0 && (
-        <div className="mb-6 bg-gradient-to-br from-white/5 to-navy-raised border border-white/8 backdrop-blur-xl rounded-2xl p-4">
+        <div className="mb-6 bg-gradient-to-br from-white/5 to-navy-raised border border-[var(--color-border-light)] backdrop-blur-xl rounded-2xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-glow/80 font-medium">Pipeline progress</span>
-            <span className="text-xs text-mid">
+            <span className="text-sm text-[var(--color-text-dark)] font-medium">Pipeline progress</span>
+            <span className="text-xs text-[var(--color-text-dark-muted)]">
               {completedMilestones} of {totalMilestones} milestones completed
             </span>
           </div>
@@ -233,13 +233,13 @@ export default function ProjectPipeline() {
       {loading && projects.length === 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-64 bg-navy-raised rounded-2xl animate-pulse" />
+            <div key={i} className="h-64 bg-[var(--color-bg-light-secondary)] rounded-2xl animate-pulse" />
           ))}
         </div>
       )}
 
       {!loading && projects.length === 0 && (
-        <div className="text-center py-12 text-sm text-mid">
+        <div className="text-center py-12 text-sm text-[var(--color-text-dark-muted)]">
           {error
             ? `Error: ${error}`
             : 'No projects in project_state. Add a row to the table to see it here.'}

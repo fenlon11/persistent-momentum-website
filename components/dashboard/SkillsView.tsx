@@ -96,7 +96,7 @@ export default function SkillsView() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-xl font-bold text-white">Skills</h2>
-          <p className="text-sm text-mid mt-1">
+          <p className="text-sm text-[var(--color-text-dark-muted)] mt-1">
             {totalInvocations} invocation{totalInvocations !== 1 ? 's' : ''} · {stats.length} distinct skill{stats.length !== 1 ? 's' : ''} · last {days} days
             {' · '}from <span className="font-mono">pm_skill_invocations</span>
           </p>
@@ -104,7 +104,7 @@ export default function SkillsView() {
         <select
           value={days}
           onChange={(e) => setDays(parseInt(e.target.value))}
-          className="text-xs bg-navy-raised border border-white/8 rounded-lg px-2 py-1 text-glow/80"
+          className="text-xs bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-lg px-2 py-1 text-[var(--color-text-dark)]"
         >
           <option value={1}>Last 24 hours</option>
           <option value={7}>Last 7 days</option>
@@ -115,20 +115,20 @@ export default function SkillsView() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="rounded-xl border border-white/8 bg-white/5 p-4">
-          <p className="text-xs text-mid uppercase tracking-wider">Invocations</p>
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
+          <p className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">Invocations</p>
           <p className="text-2xl font-bold text-white mt-1">{totalInvocations}</p>
         </div>
-        <div className="rounded-xl border border-white/8 bg-white/5 p-4">
-          <p className="text-xs text-mid uppercase tracking-wider">Completed</p>
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
+          <p className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">Completed</p>
           <p className="text-2xl font-bold text-emerald-400 mt-1">{totalCompleted}</p>
         </div>
-        <div className="rounded-xl border border-white/8 bg-white/5 p-4">
-          <p className="text-xs text-mid uppercase tracking-wider">Failed</p>
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
+          <p className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">Failed</p>
           <p className="text-2xl font-bold text-red-400 mt-1">{totalFailed}</p>
         </div>
-        <div className="rounded-xl border border-white/8 bg-white/5 p-4">
-          <p className="text-xs text-mid uppercase tracking-wider">Success rate</p>
+        <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] p-4">
+          <p className="text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">Success rate</p>
           <p className="text-2xl font-bold text-white mt-1">{overallRate}%</p>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default function SkillsView() {
       {loading && stats.length === 0 && (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 bg-navy-raised rounded-xl animate-pulse" />
+            <div key={i} className="h-16 bg-[var(--color-bg-light-secondary)] rounded-xl animate-pulse" />
           ))}
         </div>
       )}
@@ -145,9 +145,9 @@ export default function SkillsView() {
       {stats.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-sm font-bold text-white">Per-skill breakdown</h3>
-          <div className="rounded-xl border border-white/8 bg-navy-raised overflow-hidden">
+          <div className="rounded-xl border border-[var(--color-border-light)] bg-[var(--color-bg-light-secondary)] overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-white/5 text-xs text-mid uppercase tracking-wider">
+              <thead className="bg-[var(--color-bg-light-secondary)] text-xs text-[var(--color-text-dark-muted)] uppercase tracking-wider">
                 <tr>
                   <th className="text-left px-4 py-2 font-medium">Skill</th>
                   <th className="text-right px-3 py-2 font-medium">Total</th>
@@ -165,12 +165,12 @@ export default function SkillsView() {
                     <tr
                       key={stat.skill_name}
                       onClick={() => setSelectedSkill(isSelected ? null : stat.skill_name)}
-                      className={`border-t border-white/8 cursor-pointer transition-colors ${
-                        isSelected ? 'bg-[#1E5BFF]/10' : 'hover:bg-white/5'
+                      className={`border-t border-[var(--color-border-light)] cursor-pointer transition-colors ${
+                        isSelected ? 'bg-[#1E5BFF]/10' : 'hover:bg-[var(--color-bg-light-secondary)]'
                       }`}
                     >
                       <td className="px-4 py-2.5 text-white font-mono text-xs">{stat.skill_name}</td>
-                      <td className="px-3 py-2.5 text-right text-glow/80">{stat.total_count}</td>
+                      <td className="px-3 py-2.5 text-right text-[var(--color-text-dark)]">{stat.total_count}</td>
                       <td className="px-3 py-2.5 text-right text-emerald-400">{stat.completed_count}</td>
                       <td className="px-3 py-2.5 text-right text-red-400">{stat.failed_count || ''}</td>
                       <td className="px-3 py-2.5 text-right">
@@ -182,7 +182,7 @@ export default function SkillsView() {
                           {rate}%
                         </span>
                       </td>
-                      <td className="px-3 py-2.5 text-right text-mid text-xs">
+                      <td className="px-3 py-2.5 text-right text-[var(--color-text-dark-muted)] text-xs">
                         {formatDuration(stat.avg_duration_ms)}
                       </td>
                     </tr>
@@ -192,12 +192,12 @@ export default function SkillsView() {
             </table>
           </div>
           {selectedSkill && (
-            <p className="text-xs text-mid">
+            <p className="text-xs text-[var(--color-text-dark-muted)]">
               Filtering invocations to <span className="font-mono text-[#1E5BFF]">{selectedSkill}</span>
               {' · '}
               <button
                 onClick={() => setSelectedSkill(null)}
-                className="text-mid hover:text-white underline"
+                className="text-[var(--color-text-dark-muted)] hover:text-white underline"
               >
                 clear
               </button>
@@ -212,31 +212,31 @@ export default function SkillsView() {
           <h3 className="text-sm font-bold text-white">
             Recent invocations
             {selectedSkill && (
-              <span className="text-mid font-normal text-xs ml-2">({filteredInvocations.length})</span>
+              <span className="text-[var(--color-text-dark-muted)] font-normal text-xs ml-2">({filteredInvocations.length})</span>
             )}
           </h3>
           <div className="space-y-2">
             {filteredInvocations.slice(0, 30).map((inv) => (
               <div
                 key={inv.id}
-                className="bg-navy-raised border border-white/8 rounded-lg p-3"
+                className="bg-[var(--color-bg-light-secondary)] border border-[var(--color-border-light)] rounded-lg p-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3 min-w-0 flex-1">
                     <span
                       className={`text-[10px] px-2 py-0.5 rounded border flex-shrink-0 mt-0.5 ${
-                        STATUS_COLOR[inv.status] || 'bg-white/5 text-mid border-white/12'
+                        STATUS_COLOR[inv.status] || 'bg-[var(--color-bg-light-secondary)] text-[var(--color-text-dark-muted)] border-[var(--color-border)]'
                       }`}
                     >
                       {inv.status}
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="text-sm text-white font-mono">{inv.skill_name}</div>
-                      <div className="text-[11px] text-mid mt-0.5 flex items-center gap-3 flex-wrap">
+                      <div className="text-[11px] text-[var(--color-text-dark-muted)] mt-0.5 flex items-center gap-3 flex-wrap">
                         <span>{timeAgo(inv.created_at)}</span>
                         {inv.duration_ms != null && <span>{formatDuration(inv.duration_ms)}</span>}
                         {inv.model_used && (
-                          <span className="font-mono text-mid">{inv.model_used}</span>
+                          <span className="font-mono text-[var(--color-text-dark-muted)]">{inv.model_used}</span>
                         )}
                       </div>
                       {inv.error_message && (
@@ -251,7 +251,7 @@ export default function SkillsView() {
             ))}
           </div>
           {filteredInvocations.length > 30 && (
-            <p className="text-xs text-mid text-center">
+            <p className="text-xs text-[var(--color-text-dark-muted)] text-center">
               Showing 30 of {filteredInvocations.length}. Filter by skill or shorten range to see more.
             </p>
           )}
@@ -259,7 +259,7 @@ export default function SkillsView() {
       )}
 
       {!loading && totalInvocations === 0 && (
-        <div className="text-center py-12 text-sm text-mid">
+        <div className="text-center py-12 text-sm text-[var(--color-text-dark-muted)]">
           No skill invocations recorded in the selected range.
           {data?.error && <p className="text-red-400 mt-2">{data.error}</p>}
         </div>

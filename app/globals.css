@@ -1,161 +1,105 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Persistent Momentum — corporate site palette                                */
+/* Sister to recruiter.persistentmomentum.com. Same CSS variable names so      */
+/* components can move between sites with no rewrite.                          */
+/* All-light theme on the parent (holdco surface, no auth-dark context).       */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #07112C;
-  --foreground: #E6EEFF;
+  /* Backgrounds */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-light: #f8fafc;
+  --color-bg-light-secondary: #f1f5f9;
+  --color-bg-light-card: #ffffff;
+
+  /* Text — on light */
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-dark: #0f172a;
+  --color-text-dark-muted: #64748b;
+
+  /* Brand */
+  --color-primary: #15448e;
+  --color-primary-hover: #0f3470;
+  --color-primary-glow: #3b82f6;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-light: #e2e8f0;
+
+  /* Misc */
+  --color-secondary: #f1f5f9;
+  --color-accent: #15448e;
+
+  /* Radii */
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-lg: 10px;
+
+  /* Fonts */
+  --font-body: var(--font-open-sans), 'Open Sans', system-ui, sans-serif;
 }
 
-/* Brand palette — canonical source: projects/persistent-momentum/BRAND.md */
+/* Expose key tokens to Tailwind so `bg-bg-light`, `text-primary` etc. work    */
+/* alongside inline `style={{ ... var(--color-...) }}`.                        */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--color-bg);
+  --color-bg-secondary: var(--color-bg-secondary);
+  --color-bg-light: var(--color-bg-light);
+  --color-bg-light-secondary: var(--color-bg-light-secondary);
+  --color-bg-light-card: var(--color-bg-light-card);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-dark: var(--color-text-dark);
+  --color-text-dark-muted: var(--color-text-dark-muted);
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-glow: var(--color-primary-glow);
+  --color-border: var(--color-border);
+  --color-border-light: var(--color-border-light);
+  --color-accent: var(--color-accent);
 
-  --color-navy: #07112C;        /* primary surface */
-  --color-navy-raised: #0C1838; /* raised cards / panels */
-  --color-electric: #1E5BFF;    /* THE accent — one per surface */
-  --color-ice: #A8C5FF;         /* secondary accent / highlights */
-  --color-glow: #E6EEFF;        /* near-white text on dark */
-  --color-mid: #6B7A99;         /* secondary text, dividers */
+  --font-sans: var(--font-body);
+}
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────── */
-/* BLUEPRINT METAPHOR — the visual system                                     */
-/* ─────────────────────────────────────────────────────────────────────────── */
-/* Restrained, precise, technical. Drafting grid, hairline linework, mono     */
-/* annotations, titleblock structure. No decorative flourishes.               */
-
-/* Drafting grid — subtle paper grain, 32px squares. Applied to <body> via    */
-/* the blueprint-grid class so we can opt-out on dashboard areas if needed.   */
-.blueprint-grid {
-  background-image:
-    linear-gradient(to right, rgba(168, 197, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(168, 197, 255, 0.035) 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-attachment: fixed;
+a,
+button {
+  transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
 }
 
-/* Finer sub-grid that emerges on raised surfaces */
-.blueprint-grid-fine {
-  background-image:
-    linear-gradient(to right, rgba(168, 197, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(168, 197, 255, 0.04) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-
-/* Hairline — the schematic stroke. 1px, ice-blue at low alpha. */
-.hairline {
-  background-color: rgba(168, 197, 255, 0.15);
-}
-.hairline-strong {
-  background-color: rgba(168, 197, 255, 0.28);
-}
-.hairline-accent {
-  background-color: rgba(30, 91, 255, 0.55);
-}
-
-/* Mono annotation — small uppercase tracking, builder texture. */
-.annotation {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.6875rem; /* 11px */
-  line-height: 1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6B7A99;
-}
-.annotation-bright {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  line-height: 1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #A8C5FF;
-}
-
-/* Eyebrow — kept for back-compat; alias of annotation at slightly larger size */
-.eyebrow {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #6B7A99;
-}
-
-/* Sheet header — "SHEET 03 / 07 ──── THE SYSTEM" style section header */
-.sheet-rule::after {
-  content: '';
-  display: inline-block;
-  height: 1px;
-  background: linear-gradient(to right, rgba(168, 197, 255, 0.35), rgba(168, 197, 255, 0));
-  flex: 1;
-  margin-left: 1rem;
-  align-self: center;
-}
-
-/* Corner crop marks — L-shaped, very subtle. Inserted via ::before/::after */
-/* on container elements with .corner-marks class. Sized to 12px arms.        */
-.corner-marks {
-  position: relative;
-}
-.corner-marks::before,
-.corner-marks::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  pointer-events: none;
-  border-color: rgba(168, 197, 255, 0.25);
-  border-style: solid;
-}
-.corner-marks::before {
-  top: 0;
-  left: 0;
-  border-width: 1px 0 0 1px;
-}
-.corner-marks::after {
-  bottom: 0;
-  right: 0;
-  border-width: 0 1px 1px 0;
-}
-
-/* Hide scrollbar for tab nav */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Smooth transitions for interactive elements */
-a, button {
-  transition: all 0.18s ease-out;
-}
-
-/* Selection styling */
 ::selection {
-  background-color: rgba(30, 91, 255, 0.35);
-  color: #ffffff;
+  background-color: rgba(21, 68, 142, 0.18);
+  color: var(--color-text-dark);
 }
 
 /* Legal-prose — paragraph + list styling for /privacy and /terms.            */
 .legal-prose p {
   line-height: 1.65;
   font-size: 0.95rem;
+  color: var(--color-text-dark);
 }
 .legal-prose ul {
   list-style: disc;
@@ -166,15 +110,18 @@ a, button {
   margin-top: 0.4rem;
   line-height: 1.55;
   font-size: 0.95rem;
+  color: var(--color-text-dark);
 }
 .legal-prose strong {
-  color: #E6EEFF;
+  color: var(--color-text-dark);
   font-weight: 600;
 }
 
-/* Reduced motion — strip any pulse/animation if the user opts out */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }

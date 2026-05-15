@@ -1,10 +1,9 @@
 // Canonical product list for the corporate site.
 // PM is a portfolio operator — customers meet each product on its OWN site/brand.
-// This file only powers the "products we make" overview; it carries no pricing.
 // Source of truth for positioning: projects/persistent-momentum/BUSINESS-PLAN.md
 // Rule (BRAND.md): Rabbit Golf never appears on a PM customer-facing surface.
 
-export type ProductStatus = 'live' | 'building' | 'in-design';
+export type ProductStatus = 'live' | 'building' | 'in-design' | 'coming-soon';
 
 export interface Product {
   id: string;
@@ -25,38 +24,39 @@ export const products: Product[] = [
     category: 'Web platforms',
     tagline: 'The recruiting software small teams actually use.',
     description:
-      'Candidate pipelines, branded public forms and pages, Discovery Videos, and automated outreach — one Next.js app on Supabase. Built for solo recruiters and small hiring teams. v1 shipped; v2 in build.',
+      'Candidate pipelines, branded public forms and pages, Discovery Videos, and automated outreach — one app on Next.js + Supabase. Built for solo recruiters and small hiring teams.',
     status: 'live',
     externalUrl: 'https://recruiter.persistentmomentum.com',
     features: [
       'Candidate pipelines',
       'Branded public forms & pages',
       'Discovery Videos',
-      'Automated outreach workflows',
+      'Automated outreach',
     ],
   },
   {
-    id: 'persistent-marketer',
-    name: 'Persistent Marketer',
-    category: 'AI-powered automation',
-    tagline: 'AI-powered content and social automation for your business.',
+    id: 'persistent-sales',
+    name: 'Persistent Sales',
+    category: 'Web platforms',
+    tagline: 'A modern sales workflow for small teams.',
     description:
-      'Automated content planning, rendering, and posting across the channels you care about. Built on Claude and the same pmOS pipeline that ships every Persistent product.',
-    status: 'in-design',
-    externalUrl: null,
+      'Pipeline tracking, automated outreach, and AI-assisted follow-up — built on the same foundation as Persistent Recruiter. Coming soon.',
+    status: 'coming-soon',
+    externalUrl: 'https://sales.persistentmomentum.com',
     features: [
-      'AI content planning',
-      'Automated rendering pipeline',
-      'Cross-platform posting',
-      'Performance analytics',
+      'Pipeline tracking',
+      'Automated sequences',
+      'AI-assisted follow-up',
+      'Revenue analytics',
     ],
   },
 ];
 
 export const statusMeta: Record<ProductStatus, { label: string; dot: string }> = {
-  live: { label: 'Live', dot: 'bg-emerald-400' },
-  building: { label: 'In build', dot: 'bg-amber-400' },
-  'in-design': { label: 'In design', dot: 'bg-mid' },
+  live: { label: 'Live', dot: 'bg-emerald-500' },
+  building: { label: 'In build', dot: 'bg-amber-500' },
+  'in-design': { label: 'In design', dot: 'bg-slate-400' },
+  'coming-soon': { label: 'Coming soon', dot: 'bg-sky-500' },
 };
 
 export const categories = [

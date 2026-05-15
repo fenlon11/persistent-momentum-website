@@ -67,7 +67,7 @@ export default function Footer() {
               className="mt-4 max-w-xs text-sm leading-relaxed"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              We build products. Each one stands alone.
+              We build products as persistent as you.
             </p>
           </div>
 

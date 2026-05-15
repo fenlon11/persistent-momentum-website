@@ -24,7 +24,7 @@ export default function Hero() {
             letterSpacing: '-0.02em',
           }}
         >
-          We build products.
+          We build products as persistent as you.
           <br />
           <span
             style={{
@@ -33,7 +33,7 @@ export default function Hero() {
               color: 'var(--color-text-muted)',
             }}
           >
-            Each one stands alone.
+            To keep your momentum going.
           </span>
         </h1>
 

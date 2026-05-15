@@ -10,7 +10,7 @@ const openSans = Open_Sans({
 });
 
 const description =
-  "Persistent Momentum builds products. Persistent Recruiter is live. Persistent Sales is coming. Each product stands alone.";
+  "We build products as persistent as you — to keep your momentum going. Persistent Recruiter is live; Persistent Sales is coming soon.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://persistentmomentum.com"),

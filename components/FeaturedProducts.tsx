@@ -33,14 +33,24 @@ export default function FeaturedProducts() {
               letterSpacing: '-0.02em',
             }}
           >
-            Software for small teams.
+            Products that grow with you.
+            <br />
+            <span
+              style={{
+                fontStyle: 'italic',
+                fontWeight: 300,
+                color: 'var(--color-text-dark-muted)',
+              }}
+            >
+              And scale with your business.
+            </span>
           </h2>
           <p
             className="text-lg"
             style={{ color: 'var(--color-text-dark-muted)' }}
           >
-            Two products today. Each one has its own brand, its own site, and its
-            own customers.
+            Two products today, each one its own brand. Built to start small
+            and keep up as you grow.
           </p>
         </div>
 

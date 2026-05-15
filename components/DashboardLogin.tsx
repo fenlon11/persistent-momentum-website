@@ -39,20 +39,38 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-navy px-5">
-      <div className="w-full max-w-sm rounded-xl border border-white/8 bg-navy-raised p-8">
-        <div className="mb-8 text-center">
+      <div className="relative w-full max-w-sm border border-white/12 bg-navy-raised p-8">
+        {/* corner ticks */}
+        <span
+          aria-hidden
+          className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
+        />
+        <span
+          aria-hidden
+          className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
+        />
+
+        {/* identity strip */}
+        <div className="mb-7 flex items-center gap-3">
           <Image
             src="/logo.png"
-            alt="Persistent Momentum"
-            width={44}
-            height={44}
+            alt=""
+            width={32}
+            height={32}
             priority
-            className="mx-auto mb-4 h-10 w-auto"
+            className="h-7 w-auto"
           />
-          <p className="eyebrow mb-2">pmOS</p>
-          <h1 className="text-lg font-semibold tracking-tight text-white">Command Center</h1>
-          <p className="mt-1 text-sm text-mid">Enter your PIN to continue.</p>
+          <div className="flex-1">
+            <p className="annotation">pmOS &middot; Command Center</p>
+            <p className="text-sm font-semibold text-white">Operator console</p>
+          </div>
+          <span
+            aria-hidden
+            className="h-2 w-2 rounded-full bg-emerald-400/80 shadow-[0_0_6px_rgba(52,211,153,0.6)]"
+          />
         </div>
+
+        <p className="annotation mb-3">Auth &middot; Enter 6-digit PIN</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -62,18 +80,31 @@ export default function DashboardLogin({ onAuthenticated }: DashboardLoginProps)
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
             placeholder="••••••"
-            className="w-full rounded-lg border border-white/10 bg-navy px-4 py-3 text-center text-2xl tracking-[0.5em] text-white transition-colors placeholder:tracking-[0.3em] placeholder:text-mid focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric"
+            className="w-full border border-white/15 bg-navy px-4 py-3 text-center text-2xl tracking-[0.5em] text-white transition-colors placeholder:tracking-[0.3em] placeholder:text-mid focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric"
             autoFocus
+            aria-label="6-digit PIN"
           />
 
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
+          {error && (
+            <p
+              role="alert"
+              className="border border-red-500/30 bg-red-500/8 px-3 py-2 text-center font-mono text-xs uppercase tracking-widest text-red-300"
+            >
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
             disabled={loading || pin.length === 0}
-            className="w-full rounded-lg bg-electric py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
+            className="group inline-flex w-full items-center justify-center gap-2 bg-electric py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? 'Verifying…' : 'Unlock'}
+            {!loading && (
+              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
+            )}
           </button>
         </form>
       </div>

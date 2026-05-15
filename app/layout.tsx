@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 const description =
-  "We design, build, and ship mobile apps, web platforms, and AI-powered automation for your business. Persistent Momentum is a portfolio operator — each product stands alone, pmOS is how we ship them.";
+  "Persistent Momentum is a portfolio operator. We design, build, and ship mobile apps, web platforms, and AI-powered automation. pmOS is the build system that makes it work.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://persistentmomentum.com"),
   title: {
-    default: "Persistent Momentum — Mobile apps, web platforms, and AI-powered automation",
+    default: "Persistent Momentum — Portfolio operator",
     template: "%s",
   },
   description,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Persistent Momentum',
-    title: 'Persistent Momentum — Mobile apps, web platforms, and AI-powered automation',
+    title: 'Persistent Momentum — Portfolio operator',
     description,
     url: 'https://persistentmomentum.com',
     images: [{ url: '/logo.png', width: 762, height: 720, alt: 'Persistent Momentum' }],
@@ -56,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased blueprint-grid`}
       >
         <Navigation />
         {children}

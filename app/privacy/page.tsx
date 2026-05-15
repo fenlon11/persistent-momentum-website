@@ -1,292 +1,314 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
 import Footer from '@/components/Footer';
 
+export const metadata: Metadata = {
+  title: 'Privacy Policy — Persistent Momentum',
+  description:
+    'Privacy policy for Persistent Momentum and persistentmomentum.com.',
+};
+
 export default function PrivacyPolicy() {
+  const lastUpdated = '2026-05-15';
+
   return (
-    <div className="min-h-screen bg-navy">
-      <section className="border-b border-white/8 bg-navy">
+    <main className="min-h-screen bg-navy">
+      {/* Header */}
+      <section className="relative border-b border-white/8 bg-navy">
         <div className="mx-auto max-w-3xl px-5 pb-12 pt-36 sm:px-8 sm:pt-44">
-          <p className="eyebrow mb-5">Legal</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <div className="flex items-center gap-4">
+            <span aria-hidden className="h-px flex-1 bg-white/12" />
+            <span className="annotation-bright">Sheet E &middot; Legal &middot; Privacy</span>
+          </div>
+          <p className="annotation mt-12">Legal</p>
+          <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl">
             Privacy Policy
           </h1>
-          <p className="mt-3 text-sm text-mid">
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          <p className="mt-5 font-mono text-xs uppercase tracking-widest text-mid">
+            Last updated &middot; {lastUpdated}
           </p>
         </div>
       </section>
 
+      {/* Body */}
       <section className="pb-28 pt-12">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <div className="rounded-xl border border-white/8 bg-navy-raised p-7 sm:p-10">
-            <div className="prose prose-invert prose-slate max-w-none">
-              {/* Introduction */}
-              <div className="mb-12">
-                <p className="text-slate-300 leading-relaxed">
-                  Persistent Momentum (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or interact with us through various channels.
+          <div className="relative border border-white/12 bg-navy-raised p-7 sm:p-10">
+            <span
+              aria-hidden
+              className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
+            />
+            <span
+              aria-hidden
+              className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
+            />
+
+            <Intro>
+              <p>
+                Persistent Momentum (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or
+                &ldquo;us&rdquo;) is committed to protecting your privacy. This
+                Privacy Policy explains how we collect, use, disclose, and
+                safeguard your information when you visit our website or
+                interact with us.
+              </p>
+              <p>
+                By accessing or using our services, you acknowledge that you
+                have read, understood, and agree to be bound by this Privacy
+                Policy.
+              </p>
+            </Intro>
+
+            <Section num="01" title="Information we collect">
+              <SubHeading>1.1 Personal information</SubHeading>
+              <p>We collect information you provide directly, including:</p>
+              <ul>
+                <li>Name and contact information (email, phone, address)</li>
+                <li>Company name and business information</li>
+                <li>Communication preferences</li>
+                <li>Anything else you provide through forms or messages</li>
+              </ul>
+
+              <SubHeading>1.2 Automatically collected</SubHeading>
+              <p>When you access the site we may automatically collect:</p>
+              <ul>
+                <li>Device information (IP address, browser, OS)</li>
+                <li>Usage data (pages viewed, links clicked, time on page)</li>
+                <li>Approximate location from IP address</li>
+                <li>Cookies and similar tracking technologies</li>
+              </ul>
+
+              <SubHeading>1.3 Third-party information</SubHeading>
+              <p>
+                If you connect a third-party account or interact with us
+                through social platforms, we may receive your public profile
+                information and email address from those platforms.
+              </p>
+            </Section>
+
+            <Section num="02" title="How we use your information">
+              <p>We use what we collect for these purposes:</p>
+              <ul>
+                <li>To provide, maintain, and improve our services</li>
+                <li>To respond to your inquiries</li>
+                <li>To send marketing emails, where you have opted in</li>
+                <li>To personalize your experience</li>
+                <li>To analyze usage and optimize the site</li>
+                <li>To detect and prevent abuse</li>
+                <li>To comply with legal obligations</li>
+              </ul>
+            </Section>
+
+            <Section num="03" title="How we share your information">
+              <SubHeading>3.1 Service providers</SubHeading>
+              <p>
+                We may share information with third-party providers performing
+                services on our behalf, including:
+              </p>
+              <ul>
+                <li>Email and communication services</li>
+                <li>Analytics and site optimization</li>
+                <li>CRM systems</li>
+                <li>Payment processing</li>
+              </ul>
+
+              <SubHeading>3.2 Business transfers</SubHeading>
+              <p>
+                If we are involved in a merger, acquisition, financing,
+                reorganization, bankruptcy, or sale of assets, your information
+                may transfer as part of that transaction.
+              </p>
+
+              <SubHeading>3.3 Legal requirements</SubHeading>
+              <p>
+                We may disclose your information if required by law or in
+                response to valid government requests.
+              </p>
+
+              <SubHeading>3.4 With your consent</SubHeading>
+              <p>
+                We may share information with third parties when you give us
+                explicit consent.
+              </p>
+            </Section>
+
+            <Section num="04" title="Your rights and choices">
+              <p>You have certain rights regarding your personal information:</p>
+              <ul>
+                <li>
+                  <strong>Access</strong> &middot; request the personal
+                  information we hold about you
+                </li>
+                <li>
+                  <strong>Correction</strong> &middot; ask us to correct
+                  inaccurate information
+                </li>
+                <li>
+                  <strong>Deletion</strong> &middot; request that we delete
+                  your personal information
+                </li>
+                <li>
+                  <strong>Opt out</strong> &middot; unsubscribe from marketing
+                  emails any time
+                </li>
+                <li>
+                  <strong>Portability</strong> &middot; receive your data in a
+                  structured format
+                </li>
+                <li>
+                  <strong>Restriction</strong> &middot; ask us to restrict
+                  processing
+                </li>
+              </ul>
+              <p>
+                To exercise any of these rights, email{' '}
+                <a
+                  href="mailto:info@persistentmomentum.com"
+                  className="text-electric underline-offset-4 hover:underline"
+                >
+                  info@persistentmomentum.com
+                </a>{' '}
+                or call (407) 801-2515.
+              </p>
+            </Section>
+
+            <Section num="05" title="Cookies and tracking">
+              <p>
+                We use cookies and similar tracking technologies. You can
+                instruct your browser to refuse cookies or warn you when one is
+                sent. Some portions of the site may not work without cookies.
+              </p>
+            </Section>
+
+            <Section num="06" title="Data security">
+              <p>
+                We implement reasonable technical and organizational security
+                measures to protect your information. No method of transmission
+                over the internet is 100% secure, and we cannot guarantee
+                absolute security.
+              </p>
+            </Section>
+
+            <Section num="07" title="Data retention">
+              <p>
+                We retain personal information for as long as necessary to
+                fulfill the purposes outlined in this Privacy Policy, unless a
+                longer retention period is required or permitted by law.
+              </p>
+            </Section>
+
+            <Section num="08" title="Children's privacy">
+              <p>
+                Our services are not directed to individuals under 18. We do
+                not knowingly collect personal information from children. If
+                you believe a child has provided us information, contact us and
+                we will delete it.
+              </p>
+            </Section>
+
+            <Section num="09" title="Third-party websites">
+              <p>
+                Our site may link to third-party websites that we do not
+                operate. We assume no responsibility for their content or
+                privacy practices. Review their privacy policies before
+                providing information.
+              </p>
+            </Section>
+
+            <Section num="10" title="International data transfers">
+              <p>
+                Your information may be transferred to and maintained on
+                computers in jurisdictions whose data protection laws may
+                differ from yours. By providing information, you consent to
+                that transfer.
+              </p>
+            </Section>
+
+            <Section num="11" title="Changes to this policy">
+              <p>
+                We may update this Privacy Policy from time to time. We will
+                post the new version on this page and update the &ldquo;Last
+                updated&rdquo; date.
+              </p>
+            </Section>
+
+            <Section num="12" title="Contact us" last>
+              <p>
+                Questions about this Privacy Policy? Reach out via{' '}
+                <Link
+                  href="/contact"
+                  className="text-electric underline-offset-4 hover:underline"
+                >
+                  the contact page
+                </Link>{' '}
+                or directly:
+              </p>
+              <div className="mt-4 border border-white/12 bg-navy p-5">
+                <p className="font-semibold text-white">Persistent Momentum</p>
+                <p className="mt-2 text-sm text-mid">
+                  Email:{' '}
+                  <a
+                    href="mailto:info@persistentmomentum.com"
+                    className="text-electric underline-offset-4 hover:underline"
+                  >
+                    info@persistentmomentum.com
+                  </a>
                 </p>
-                <p className="text-slate-300 leading-relaxed mt-4">
-                  Please read this Privacy Policy carefully. By accessing or using our services, you acknowledge that you have read, understood, and agree to be bound by all the terms of this Privacy Policy.
+                <p className="text-sm text-mid">
+                  Phone:{' '}
+                  <a
+                    href="tel:+14078012515"
+                    className="text-electric underline-offset-4 hover:underline"
+                  >
+                    (407) 801-2515
+                  </a>
                 </p>
               </div>
-
-              {/* Information We Collect */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">1</span>
-                  Information We Collect
-                </h2>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">1.1 Personal Information</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  We collect information that you provide directly to us, including:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li>Name and contact information (email address, phone number, mailing address)</li>
-                  <li>Company name and business information</li>
-                  <li>Communication preferences</li>
-                  <li>Any other information you choose to provide in forms or communications</li>
-                </ul>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">1.2 Automatically Collected Information</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  When you access our website or services, we may automatically collect:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li>Device information (IP address, browser type, operating system)</li>
-                  <li>Usage data (pages viewed, links clicked, time spent on pages)</li>
-                  <li>Location information (general geographic location based on IP address)</li>
-                  <li>Cookies and similar tracking technologies</li>
-                </ul>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">1.3 Third-Party Information</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  We may receive information about you from third-party platforms and services when you connect your accounts or interact with us through social media platforms. This may include your public profile information, email address, and other data you have made available through those platforms.
-                </p>
-              </div>
-
-              {/* How We Use Your Information */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">2</span>
-                  How We Use Your Information
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  We use the information we collect for the following purposes:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li>To provide, maintain, and improve our services</li>
-                  <li>To respond to your inquiries and communicate with you</li>
-                  <li>To send you marketing communications (with your consent where required)</li>
-                  <li>To send you text messages (SMS) if you have opted in to receive them</li>
-                  <li>To personalize your experience and deliver relevant content</li>
-                  <li>To analyze usage patterns and optimize our website</li>
-                  <li>To detect, prevent, and address technical issues or fraudulent activity</li>
-                  <li>To comply with legal obligations and enforce our terms</li>
-                </ul>
-              </div>
-
-              {/* SMS/Text Messaging */}
-              <div className="mb-12 bg-[#1E5BFF]/5 border border-[#1E5BFF]/20 rounded-2xl p-6">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">3</span>
-                  SMS and Text Messaging
-                </h2>
-
-                <h3 className="text-xl font-semibold text-white mb-3">3.1 Consent</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  By providing your phone number and checking the SMS consent box on our forms, you expressly consent to receive text messages from Persistent Momentum at the phone number you provided. Your consent is not a condition of purchasing any goods or services.
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">3.2 Message Frequency</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  Message frequency varies depending on your interactions with us and the services you request. You may receive appointment confirmations, service updates, promotional messages, and other communications related to our services.
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">3.3 Opt-Out</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  You can opt out of receiving text messages at any time by:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li>Replying <strong>STOP</strong> to any text message you receive from us</li>
-                  <li>Contacting us at info@persistentmomentum.com</li>
-                  <li>Calling us at (407) 801-2515</li>
-                </ul>
-                <p className="text-slate-300 leading-relaxed mt-3">
-                  After you opt out, you will receive one final confirmation message. You may continue to receive messages briefly while your request is being processed.
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">3.4 Message and Data Rates</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  Message and data rates may apply based on your mobile carrier&apos;s plan. Please contact your wireless provider for information about your messaging plan and rates. We are not responsible for any charges incurred from your mobile carrier.
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">3.5 Support</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  For support or questions about our text messaging program, reply <strong>HELP</strong> to any message or contact us at info@persistentmomentum.com.
-                </p>
-              </div>
-
-              {/* Information Sharing */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">4</span>
-                  How We Share Your Information
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  We may share your information in the following circumstances:
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">4.1 Service Providers</h3>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  We may share your information with third-party service providers who perform services on our behalf, including:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li>Email and communication services</li>
-                  <li>SMS/text messaging platforms</li>
-                  <li>Analytics and website optimization services</li>
-                  <li>Customer relationship management (CRM) systems</li>
-                  <li>Payment processing services</li>
-                </ul>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">4.2 Business Transfers</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  If we are involved in a merger, acquisition, financing, reorganization, bankruptcy, or sale of our assets, your information may be transferred as part of that transaction.
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">4.3 Legal Requirements</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  We may disclose your information if required to do so by law or in response to valid requests by public authorities (e.g., court orders, subpoenas, government investigations).
-                </p>
-
-                <h3 className="text-xl font-semibold text-white mb-3 mt-6">4.4 With Your Consent</h3>
-                <p className="text-slate-300 leading-relaxed">
-                  We may share your information with third parties when you have given us explicit consent to do so.
-                </p>
-              </div>
-
-              {/* Your Rights and Choices */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">5</span>
-                  Your Rights and Choices
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  You have certain rights regarding your personal information:
-                </p>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 ml-4">
-                  <li><strong>Access:</strong> You can request access to the personal information we hold about you</li>
-                  <li><strong>Correction:</strong> You can request that we correct inaccurate information</li>
-                  <li><strong>Deletion:</strong> You can request that we delete your personal information</li>
-                  <li><strong>Opt-Out:</strong> You can opt out of marketing communications and text messages</li>
-                  <li><strong>Data Portability:</strong> You can request a copy of your data in a structured format</li>
-                  <li><strong>Restriction:</strong> You can request that we restrict the processing of your data</li>
-                </ul>
-                <p className="text-slate-300 leading-relaxed mt-4">
-                  To exercise any of these rights, please contact us at info@persistentmomentum.com or call (407) 801-2515.
-                </p>
-              </div>
-
-              {/* Cookies and Tracking */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">6</span>
-                  Cookies and Tracking Technologies
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-3">
-                  We use cookies and similar tracking technologies to track activity on our website and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our website.
-                </p>
-                <p className="text-slate-300 leading-relaxed">
-                  We may use both session cookies (which expire when you close your browser) and persistent cookies (which stay on your device until deleted) for analytics, personalization, and advertising purposes.
-                </p>
-              </div>
-
-              {/* Data Security */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">7</span>
-                  Data Security
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
-                </p>
-              </div>
-
-              {/* Data Retention */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">8</span>
-                  Data Retention
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When we no longer need your information, we will securely delete or anonymize it.
-                </p>
-              </div>
-
-              {/* Children's Privacy */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">9</span>
-                  Children&apos;s Privacy
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  Our services are not directed to individuals under the age of 18. We do not knowingly collect personal information from children. If you are a parent or guardian and believe your child has provided us with personal information, please contact us, and we will delete such information from our systems.
-                </p>
-              </div>
-
-              {/* Third-Party Links */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">10</span>
-                  Third-Party Websites and Services
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  Our website may contain links to third-party websites or services that are not operated by us. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services. We encourage you to review the privacy policy of every site you visit.
-                </p>
-              </div>
-
-              {/* International Users */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">11</span>
-                  International Data Transfers
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  Your information may be transferred to and maintained on computers located outside of your state, province, country, or other governmental jurisdiction where the data protection laws may differ. By providing your information, you consent to the transfer of your information to the United States and other jurisdictions.
-                </p>
-              </div>
-
-              {/* Changes to Policy */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">12</span>
-                  Changes to This Privacy Policy
-                </h2>
-                <p className="text-slate-300 leading-relaxed">
-                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
-                </p>
-              </div>
-
-              {/* Contact Information */}
-              <div className="mb-0">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#1E5BFF]/10 rounded-lg flex items-center justify-center text-[#1E5BFF] text-sm">13</span>
-                  Contact Us
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-4">
-                  If you have any questions about this Privacy Policy or our data practices, please contact us:
-                </p>
-                <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
-                  <p className="text-white font-semibold mb-2">Persistent Momentum</p>
-                  <p className="text-slate-300">Email: <a href="mailto:info@persistentmomentum.com" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">info@persistentmomentum.com</a></p>
-                  <p className="text-slate-300">Phone: <a href="tel:+14078012515" className="text-[#1E5BFF] hover:text-[#1E5BFF]/80 transition-colors">(407) 801-2515</a></p>
-                </div>
-              </div>
-            </div>
+            </Section>
           </div>
         </div>
       </section>
 
       <Footer />
-    </div>
+    </main>
+  );
+}
+
+/* ───────────────────── Local helpers ───────────────────── */
+
+function Intro({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="legal-prose space-y-4 text-glow/85">{children}</div>
+  );
+}
+
+function SubHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="mt-6 text-base font-semibold text-white">{children}</h3>
+  );
+}
+
+function Section({
+  num,
+  title,
+  last = false,
+  children,
+}: {
+  num: string;
+  title: string;
+  last?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={last ? 'mt-12' : 'mt-12'}>
+      <header className="mb-5 flex items-baseline gap-4">
+        <span className="font-mono text-xs tracking-widest text-electric">
+          {num}
+        </span>
+        <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          {title}
+        </h2>
+      </header>
+      <div className="legal-prose space-y-3 text-glow/85">{children}</div>
+    </section>
   );
 }

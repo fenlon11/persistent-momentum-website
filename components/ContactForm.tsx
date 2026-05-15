@@ -13,8 +13,8 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-const inputClass =
-  'w-full rounded-lg border border-white/10 bg-navy px-4 py-3 text-sm text-white placeholder-mid transition-colors focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric';
+const fieldShell =
+  'w-full border border-white/12 bg-navy px-4 py-3 text-sm text-white placeholder-mid transition-colors focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric';
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,14 +50,16 @@ export default function ContactForm() {
 
       setSubmitStatus({
         type: 'success',
-        message: "Thanks for reaching out — we'll get back to you soon.",
+        message: "Thanks — we'll get back to you within 24 hours.",
       });
       reset();
     } catch (error) {
       setSubmitStatus({
         type: 'error',
         message:
-          error instanceof Error ? error.message : 'An error occurred. Please try again.',
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong. Try us at info@persistentmomentum.com.',
       });
     } finally {
       setIsSubmitting(false);
@@ -67,53 +69,89 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-xl border border-white/8 bg-navy-raised p-7 sm:p-8"
+      className="relative border border-white/12 bg-navy-raised p-6 sm:p-8"
     >
-      <div className="space-y-5">
+      {/* corner ticks */}
+      <span
+        aria-hidden
+        className="absolute left-0 top-0 h-3 w-3 border-l border-t border-electric/60"
+      />
+      <span
+        aria-hidden
+        className="absolute right-0 bottom-0 h-3 w-3 border-b border-r border-electric/60"
+      />
+
+      <p className="annotation-bright mb-6">Message form</p>
+
+      <div className="space-y-6">
         <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-medium text-glow">
+          <label htmlFor="name" className="annotation mb-2 block">
             Name
           </label>
-          <input id="name" type="text" {...register('name')} className={inputClass} placeholder="Your name" />
-          {errors.name && <p className="mt-2 text-sm text-red-400">{errors.name.message}</p>}
+          <input
+            id="name"
+            type="text"
+            {...register('name')}
+            className={fieldShell}
+            placeholder="Your name"
+          />
+          {errors.name && (
+            <p className="mt-2 text-sm text-red-400">{errors.name.message}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-medium text-glow">
+          <label htmlFor="email" className="annotation mb-2 block">
             Email
           </label>
-          <input id="email" type="email" {...register('email')} className={inputClass} placeholder="you@company.com" />
-          {errors.email && <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>}
+          <input
+            id="email"
+            type="email"
+            {...register('email')}
+            className={fieldShell}
+            placeholder="you@company.com"
+          />
+          {errors.email && (
+            <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="message" className="mb-2 block text-sm font-medium text-glow">
+          <label htmlFor="message" className="annotation mb-2 block">
             Message
           </label>
           <textarea
             id="message"
             rows={5}
             {...register('message')}
-            className={`${inputClass} resize-none`}
-            placeholder="Tell us what you're working on."
+            className={`${fieldShell} resize-none`}
+            placeholder="Investors, partners, talent, press — what brings you here?"
           />
-          {errors.message && <p className="mt-2 text-sm text-red-400">{errors.message.message}</p>}
+          {errors.message && (
+            <p className="mt-2 text-sm text-red-400">{errors.message.message}</p>
+          )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-electric px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex w-full items-center justify-center gap-2 bg-electric px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A4FE0] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? 'Sending…' : 'Send message'}
+          {!isSubmitting && (
+            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+              →
+            </span>
+          )}
         </button>
 
         {submitStatus.type && (
           <div
-            className={`rounded-lg border p-4 text-sm ${
+            role="status"
+            className={`border p-4 text-sm ${
               submitStatus.type === 'success'
-                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                : 'border-red-500/20 bg-red-500/10 text-red-300'
+                ? 'border-emerald-500/30 bg-emerald-500/8 text-emerald-300'
+                : 'border-red-500/30 bg-red-500/8 text-red-300'
             }`}
           >
             {submitStatus.message}

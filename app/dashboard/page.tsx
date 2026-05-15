@@ -23,8 +23,8 @@ export default function DashboardPage() {
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#3E8BF5] border-t-transparent rounded-full animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-navy">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-electric border-t-transparent" />
       </div>
     );
   }

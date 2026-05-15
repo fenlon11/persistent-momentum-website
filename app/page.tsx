@@ -1,18 +1,20 @@
 import Hero from '@/components/Hero';
-import Products from '@/components/Products';
-import Services from '@/components/Services';
-import CompanyMission from '@/components/CompanyMission';
-import ContactForm from '@/components/ContactForm';
+import Thesis from '@/components/Thesis';
+import PmosCycle from '@/components/PmosCycle';
+import PortfolioBoard from '@/components/PortfolioBoard';
+import PortfolioMath from '@/components/PortfolioMath';
+import TwoDoors from '@/components/TwoDoors';
 import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-navy">
       <Hero />
-      <Products />
-      <Services />
-      <CompanyMission />
-      <ContactForm />
+      <Thesis />
+      <PmosCycle />
+      <PortfolioBoard />
+      <PortfolioMath />
+      <TwoDoors />
       <Footer />
     </main>
   );

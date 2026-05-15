@@ -26,8 +26,8 @@ interface ActivityLog {
 
 const STATUS_DOT: Record<string, string> = {
   active: 'bg-emerald-500',
-  retired: 'bg-slate-600',
-  unknown: 'bg-slate-500',
+  retired: 'bg-white/15',
+  unknown: 'bg-mid',
 };
 
 const LAST_STATUS_BADGE: Record<string, string> = {
@@ -36,7 +36,7 @@ const LAST_STATUS_BADGE: Record<string, string> = {
   error: 'bg-red-500/10 text-red-400 border-red-500/20',
   failed: 'bg-red-500/10 text-red-400 border-red-500/20',
   running: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  info: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  info: 'bg-electric/10 text-electric border-electric/25',
 };
 
 const ACTIVITY_BADGE: Record<string, string> = {
@@ -44,7 +44,7 @@ const ACTIVITY_BADGE: Record<string, string> = {
   completed: 'bg-emerald-500/10 text-emerald-400',
   error: 'bg-red-500/10 text-red-400',
   failed: 'bg-red-500/10 text-red-400',
-  info: 'bg-blue-500/10 text-blue-400',
+  info: 'bg-electric/10 text-electric',
 };
 
 function timeAgo(dateStr: string | null): string {
@@ -103,13 +103,13 @@ export default function AgentsStatus() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-xl font-bold text-white">Agents</h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-mid mt-1">
             {activeCount} active · {retiredCount} retired · {activity.length} recent event{activity.length !== 1 ? 's' : ''}
           </p>
         </div>
         <button
           onClick={() => setShowRetired(!showRetired)}
-          className="text-xs px-2.5 py-1 rounded-full border border-slate-700/50 text-slate-400 hover:border-slate-600 hover:text-white transition-colors"
+          className="text-xs px-2.5 py-1 rounded-full border border-white/8 text-mid hover:border-white/15 hover:text-white transition-colors"
         >
           {showRetired ? 'Hide retired' : 'Show retired'}
         </button>
@@ -118,7 +118,7 @@ export default function AgentsStatus() {
       {loading && workers.length === 0 && (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-20 bg-slate-900/80 rounded-xl animate-pulse" />
+            <div key={i} className="h-20 bg-navy-raised rounded-xl animate-pulse" />
           ))}
         </div>
       )}
@@ -128,7 +128,7 @@ export default function AgentsStatus() {
         {visibleWorkers.map(worker => (
           <div
             key={worker.id}
-            className="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4"
+            className="bg-navy-raised border border-white/8 rounded-xl p-4"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -139,13 +139,13 @@ export default function AgentsStatus() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-semibold text-white">{displayName(worker.name)}</span>
                     {worker.last_status && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded border ${LAST_STATUS_BADGE[worker.last_status] || 'bg-slate-500/10 text-slate-400 border-slate-500/20'}`}>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded border ${LAST_STATUS_BADGE[worker.last_status] || 'bg-white/5 text-mid border-white/12'}`}>
                         {worker.last_status}
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-slate-400 mt-1">{worker.role}</div>
-                  <div className="flex items-center gap-3 text-[11px] text-slate-500 mt-2 flex-wrap">
+                  <div className="text-xs text-mid mt-1">{worker.role}</div>
+                  <div className="flex items-center gap-3 text-[11px] text-mid mt-2 flex-wrap">
                     {worker.cron_schedule && (
                       <span className="font-mono">{worker.cron_schedule}</span>
                     )}
@@ -168,7 +168,7 @@ export default function AgentsStatus() {
         ))}
 
         {!loading && visibleWorkers.length === 0 && (
-          <div className="text-center py-8 text-sm text-slate-500">
+          <div className="text-center py-8 text-sm text-mid">
             {workers.length === 0
               ? 'No workers registered. Configure PMOS_SUPABASE_URL and PMOS_SUPABASE_SERVICE_KEY in Vercel.'
               : 'No active workers (all retired).'}
@@ -184,18 +184,18 @@ export default function AgentsStatus() {
             {activity.slice(0, 20).map(log => (
               <div
                 key={log.id}
-                className="flex items-start gap-3 bg-slate-900/60 border border-slate-700/30 rounded-lg p-3"
+                className="flex items-start gap-3 bg-navy-raised border border-white/8 rounded-lg p-3"
               >
-                <span className={`text-[10px] px-2 py-0.5 rounded ${ACTIVITY_BADGE[log.status] || 'bg-slate-500/10 text-slate-400'} flex-shrink-0 mt-0.5`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded ${ACTIVITY_BADGE[log.status] || 'bg-white/5 text-mid'} flex-shrink-0 mt-0.5`}>
                   {log.status}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-slate-300">
-                    <span className="text-slate-400">{displayName(log.worker_name)}</span>
+                  <div className="text-xs text-glow/80">
+                    <span className="text-mid">{displayName(log.worker_name)}</span>
                     {' · '}
                     <span>{log.action}</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-mid mt-0.5">
                     {timeAgo(log.created_at)}
                     {log.brand_id && (
                       <>

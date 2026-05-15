@@ -22,10 +22,10 @@ const SHIPPED_STAGES = new Set(['live', 'shipped', 'scaling', 'monetizing']);
 
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
-      <p className="text-xs text-slate-400 uppercase tracking-wider">{label}</p>
+    <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
+      <p className="text-xs text-mid uppercase tracking-wider">{label}</p>
       <p className="text-2xl font-bold text-white mt-1">{value}</p>
-      {sub && <p className="text-xs text-slate-500 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-mid mt-1">{sub}</p>}
     </div>
   );
 }
@@ -64,10 +64,10 @@ function ProgressRing({ current, target }: { current: number; target: number }) 
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-3xl font-bold text-white">{percentage}%</span>
-          <span className="text-xs text-slate-400">of {fmt(target)}</span>
+          <span className="text-xs text-mid">of {fmt(target)}</span>
         </div>
       </div>
-      <p className="text-sm text-slate-400">MRR Progress</p>
+      <p className="text-sm text-mid">MRR Progress</p>
     </div>
   );
 }
@@ -91,7 +91,7 @@ function MonthlyBars() {
             <div key={m.period} className="flex items-center gap-3">
               <span
                 className={`w-20 text-xs shrink-0 ${
-                  isCurrent ? 'text-[#1E5BFF] font-semibold' : 'text-slate-400'
+                  isCurrent ? 'text-[#1E5BFF] font-semibold' : 'text-mid'
                 }`}
               >
                 {m.period}
@@ -100,10 +100,10 @@ function MonthlyBars() {
                 <div
                   className={`absolute inset-y-0 left-0 rounded ${
                     isPast
-                      ? 'bg-slate-600/60'
+                      ? 'bg-white/15'
                       : isCurrent
                         ? 'border border-[#1E5BFF]/40 bg-[#1E5BFF]/10'
-                        : 'border border-slate-600/40'
+                        : 'border border-white/12'
                   }`}
                   style={{ width: `${targetWidth}%` }}
                 />
@@ -115,7 +115,7 @@ function MonthlyBars() {
                     style={{ width: `${currentWidth}%` }}
                   />
                 )}
-                <span className="absolute right-2 top-0.5 text-xs text-slate-500">
+                <span className="absolute right-2 top-0.5 text-xs text-mid">
                   {fmt(m.target)}
                 </span>
               </div>
@@ -138,14 +138,14 @@ function ProductBreakdown({ projects, totalMRR }: { projects: ApiProject[]; tota
           {productsWithMRR.map((p) => (
             <div
               key={p.id}
-              className="rounded-lg border border-slate-700/50 bg-slate-800/40 p-3 flex items-center gap-2"
+              className="rounded-lg border border-white/8 bg-white/5 p-3 flex items-center gap-2"
             >
               <span className="text-lg">{p.icon}</span>
               <div>
-                <p className="text-xs text-slate-300 font-medium">{p.name}</p>
+                <p className="text-xs text-glow/80 font-medium">{p.name}</p>
                 <p className="text-sm font-bold text-white">{fmt(p.mrr)}</p>
                 {totalMRR > 0 && (
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-[10px] text-mid">
                     {Math.round((p.mrr / totalMRR) * 100)}% of total
                   </p>
                 )}
@@ -155,17 +155,17 @@ function ProductBreakdown({ projects, totalMRR }: { projects: ApiProject[]; tota
         </div>
       ) : (
         <>
-          <p className="text-xs text-slate-500">No revenue yet — all products at $0 MRR</p>
+          <p className="text-xs text-mid">No revenue yet — all products at $0 MRR</p>
           <div className="grid grid-cols-2 gap-2">
             {projects.map((p) => (
               <div
                 key={p.id}
-                className="rounded-lg border border-slate-700/30 bg-slate-800/20 p-3 flex items-center gap-2 opacity-60"
+                className="rounded-lg border border-white/8 bg-white/5 p-3 flex items-center gap-2 opacity-60"
               >
                 <span className="text-lg">{p.icon}</span>
                 <div>
-                  <p className="text-xs text-slate-400">{p.name}</p>
-                  <p className="text-xs text-slate-600">$0</p>
+                  <p className="text-xs text-mid">{p.name}</p>
+                  <p className="text-xs text-mid/70">$0</p>
                 </div>
               </div>
             ))}
@@ -181,9 +181,9 @@ function RevenueRunway({ currentMRR }: { currentMRR: number }) {
 
   if (currentMRR === 0) {
     return (
-      <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
+      <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
         <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
-        <p className="text-xs text-slate-500 mt-2">
+        <p className="text-xs text-mid mt-2">
           Not enough data — start generating MRR to project your runway to {fmt(targetMRR2026)}.
         </p>
       </div>
@@ -193,9 +193,9 @@ function RevenueRunway({ currentMRR }: { currentMRR: number }) {
   const monthsWithRevenue = revenueTargets.monthlyTargets.filter((m) => m.current > 0);
   if (monthsWithRevenue.length < 2) {
     return (
-      <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
+      <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
         <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
-        <p className="text-xs text-slate-500 mt-2">
+        <p className="text-xs text-mid mt-2">
           Need at least 2 months of data to project growth rate.
         </p>
         <p className="text-lg font-bold text-white mt-1">Current: {fmt(currentMRR)}/mo</p>
@@ -215,14 +215,14 @@ function RevenueRunway({ currentMRR }: { currentMRR: number }) {
       : null;
 
   return (
-    <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
+    <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
       <h3 className="text-sm font-semibold text-white">Revenue runway</h3>
       <div className="mt-2 space-y-1">
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-mid">
           Growth rate: <span className="text-white font-medium">+{fmt(monthlyGrowth)}/mo</span>
         </p>
         {targetDate ? (
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-mid">
             {fmt(targetMRR2026)} target:{' '}
             <span className="text-[#1E5BFF] font-semibold">
               {targetDate.toLocaleString('en', { month: 'short', year: 'numeric' })}
@@ -268,7 +268,7 @@ export default function RevenueTracker() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-white">Revenue Tracker</h2>
-        <p className="text-sm text-slate-400 mt-1">Progress toward $10k MRR by end of 2026 · {fmt(revenueTargets.longTermTargetMRR)} long-term</p>
+        <p className="text-sm text-mid mt-1">Progress toward $10k MRR by end of 2026 · {fmt(revenueTargets.longTermTargetMRR)} long-term</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -283,16 +283,16 @@ export default function RevenueTracker() {
       </div>
 
       <div className="grid lg:grid-cols-[auto_1fr] gap-6 items-start">
-        <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-6 flex justify-center">
+        <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-6 flex justify-center">
           <ProgressRing current={currentMRR} target={targetMRR2026} />
         </div>
-        <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
+        <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
           <MonthlyBars />
         </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 backdrop-blur-sm p-4">
+        <div className="rounded-xl border border-white/8 bg-white/5 backdrop-blur-sm p-4">
           <ProductBreakdown projects={projects} totalMRR={currentMRR} />
         </div>
         <RevenueRunway currentMRR={currentMRR} />

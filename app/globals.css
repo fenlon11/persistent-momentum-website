@@ -3,15 +3,20 @@
 :root {
   --background: #07112C;
   --foreground: #E6EEFF;
-  --brand-navy: #07112C;
-  --brand-electric: #1E5BFF;
-  --brand-ice: #A8C5FF;
-  --brand-glow: #E6EEFF;
 }
 
+/* Brand palette — canonical source: projects/persistent-momentum/BRAND.md */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-navy: #07112C;        /* primary surface */
+  --color-navy-raised: #0C1838; /* raised cards / panels */
+  --color-electric: #1E5BFF;    /* THE accent — one per surface */
+  --color-ice: #A8C5FF;         /* secondary accent / highlights */
+  --color-glow: #E6EEFF;        /* near-white text on dark */
+  --color-mid: #6B7A99;         /* secondary text, dividers */
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -25,6 +30,106 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* BLUEPRINT METAPHOR — the visual system                                     */
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Restrained, precise, technical. Drafting grid, hairline linework, mono     */
+/* annotations, titleblock structure. No decorative flourishes.               */
+
+/* Drafting grid — subtle paper grain, 32px squares. Applied to <body> via    */
+/* the blueprint-grid class so we can opt-out on dashboard areas if needed.   */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgba(168, 197, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 197, 255, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
+}
+
+/* Finer sub-grid that emerges on raised surfaces */
+.blueprint-grid-fine {
+  background-image:
+    linear-gradient(to right, rgba(168, 197, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 197, 255, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Hairline — the schematic stroke. 1px, ice-blue at low alpha. */
+.hairline {
+  background-color: rgba(168, 197, 255, 0.15);
+}
+.hairline-strong {
+  background-color: rgba(168, 197, 255, 0.28);
+}
+.hairline-accent {
+  background-color: rgba(30, 91, 255, 0.55);
+}
+
+/* Mono annotation — small uppercase tracking, builder texture. */
+.annotation {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem; /* 11px */
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6B7A99;
+}
+.annotation-bright {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A8C5FF;
+}
+
+/* Eyebrow — kept for back-compat; alias of annotation at slightly larger size */
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6B7A99;
+}
+
+/* Sheet header — "SHEET 03 / 07 ──── THE SYSTEM" style section header */
+.sheet-rule::after {
+  content: '';
+  display: inline-block;
+  height: 1px;
+  background: linear-gradient(to right, rgba(168, 197, 255, 0.35), rgba(168, 197, 255, 0));
+  flex: 1;
+  margin-left: 1rem;
+  align-self: center;
+}
+
+/* Corner crop marks — L-shaped, very subtle. Inserted via ::before/::after */
+/* on container elements with .corner-marks class. Sized to 12px arms.        */
+.corner-marks {
+  position: relative;
+}
+.corner-marks::before,
+.corner-marks::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  border-color: rgba(168, 197, 255, 0.25);
+  border-style: solid;
+}
+.corner-marks::before {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+.corner-marks::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
 }
 
 /* Hide scrollbar for tab nav */
@@ -36,78 +141,41 @@ body {
   display: none;
 }
 
-/* Custom animation delays */
-.delay-700 {
-  animation-delay: 700ms;
-}
-
-.delay-1000 {
-  animation-delay: 1000ms;
-}
-
-/* Floating animations for hero cards */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  50% {
-    transform: translateY(-20px) translateX(10px);
-  }
-}
-
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  50% {
-    transform: translateY(-15px) translateX(-10px);
-  }
-}
-
-@keyframes float-delayed {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  50% {
-    transform: translateY(-25px) translateX(5px);
-  }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-slow {
-  animation: float-slow 8s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float-delayed 7s ease-in-out infinite;
-}
-
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-3000 {
-  animation-delay: 3s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
 /* Smooth transitions for interactive elements */
 a, button {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.18s ease-out;
 }
 
 /* Selection styling */
 ::selection {
   background-color: rgba(30, 91, 255, 0.35);
   color: #ffffff;
+}
+
+/* Legal-prose — paragraph + list styling for /privacy and /terms.            */
+.legal-prose p {
+  line-height: 1.65;
+  font-size: 0.95rem;
+}
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+}
+.legal-prose ul li {
+  margin-top: 0.4rem;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+.legal-prose strong {
+  color: #E6EEFF;
+  font-weight: 600;
+}
+
+/* Reduced motion — strip any pulse/animation if the user opts out */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

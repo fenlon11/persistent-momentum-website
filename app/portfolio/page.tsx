@@ -13,7 +13,7 @@ export default function PortfolioPage() {
   return (
     <main>
       {/* ── Header ───────────────────────────────────────────────────── */}
-      <section className="px-6 pt-12 pb-12 md:pt-20 md:pb-16" style={{ background: 'var(--color-bg)' }}>
+      <section className="px-6 pt-6 pb-12 md:pt-20 md:pb-16" style={{ background: 'var(--color-bg)' }}>
         <div className="max-w-6xl mx-auto">
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-4"

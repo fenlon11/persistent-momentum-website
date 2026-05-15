@@ -23,8 +23,6 @@ const columns: {
   {
     heading: 'Company',
     links: [
-      { href: '/portfolio', label: 'Portfolio' },
-      { href: '/careers', label: 'Careers' },
       { href: '/contact', label: 'Contact' },
     ],
   },

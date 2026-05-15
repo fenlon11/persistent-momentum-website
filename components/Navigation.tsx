@@ -12,7 +12,9 @@ type NavLink = {
 };
 
 // Two product domains get top-billing in the parent nav.
-// Internal pages follow. No "pmOS" link — pmOS is internal.
+// No "pmOS" link — pmOS is internal.
+// Portfolio + Careers removed from nav 2026-05-15 (pages still exist; just
+// not surfaced in the chrome).
 const links: NavLink[] = [
   {
     href: 'https://recruiter.persistentmomentum.com',
@@ -24,8 +26,6 @@ const links: NavLink[] = [
     label: 'Sales',
     external: true,
   },
-  { href: '/portfolio', label: 'Portfolio' },
-  { href: '/careers', label: 'Careers' },
 ];
 
 export default function Navigation() {

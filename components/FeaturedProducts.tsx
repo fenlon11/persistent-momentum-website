@@ -43,8 +43,8 @@ export default function FeaturedProducts() {
             className="text-lg"
             style={{ color: 'var(--color-text-dark-muted)' }}
           >
-            Two products today, each one its own brand. Built to start small
-            and keep up as you grow.
+            Persistent Recruiter helps you hire faster. Persistent Sales
+            helps you close more. Both built to scale with your business.
           </p>
         </div>
 

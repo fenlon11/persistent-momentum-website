@@ -26,7 +26,7 @@ export const products: Product[] = [
     description:
       'Candidate pipelines, branded public forms and pages, Discovery Videos, and automated outreach — one app on Next.js + Supabase. Built for solo recruiters and small hiring teams.',
     status: 'live',
-    externalUrl: 'https://recruiter.persistentmomentum.com',
+    externalUrl: 'https://recruiter.persistentmomentum.com/pricing',
     features: [
       'Candidate pipelines',
       'Branded public forms & pages',

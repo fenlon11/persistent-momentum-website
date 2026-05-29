@@ -67,7 +67,7 @@ export default function ContactPage() {
                 our products, the product&apos;s own site is where you want to
                 go &mdash;{' '}
                 <a
-                  href="https://recruiter.persistentmomentum.com"
+                  href="https://recruiter.persistentmomentum.com/pricing"
                   className="font-semibold underline-offset-4 hover:underline"
                   style={{ color: 'var(--color-primary)' }}
                 >

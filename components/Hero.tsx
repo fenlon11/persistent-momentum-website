@@ -43,7 +43,7 @@ export default function Hero() {
         >
           Persistent Momentum is the company behind{' '}
           <Link
-            href="https://recruiter.persistentmomentum.com"
+            href="https://recruiter.persistentmomentum.com/pricing"
             className="font-semibold underline-offset-4 hover:underline"
             style={{ color: 'var(--color-primary)' }}
           >
@@ -62,7 +62,7 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <a
-            href="https://recruiter.persistentmomentum.com"
+            href="https://recruiter.persistentmomentum.com/pricing"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center text-base font-semibold px-7 py-3.5 text-white transition-colors"

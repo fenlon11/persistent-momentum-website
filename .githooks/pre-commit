@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# pre-commit — secret-leak gate (2026-06-13).
+#
+# WHY: secrets kept reaching repos because there was no commit-time scanner.
+# Keys got hardcoded into scripts/runbooks (rabbit-golf ×3, pmOS pm-render-service
+# ×6) and, via EXPO_PUBLIC_*, into the public app binary. This hook is the local
+# first line: it scans the STAGED diff with gitleaks and BLOCKS the commit if a
+# secret is detected — before it can ever be pushed (let alone made public).
+#
+# Layers (defense in depth): this hook (local) → GitHub push protection (server,
+# enabled on public repos) → provider scanning (last resort). This is layer 1.
+#
+# Bypass a FALSE POSITIVE explicitly:  git commit --no-verify
+# (Prefer adding a narrow allowlist entry to .gitleaks.toml so the gate stays on.)
+#
+# Coexists with the post-checkout branch guard (different hook file). Installed by
+# scripts/git-hooks/install.sh into whatever core.hooksPath points at.
+
+set -euo pipefail
+
+GITLEAKS="$(command -v gitleaks || true)"
+
+if [[ -z "$GITLEAKS" ]]; then
+  # Fail OPEN on missing tooling, but loudly — a machine without gitleaks must not
+  # silently lose protection. GitHub push protection is the server-side backstop.
+  echo "⚠️  [pre-commit] gitleaks not installed — secret scan SKIPPED." >&2
+  echo "    Install it so this gate works:  brew install gitleaks" >&2
+  echo "    (Push protection on public repos still blocks server-side.)" >&2
+  exit 0
+fi
+
+# Repo root + optional config.
+ROOT="$(git rev-parse --show-toplevel)"
+CFG_ARG=()
+[[ -f "$ROOT/.gitleaks.toml" ]] && CFG_ARG=(--config "$ROOT/.gitleaks.toml")
+
+# `gitleaks protect --staged` scans the staged changes only (the commit-time
+# surface) — fast, and exactly what we want to block.
+if ! "$GITLEAKS" protect --staged --redact --no-banner ${CFG_ARG[@]+"${CFG_ARG[@]}"} 2>/dev/null; then
+  echo "" >&2
+  echo "🚫 [pre-commit] BLOCKED: a secret was detected in your staged changes." >&2
+  echo "   Move it to .env / a secret manager and read it from the environment." >&2
+  echo "   Re-run details:  gitleaks protect --staged --redact ${CFG_ARG[*]:-}" >&2
+  echo "   False positive?  add a narrow allowlist to .gitleaks.toml, or (last resort) git commit --no-verify" >&2
+  exit 1
+fi
+
+exit 0

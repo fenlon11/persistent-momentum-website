@@ -41,8 +41,9 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: 'var(--color-bg-secondary)',
-        borderTop: '1px solid var(--color-border)',
+        background:
+          'linear-gradient(160deg, var(--color-navy) 0%, var(--color-navy-2) 100%)',
+        color: 'var(--color-glow-white)',
       }}
     >
       <div className="max-w-6xl mx-auto px-6 py-14">
@@ -58,16 +59,25 @@ export default function Footer() {
               />
               <span
                 className="font-semibold text-base tracking-tight"
-                style={{ color: 'var(--color-text)' }}
+                style={{ color: 'var(--color-glow-white)' }}
               >
-                Persistent Momentum
+                Persistent Momentum, LLC
               </span>
             </Link>
             <p
               className="mt-4 max-w-xs text-sm leading-relaxed"
-              style={{ color: 'var(--color-text-muted)' }}
+              style={{ color: 'rgba(230,238,255,0.62)' }}
             >
               We build products as persistent as you.
+            </p>
+            <p className="mt-4 text-sm">
+              <a
+                href="mailto:info@persistentmomentum.com"
+                className="underline-offset-4 hover:underline"
+                style={{ color: 'var(--color-ice)' }}
+              >
+                info@persistentmomentum.com
+              </a>
             </p>
           </div>
 
@@ -76,7 +86,7 @@ export default function Footer() {
               <p
                 className="text-xs font-semibold uppercase tracking-widest mb-4"
                 style={{
-                  color: 'var(--color-text-muted)',
+                  color: 'rgba(168,197,255,0.7)',
                   letterSpacing: '0.12em',
                 }}
               >
@@ -90,8 +100,8 @@ export default function Footer() {
                         href={l.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="transition-colors"
-                        style={{ color: 'var(--color-text)' }}
+                        className="transition-colors hover:underline underline-offset-4"
+                        style={{ color: 'var(--color-glow-white)' }}
                       >
                         {l.label}
                       </a>
@@ -100,8 +110,8 @@ export default function Footer() {
                     <li key={l.href}>
                       <Link
                         href={l.href}
-                        className="transition-colors"
-                        style={{ color: 'var(--color-text)' }}
+                        className="transition-colors hover:underline underline-offset-4"
+                        style={{ color: 'var(--color-glow-white)' }}
                       >
                         {l.label}
                       </Link>
@@ -115,18 +125,12 @@ export default function Footer() {
 
         <div
           className="mt-12 pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-          style={{ borderTop: '1px solid var(--color-border)' }}
+          style={{ borderTop: '1px solid rgba(168,197,255,0.16)' }}
         >
-          <p
-            className="text-xs"
-            style={{ color: 'var(--color-text-muted)' }}
-          >
-            &copy; {year} Persistent Momentum &middot; All rights reserved
+          <p className="text-xs" style={{ color: 'rgba(230,238,255,0.55)' }}>
+            &copy; {year} Persistent Momentum, LLC &middot; All rights reserved
           </p>
-          <p
-            className="text-xs"
-            style={{ color: 'var(--color-text-muted)' }}
-          >
+          <p className="text-xs" style={{ color: 'rgba(230,238,255,0.55)' }}>
             persistentmomentum.com
           </p>
         </div>

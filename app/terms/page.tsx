@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function TermsOfService() {
-  const lastUpdated = '2026-05-15';
+  const lastUpdated = '2026-07-08';
 
   return (
     <main>
@@ -264,7 +264,7 @@ export default function TermsOfService() {
                   className="font-bold"
                   style={{ color: 'var(--color-text-dark)' }}
                 >
-                  Persistent Momentum
+                  Persistent Momentum, LLC
                 </p>
                 <p
                   className="mt-2 text-sm"
@@ -277,19 +277,6 @@ export default function TermsOfService() {
                     style={{ color: 'var(--color-primary)' }}
                   >
                     info@persistentmomentum.com
-                  </a>
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--color-text-dark-muted)' }}
-                >
-                  Phone:{' '}
-                  <a
-                    href="tel:+14078012515"
-                    className="underline-offset-4 hover:underline"
-                    style={{ color: 'var(--color-primary)' }}
-                  >
-                    (407) 801-2515
                   </a>
                 </p>
               </div>

@@ -13,13 +13,7 @@ const channels = [
     href: 'mailto:info@persistentmomentum.com',
     label: 'Email',
     value: 'info@persistentmomentum.com',
-    note: '24-hour response, weekdays.',
-  },
-  {
-    href: 'tel:+14078012515',
-    label: 'Phone',
-    value: '(407) 801-2515',
-    note: 'Mon–Fri, 9am–5pm ET.',
+    note: 'The fastest way to reach us — 24-hour response, weekdays.',
   },
 ];
 
@@ -135,6 +129,13 @@ export default function ContactPage() {
                   </a>
                 ))}
               </div>
+
+              <p
+                className="mt-5 text-sm"
+                style={{ color: 'var(--color-text-dark-muted)' }}
+              >
+                Persistent Momentum, LLC &middot; United States
+              </p>
             </div>
 
             {/* form */}

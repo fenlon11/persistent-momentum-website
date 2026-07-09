@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicy() {
-  const lastUpdated = '2026-05-15';
+  const lastUpdated = '2026-07-08';
 
   return (
     <main>
@@ -178,8 +178,8 @@ export default function PrivacyPolicy() {
                   style={{ color: 'var(--color-primary)' }}
                 >
                   info@persistentmomentum.com
-                </a>{' '}
-                or call (407) 801-2515.
+                </a>
+                .
               </p>
             </Section>
 
@@ -243,7 +243,45 @@ export default function PrivacyPolicy() {
               </p>
             </Section>
 
-            <Section num="12" title="Contact us" last>
+            <Section num="12" title="SMS and messaging consent">
+              <p>
+                If you provide your mobile number and opt in — through a form,
+                a checkbox, or by texting us first — you consent to receive SMS
+                and other text messages from Persistent Momentum, LLC related to
+                the purpose you opted in for (for example, account notifications,
+                customer support, or updates you requested). Consent to receive
+                messages is not a condition of any purchase.
+              </p>
+              <ul>
+                <li>
+                  <strong>Message frequency</strong> &middot; varies based on
+                  your activity and the messages you opt in to
+                </li>
+                <li>
+                  <strong>Rates</strong> &middot; message and data rates may
+                  apply, per your mobile carrier plan
+                </li>
+                <li>
+                  <strong>Opt out</strong> &middot; reply <strong>STOP</strong>{' '}
+                  at any time to cancel; reply <strong>HELP</strong> for help
+                </li>
+              </ul>
+              <p>
+                <strong>
+                  We do not share your mobile opt-in information or consent with
+                  any third parties or affiliates for their marketing or
+                  promotional purposes.
+                </strong>{' '}
+                Mobile information collected through SMS consent is used only to
+                deliver the messages you opted in to receive and is never sold,
+                rented, or shared for marketing. Where we use service providers
+                to send messages on our behalf, they process the data only to
+                deliver those messages and are contractually barred from using
+                it for any other purpose.
+              </p>
+            </Section>
+
+            <Section num="13" title="Contact us" last>
               <p>
                 Questions about this Privacy Policy? Reach out via{' '}
                 <Link
@@ -267,7 +305,7 @@ export default function PrivacyPolicy() {
                   className="font-bold"
                   style={{ color: 'var(--color-text-dark)' }}
                 >
-                  Persistent Momentum
+                  Persistent Momentum, LLC
                 </p>
                 <p
                   className="mt-2 text-sm"
@@ -280,19 +318,6 @@ export default function PrivacyPolicy() {
                     style={{ color: 'var(--color-primary)' }}
                   >
                     info@persistentmomentum.com
-                  </a>
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--color-text-dark-muted)' }}
-                >
-                  Phone:{' '}
-                  <a
-                    href="tel:+14078012515"
-                    className="underline-offset-4 hover:underline"
-                    style={{ color: 'var(--color-primary)' }}
-                  >
-                    (407) 801-2515
                   </a>
                 </p>
               </div>

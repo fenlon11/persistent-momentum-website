@@ -27,6 +27,14 @@
   --color-primary-hover: #0f3470;
   --color-primary-glow: #3b82f6;
 
+  /* BRAND.md deep-space palette — premium navy bands (hero + footer) with a
+     single electric-blue accent. Direction: "deep-space blue + electric accent". */
+  --color-navy: #07112c;
+  --color-navy-2: #0b1c44;
+  --color-electric: #1e5bff;
+  --color-ice: #a8c5ff;
+  --color-glow-white: #e6eeff;
+
   /* Borders */
   --color-border: #e2e8f0;
   --color-border-light: #e2e8f0;

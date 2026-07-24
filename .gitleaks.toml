@@ -1,0 +1,32 @@
+# gitleaks config for pmOS (2026-06-13).
+# Extends the built-in ruleset; adds a narrow allowlist so the pre-commit gate
+# (scripts/git-hooks/pre-commit) has a low false-positive rate and stays ON.
+# Keep the allowlist TIGHT — every entry is a place a real secret can't usefully
+# live, or a value that is public by design. When in doubt, do NOT allowlist;
+# move the secret to env instead.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "pmOS non-secret paths + public-by-design values"
+paths = [
+  # Templates/examples carry placeholders, not live secrets.
+  '''(^|/)\.env\.(example|sample|template)$''',
+  # Vendored + generated trees — not our code, huge false-positive surface.
+  '''(^|/)node_modules/''',
+  '''(^|/)\.claude/worktrees/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''package-lock\.json$''',
+  '''pnpm-lock\.yaml$''',
+]
+regexes = [
+  # Env-var REFERENCES are not secrets (process.env.X / ${X} / $X).
+  '''process\.env\.[A-Z0-9_]+''',
+  '''\$\{?[A-Z][A-Z0-9_]*(:[-?][^}]*)?\}?''',
+  # Supabase ANON / publishable keys are public client keys by design
+  # (the SERVICE key is the dangerous one and is NOT allowlisted).
+  '''EXPO_PUBLIC_SUPABASE_ANON_KEY''',
+  '''SUPABASE_ANON_KEY''',
+  '''NEXT_PUBLIC_SUPABASE_ANON_KEY''',
+]

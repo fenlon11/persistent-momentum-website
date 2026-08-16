@@ -6,7 +6,7 @@ import { products, statusMeta, categories } from '@/lib/products-data';
 export const metadata: Metadata = {
   title: 'Portfolio — Persistent Momentum',
   description:
-    'The Persistent Momentum portfolio. Persistent Recruiter is live. Persistent Sales is coming soon.',
+    'The Persistent Momentum portfolio. Persistent Workforce is live. Persistent Sales is coming soon.',
 };
 
 export default function PortfolioPage() {

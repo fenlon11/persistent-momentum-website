@@ -17,7 +17,7 @@ type NavLink = {
 // not surfaced in the chrome).
 const links: NavLink[] = [
   {
-    href: 'https://recruiter.persistentmomentum.com/pricing',
+    href: 'https://workforce.persistentmomentum.com/pricing',
     label: 'Recruiter',
     external: true,
   },

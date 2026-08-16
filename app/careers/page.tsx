@@ -33,7 +33,7 @@ const principles = [
 
 const areas = [
   {
-    label: 'Persistent Recruiter',
+    label: 'Persistent Workforce',
     detail:
       'Our live product. Web platform for recruiters and small hiring teams — pipelines, outreach, Discovery Videos.',
   },

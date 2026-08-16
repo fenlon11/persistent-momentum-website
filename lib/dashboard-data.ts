@@ -22,7 +22,7 @@ export const systemNodes: SystemNode[] = [
   { id: 'vercel', label: 'Vercel', description: 'Frontend hosting — product sites + corporate site + dashboard', type: 'infrastructure', status: 'active', icon: '▲' },
   { id: 'cloudflare', label: 'Cloudflare Workers', description: 'Automation fleet — scheduled jobs, content pipeline, ingestion', type: 'infrastructure', status: 'active', icon: '☁️' },
   { id: 'supabase', label: 'Supabase', description: 'pmOS data layer — memories, telemetry, worker registry, queues', type: 'infrastructure', status: 'active', icon: '⚡' },
-  { id: 'persistent-recruiter', label: 'Persistent Recruiter', description: 'Web platform — recruiting software for small teams (v1 launch sprint)', type: 'product', status: 'building', icon: '🎯' },
+  { id: 'persistent-recruiter', label: 'Persistent Workforce', description: 'Web platform — recruiting software for small teams (v1 launch sprint)', type: 'product', status: 'building', icon: '🎯' },
   { id: 'persistent-marketer', label: 'Persistent Marketer', description: 'AI-powered content and social automation (planned)', type: 'product', status: 'planned', icon: '📣' },
   { id: 'macbook', label: 'MacBook Pro', description: 'Dev machine + MCP host via Cloudflare Tunnel', type: 'infrastructure', status: 'active', icon: '💻' },
 ];

@@ -70,11 +70,11 @@ export default function Hero() {
         >
           Persistent Momentum is the company behind{' '}
           <Link
-            href="https://recruiter.persistentmomentum.com/pricing"
+            href="https://workforce.persistentmomentum.com/pricing"
             className="font-semibold underline-offset-4 hover:underline"
             style={{ color: 'var(--color-ice)' }}
           >
-            Persistent Recruiter
+            Persistent Workforce
           </Link>
           {' '}and{' '}
           <Link
@@ -89,7 +89,7 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-7">
           <a
-            href="https://recruiter.persistentmomentum.com/pricing"
+            href="https://workforce.persistentmomentum.com/pricing"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center text-base font-semibold px-7 py-3.5 text-white transition-transform hover:-translate-y-0.5"
@@ -99,7 +99,7 @@ export default function Hero() {
               boxShadow: '0 10px 30px -10px rgba(30,91,255,0.6)',
             }}
           >
-            Visit Persistent Recruiter <span className="ml-2">→</span>
+            Visit Persistent Workforce <span className="ml-2">→</span>
           </a>
           <a
             href="https://sales.persistentmomentum.com"
@@ -118,7 +118,7 @@ export default function Hero() {
         </div>
 
         <p className="text-sm" style={{ color: 'rgba(168,197,255,0.7)' }}>
-          Persistent Recruiter is live. Persistent Sales is coming soon.
+          Persistent Workforce is live. Persistent Sales is coming soon.
         </p>
       </div>
     </section>

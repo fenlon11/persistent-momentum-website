@@ -43,7 +43,7 @@ export default function FeaturedProducts() {
             className="text-lg"
             style={{ color: 'var(--color-text-dark-muted)' }}
           >
-            Persistent Recruiter helps you hire faster. Persistent Sales
+            Persistent Workforce helps you hire faster. Persistent Sales
             helps you close more. Both built to scale with your business.
           </p>
         </div>

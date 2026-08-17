@@ -9,8 +9,8 @@ const columns: {
     heading: 'Products',
     links: [
       {
-        href: 'https://recruiter.persistentmomentum.com/pricing',
-        label: 'Persistent Recruiter',
+        href: 'https://workforce.persistentmomentum.com/pricing',
+        label: 'Persistent Workforce',
         external: true,
       },
       {

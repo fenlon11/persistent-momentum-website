@@ -20,13 +20,13 @@ export interface Product {
 export const products: Product[] = [
   {
     id: 'persistent-recruiter',
-    name: 'Persistent Recruiter',
+    name: 'Persistent Workforce',
     category: 'Web platforms',
     tagline: 'The recruiting software small teams actually use.',
     description:
       'Candidate pipelines, branded public forms and pages, Discovery Videos, and automated outreach — one app on Next.js + Supabase. Built for solo recruiters and small hiring teams.',
     status: 'live',
-    externalUrl: 'https://recruiter.persistentmomentum.com/pricing',
+    externalUrl: 'https://workforce.persistentmomentum.com/pricing',
     features: [
       'Candidate pipelines',
       'Branded public forms & pages',
@@ -40,7 +40,7 @@ export const products: Product[] = [
     category: 'Web platforms',
     tagline: 'A modern sales workflow for small teams.',
     description:
-      'Pipeline tracking, automated outreach, and AI-assisted follow-up — built on the same foundation as Persistent Recruiter. Coming soon.',
+      'Pipeline tracking, automated outreach, and AI-assisted follow-up — built on the same foundation as Persistent Workforce. Coming soon.',
     status: 'coming-soon',
     externalUrl: 'https://sales.persistentmomentum.com',
     features: [

@@ -2,7 +2,7 @@
 
 > **This project is part of pmOS.** Read `~/pmOS/CLAUDE.md` (master instructions) and `~/pmOS/projects/persistent-momentum/BRAND.md` (parent brand rules — governs this site's copy). Separate git repo: `fenlon11/persistent-momentum-website`, Vercel deploy on main, PR-merge workflow with short-lived typed branches (`copy/…-YYYY-MM-DD`, `fix/…`).
 
-Next.js 15 (App Router) + React 19 + Tailwind v4 corporate site for the PM holdco: portfolio positioning, product list (Persistent Recruiter live, Persistent Sales coming-soon stub), TCPA/A2P-compliant contact form (Supabase + Resend), and a **PIN-gated internal pmOS Command Center** at `/dashboard` reading live telemetry from the pmOS platform Supabase.
+Next.js 15 (App Router) + React 19 + Tailwind v4 corporate site for the PM holdco: portfolio positioning, product list (Persistent Workforce live, Persistent Sales coming-soon stub), TCPA/A2P-compliant contact form (Supabase + Resend), and a **PIN-gated internal pmOS Command Center** at `/dashboard` reading live telemetry from the pmOS platform Supabase.
 
 ## Commands
 

@@ -13,9 +13,9 @@ interface DisplayConfig {
 // Known projects get nicer display; unknown slugs fall back to slug-derived name.
 const DISPLAY: Record<string, DisplayConfig> = {
   'persistent-recruiter': {
-    name: 'Persistent Recruiter',
+    name: 'Persistent Workforce',
     icon: '🎯',
-    domain: 'persistentrecruiter.com',
+    domain: 'workforce.persistentmomentum.com',
     pricing: 'Recruiter $49/mo · Company $149/mo',
   },
   'persistent-marketer': {

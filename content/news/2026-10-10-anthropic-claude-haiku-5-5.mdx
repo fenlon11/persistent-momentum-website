@@ -1,0 +1,66 @@
+---
+title: >-
+  Claude Haiku 5.5 is available now, and Anthropic says it costs about 75% less
+  than Haiku 4.5 for most tasks
+description: >-
+  Claude Haiku 5.5 is live on Anthropic's API and Amazon Bedrock, and Anthropic
+  says it costs about 75% less than Haiku 4.5 for most tasks.
+type: news
+publishedAt: '2026-10-10'
+updatedAt: '2026-10-10'
+author: elle-evate
+status: published
+tags:
+  - anthropic
+  - claude-haiku
+  - amazon-bedrock
+  - ai-pricing
+statusLabel: available
+sources:
+  - title: Introducing Claude Haiku 5.5 on AWS
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/introducing-claude-haiku-5-5-on-aws/
+    publisher: Amazon
+  - title: Release v2.1.293 · anthropics/claude-code
+    url: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.293'
+    publisher: Anthropic
+  - title: Release v1.12.0 · anthropics/anthropic-sdk-python
+    url: 'https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.12.0'
+    publisher: Anthropic
+---
+Anthropic's Claude Haiku 5.5 became available on October 7 on Anthropic's own API and on Amazon Bedrock, the AWS service for running AI models. It's built for high-volume, repetitive work like sorting documents, routing requests and running small helper tasks. Anthropic says it costs around 75% less than Claude Haiku 4.5 for most tasks, so if you pay per use for that kind of work, your bill could drop.
+
+## What shipped
+
+- **Price on the Anthropic API:** $0.10/$0.50 per million tokens, per Anthropic's [Claude Code release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.293). Tokens are the units AI models use to count text. Prompts over 100K tokens cost more: $0.50/$2.50 per million.
+- **Context window:** 1 million tokens. That's how much text the model can read at once.
+- **Default model:** the same release notes say Haiku 5.5 is now the default Haiku model on the Anthropic API.
+- **Model ID:** claude-haiku-5-5. Anthropic added it to its [Python SDK in version 1.12.0](https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.12.0), released October 7.
+- **Effort controls:** according to [AWS](https://aws.amazon.com/blogs/machine-learning/introducing-claude-haiku-5-5-on-aws/), it's the first Haiku model that lets you set the trade-off between cost and intelligence task by task, rather than using one setting for a whole workload.
+
+AWS, citing Anthropic, calls Haiku 5.5 the fastest and most efficient model in the Claude 5.5 family.
+
+## Where you can use it
+
+On Amazon Bedrock it's available today through the US, EU, Australia, Japan and global inference profiles, and in AWS GovCloud (US). AWS says your data stays within AWS infrastructure with regional data residency, it works with the access, audit and monitoring controls your team already uses, and the usage shows up on your AWS bill. It's also available through Claude Platform on AWS in North America.
+
+The AWS post doesn't list Bedrock prices. It points to the Amazon Bedrock pricing page instead, so don't assume Bedrock charges the same rates as Anthropic's API.
+
+You don't need to write code to try it. In the Amazon Bedrock console, choose Test, then Playground, select Haiku 5.5 and type a prompt.
+
+## What it's built for
+
+AWS lists work like classifying and summarizing text, pulling key details from small and medium-sized documents, answering quick questions over a knowledge base, simple chat, and repetitive browser and desktop tasks. It's also meant to pair with the recently announced Claude Opus 5.5: Opus plans the work and makes the judgment calls, and many Haiku helpers carry out the well-defined steps in parallel.
+
+## What it means for your business
+
+Haiku 5.5 is for jobs you run thousands of times, not your hardest thinking. Picture a support inbox where every incoming message gets tagged by topic and urgency before a person sees it. Say that's 10,000 messages a month at about 2,000 tokens each, or 20 million tokens. At the $0.10 rate that's $2. Even if every token were billed at the higher $0.50 rate, it's $10. At that price, a small team can afford to automate routine sorting.
+
+Before you switch, here's what to do:
+
+1. **Test it on your own work.** Run 50 to 100 real examples through Haiku 4.5 and Haiku 5.5 and compare the results. Anthropic's saving applies to "most tasks", not all of them.
+2. **Keep prompts under 100K tokens where you can.** Above that line, both listed rates are five times higher. A 1 million token context window means the model can read that much, not that it's cheap to send it.
+3. **Check which Haiku your tools use.** If you or a vendor build on Anthropic's API, Haiku 5.5 is now the default Haiku model there, which may change results you rely on.
+4. **Compare prices if you're on AWS.** Check Bedrock's pricing page before planning a budget around the API rates.
+
+One thing to watch is effort controls. If you can turn effort down for simple tagging and up for harder summaries, one model could cover both jobs at different costs. Measure that on your own tasks before you count the savings.

@@ -1,17 +1,7 @@
-import { Metadata } from 'next';
-import PagePlaceholder from '@/components/PagePlaceholder';
+import ContentIndex, { indexMetadata } from '@/components/content/ContentIndex';
 
-export const metadata: Metadata = {
-  title: 'AI News — Persistent Momentum',
-  robots: { index: false },
-};
+export const generateMetadata = () => indexMetadata('news');
 
-export default function NewsPage() {
-  return (
-    <PagePlaceholder
-      eyebrow="News"
-      title="AI news, coming soon."
-      body="What the AI companies shipped, what it means for your business, and one thing to try. The first stories publish soon."
-    />
-  );
+export default function Page() {
+  return <ContentIndex type="news" />;
 }

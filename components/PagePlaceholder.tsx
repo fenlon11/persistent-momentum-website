@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 
 // Holding page for a nav destination whose real page ships in its own issue
-// (news + guides #681, newsletter #682, consulting #683). Pages using it are
+// (newsletter #682, consulting #683). Pages using it are
 // noindex so search never sees the empty state.
 export default function PagePlaceholder({
   eyebrow,

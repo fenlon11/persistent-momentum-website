@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
+import ArticleList from '@/components/content/ArticleList';
+import { getArticles } from '@/lib/content';
 
 export default function Home() {
   return (
     <main>
       <Hero />
 
-      {/* Latest — empty until the content system (fenlon11/pmOS#681) lands. */}
+      {/* Latest — the 6 newest published news and guides (fenlon11/pmOS#681). */}
       <section className="px-6 py-20" style={{ background: 'var(--color-bg)' }}>
         <div className="max-w-6xl mx-auto">
           <h2
@@ -16,19 +18,10 @@ export default function Home() {
           >
             Latest
           </h2>
-          <div
-            className="p-8"
-            style={{
-              background: 'var(--color-bg-light-secondary)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-lg)',
-            }}
-          >
-            <p className="text-base" style={{ color: 'var(--color-text-dark-muted)' }}>
-              The first news and guides are on the way. Subscribe above to get
-              them when they publish.
-            </p>
-          </div>
+          <ArticleList
+            articles={getArticles().slice(0, 6)}
+            empty="The first news and guides are on the way. Subscribe above to get them when they publish."
+          />
         </div>
       </section>
 

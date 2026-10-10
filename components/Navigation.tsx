@@ -11,16 +11,13 @@ type NavLink = {
   external?: boolean;
 };
 
-// Two product domains get top-billing in the parent nav.
-// No "pmOS" link — pmOS is internal.
-// Portfolio + Careers removed from nav 2026-05-15 (pages still exist; just
-// not surfaced in the chrome).
+// AI news + consulting IA (2026-10-10). Products stay out of the nav until
+// they're promoted; /careers and /contact stay reachable, just not surfaced.
 const links: NavLink[] = [
-  {
-    href: 'https://workforce.persistentmomentum.com/pricing',
-    label: 'Recruiter',
-    external: true,
-  },
+  { href: '/news', label: 'News' },
+  { href: '/guides', label: 'Guides' },
+  { href: '/newsletter', label: 'Newsletter' },
+  { href: '/consulting', label: 'Consulting' },
 ];
 
 export default function Navigation() {
@@ -97,17 +94,17 @@ export default function Navigation() {
           })}
         </div>
 
-        {/* Right-side contact CTA */}
+        {/* Right-side subscribe CTA */}
         <div className="flex items-center gap-3">
           <Link
-            href="/contact"
+            href="/newsletter"
             className="text-sm font-semibold text-white px-4 py-2 transition-colors hidden sm:inline-block"
             style={{
               background: 'var(--color-primary)',
               borderRadius: 'var(--radius)',
             }}
           >
-            Contact
+            Subscribe
           </Link>
 
           {/* Mobile hamburger */}
@@ -172,7 +169,7 @@ export default function Navigation() {
               ),
             )}
             <Link
-              href="/contact"
+              href="/newsletter"
               onClick={() => setMobileOpen(false)}
               className="mt-2 block py-2.5 text-center text-sm font-semibold text-white"
               style={{
@@ -180,7 +177,7 @@ export default function Navigation() {
                 borderRadius: 'var(--radius)',
               }}
             >
-              Contact
+              Subscribe
             </Link>
           </div>
         </div>

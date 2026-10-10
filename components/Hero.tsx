@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 // Premium deep-navy hero — BRAND.md "deep-space blue + electric accent".
 // A single electric-blue accent, an ice-blue radial glow, generous space.
@@ -41,7 +41,7 @@ export default function Hero() {
             letterSpacing: '0.14em',
           }}
         >
-          Persistent Momentum, LLC
+          AI News &amp; Updates
         </span>
 
         <h1
@@ -51,53 +51,18 @@ export default function Hero() {
             letterSpacing: '-0.025em',
           }}
         >
-          We build products as persistent as you.
-          <br />
-          <span
-            style={{
-              fontStyle: 'italic',
-              fontWeight: 300,
-              color: 'var(--color-ice)',
-            }}
-          >
-            To keep your momentum going.
-          </span>
+          What the AI companies actually shipped.
         </h1>
 
         <p
           className="text-base md:text-xl mb-8 md:mb-10 max-w-2xl leading-relaxed"
           style={{ color: 'rgba(230,238,255,0.72)' }}
         >
-          Persistent Momentum is the company behind{' '}
-          <Link
-            href="https://workforce.persistentmomentum.com/pricing"
-            className="font-semibold underline-offset-4 hover:underline"
-            style={{ color: 'var(--color-ice)' }}
-          >
-            Persistent Workforce
-          </Link>
-          . We design, build, and ship software for small teams.
+          What it means for your business, and one thing to try. Every item
+          links to its primary source.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 mb-7">
-          <a
-            href="https://workforce.persistentmomentum.com/pricing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center text-base font-semibold px-7 py-3.5 text-white transition-transform hover:-translate-y-0.5"
-            style={{
-              background: 'var(--color-electric)',
-              borderRadius: 'var(--radius)',
-              boxShadow: '0 10px 30px -10px rgba(30,91,255,0.6)',
-            }}
-          >
-            Visit Persistent Workforce <span className="ml-2">→</span>
-          </a>
-        </div>
-
-        <p className="text-sm" style={{ color: 'rgba(168,197,255,0.7)' }}>
-          Persistent Workforce is live.
-        </p>
+        <NewsletterSignup />
       </div>
     </section>
   );

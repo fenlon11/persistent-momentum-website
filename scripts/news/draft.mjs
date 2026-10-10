@@ -209,7 +209,9 @@ export const DRAFT_SCHEMA = {
   },
 };
 
-const fence = (tag, attrs, body) => `<${tag}${attrs}>\n${body}\n</${tag}>`;
+// Angle brackets inside a fence become ‹ › so fetched text (decoded entities included) can never close it.
+const defang = (s) => s.replace(/</g, '‹').replace(/>/g, '›');
+const fence = (tag, attrs, body) => `<${tag}${attrs}>\n${defang(body)}\n</${tag}>`;
 
 export function selectionPrompt(candidates, existing, date) {
   const items = candidates
@@ -301,7 +303,7 @@ export function buildArticle(type, draft, date) {
 }
 
 // Problems with a built article; empty means it may go in the PR. `allowed` holds normUrl() keys.
-export function checkArticle(article, allowed, { existingPaths = new Set() } = {}) {
+export function checkArticle(article, allowed, { existingPaths = new Set(), existingSlugs = new Set() } = {}) {
   const problems = [];
   const { data, content } = matter(article.mdx);
   const parsed = frontmatterSchema.safeParse(data);
@@ -331,12 +333,28 @@ export function checkArticle(article, allowed, { existingPaths = new Set() } = {
   if (!firstBlock || /^(#|[-*] |\d+\. |>)/.test(firstBlock)) problems.push('must open with an answer-first paragraph');
   if (/[<>{}]/.test(content)) problems.push('body must be plain markdown (no <, >, { or })');
   if (/^\s*(import|export)\s/m.test(content)) problems.push('body must not contain import/export lines');
-  for (const m of content.matchAll(/\]\(([^)\s]+)/g)) {
-    if (!/^https:\/\//.test(m[1])) problems.push(`link must be https: ${m[1]}`);
+  // Inline links/images (whitespace allowed after the paren) and reference definitions. MDX here has
+  // no GFM bare-URL autolinks, and <...> autolinks are already rejected by the angle-bracket check.
+  const links = [
+    ...[...content.matchAll(/\]\(\s*([^)\s]+)/g)].map((m) => m[1]),
+    ...[...content.matchAll(/^ {0,3}\[[^\]]+\]:\s*(\S+)/gm)].map((m) => m[1]),
+  ];
+  for (const url of links) {
+    if (!/^https:\/\//.test(url)) problems.push(`link must be https: ${url}`);
+    else {
+      let key;
+      try {
+        key = normUrl(url);
+      } catch {
+        key = null;
+      }
+      if (!key || !allowed.has(key)) problems.push(`link not from a fetched page or its primary links: ${url}`);
+    }
   }
   const lower = `${data.title ?? ''} ${data.description ?? ''} ${content}`.toLowerCase();
   for (const w of BANNED) if (lower.includes(w)) problems.push(`banned phrase: "${w}"`);
   if (existingPaths.has(article.path)) problems.push(`${article.path} already exists`);
+  else if (existingSlugs.has(`${article.type}/${article.slug}`)) problems.push(`${article.type} slug "${article.slug}" already exists`);
   return problems;
 }
 
@@ -350,7 +368,8 @@ export function loadExisting(root) {
     for (const f of fs.readdirSync(full).filter((x) => x.endsWith('.mdx'))) {
       const { data } = matter(fs.readFileSync(path.join(full, f), 'utf8'));
       const publishedAt = data.publishedAt instanceof Date ? data.publishedAt.toISOString().slice(0, 10) : data.publishedAt;
-      out.push({ type, title: data.title, publishedAt, path: `content/${dir}/${f}` });
+      const slug = type === 'news' ? f.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.mdx$/, '') : f.replace(/\.mdx$/, '');
+      out.push({ type, slug, title: data.title, publishedAt, path: `content/${dir}/${f}` });
     }
   }
   return out;
@@ -381,6 +400,7 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
   const articles = [];
   const rejected = [];
   const existingPaths = new Set(existing.map((e) => e.path));
+  const existingSlugs = new Set(existing.map((e) => `${e.type}/${e.slug}`));
   const cited = new Set();
   const pageCache = new Map();
   for (const story of stories) {
@@ -417,7 +437,7 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
       continue;
     }
     const article = buildArticle(story.type, out.article, date);
-    const problems = checkArticle(article, allowed, { existingPaths });
+    const problems = checkArticle(article, allowed, { existingPaths, existingSlugs });
     if (articles.some((a) => a.path === article.path)) problems.push(`duplicate of another draft this run: ${article.path}`);
     if (story.type === 'news') {
       const shared = out.article.sources.map((s) => normUrl(s.url)).filter((u) => cited.has(u));

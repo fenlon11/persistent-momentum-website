@@ -4,12 +4,13 @@
 <dict>
     <key>Label</key>
     <string>com.pmos.pm-news-drafts</string>
-    <!-- Runs scripts/news/run.sh as merged on origin/main, so a merge is the deploy. fenlon11/pmOS#686 -->
+    <!-- Runs scripts/news/run.sh as merged on origin/main, so a merge is the deploy. The script is read into a
+         variable first (not a process substitution) so a missing run.sh exits non-zero. fenlon11/pmOS#686 -->
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>R="$PM_NEWS_REPO"; git -C "$R" fetch -q origin &amp;&amp; /bin/bash &lt;(git -C "$R" show "origin/$PM_NEWS_REF:scripts/news/run.sh")</string>
+        <string>R="$PM_NEWS_REPO"; git -C "$R" fetch -q origin &amp;&amp; S="$(git -C "$R" show "origin/$PM_NEWS_REF:scripts/news/run.sh")" &amp;&amp; /bin/bash -c "$S"</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>

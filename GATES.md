@@ -13,7 +13,7 @@ a false green.
 - [x] G2: drafter output validates against the content schema
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-686 --task=test
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-686; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=c2227dfdcaae1c3021a2a51e03034456b9a297be72961077e2b143d602d787e4; output-bytes=115
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-686; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=7d9eb22741bf28604478addadaa3abc71ddd21f79596eb4f1a5c88f2e5bbe88c; output-bytes=115
 - [x] G3: LaunchAgent loaded and healthy
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/launchagent.mjs --label=com.pmos.pm-news-drafts --expect=loaded
   EXPECT: LAUNCHAGENT CHECK PASS

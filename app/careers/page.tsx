@@ -38,14 +38,9 @@ const areas = [
       'Our live product. Web platform for recruiters and small hiring teams — pipelines, outreach, Discovery Videos.',
   },
   {
-    label: 'Persistent Sales',
-    detail:
-      'In design. A modern sales workflow for small teams, built on the same foundation as Recruiter.',
-  },
-  {
     label: 'The next product',
     detail:
-      'What gets built after Sales is open. Bring an idea, or pick one off the research queue.',
+      'What gets built next is open. Bring an idea, or pick one off the research queue.',
   },
 ];
 

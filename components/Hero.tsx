@@ -76,14 +76,6 @@ export default function Hero() {
           >
             Persistent Workforce
           </Link>
-          {' '}and{' '}
-          <Link
-            href="https://sales.persistentmomentum.com"
-            className="font-semibold underline-offset-4 hover:underline"
-            style={{ color: 'var(--color-ice)' }}
-          >
-            Persistent Sales
-          </Link>
           . We design, build, and ship software for small teams.
         </p>
 
@@ -101,24 +93,10 @@ export default function Hero() {
           >
             Visit Persistent Workforce <span className="ml-2">→</span>
           </a>
-          <a
-            href="https://sales.persistentmomentum.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center text-base font-semibold px-7 py-3.5 transition-colors"
-            style={{
-              color: 'var(--color-glow-white)',
-              border: '1px solid rgba(168,197,255,0.35)',
-              borderRadius: 'var(--radius)',
-              background: 'rgba(255,255,255,0.02)',
-            }}
-          >
-            Visit Persistent Sales <span className="ml-2">→</span>
-          </a>
         </div>
 
         <p className="text-sm" style={{ color: 'rgba(168,197,255,0.7)' }}>
-          Persistent Workforce is live. Persistent Sales is coming soon.
+          Persistent Workforce is live.
         </p>
       </div>
     </section>

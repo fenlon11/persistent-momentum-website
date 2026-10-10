@@ -21,11 +21,6 @@ const links: NavLink[] = [
     label: 'Recruiter',
     external: true,
   },
-  {
-    href: 'https://sales.persistentmomentum.com',
-    label: 'Sales',
-    external: true,
-  },
 ];
 
 export default function Navigation() {

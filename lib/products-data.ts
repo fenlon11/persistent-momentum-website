@@ -34,22 +34,6 @@ export const products: Product[] = [
       'Automated outreach',
     ],
   },
-  {
-    id: 'persistent-sales',
-    name: 'Persistent Sales',
-    category: 'Web platforms',
-    tagline: 'A modern sales workflow for small teams.',
-    description:
-      'Pipeline tracking, automated outreach, and AI-assisted follow-up — built on the same foundation as Persistent Workforce. Coming soon.',
-    status: 'coming-soon',
-    externalUrl: 'https://sales.persistentmomentum.com',
-    features: [
-      'Pipeline tracking',
-      'Automated sequences',
-      'AI-assisted follow-up',
-      'Revenue analytics',
-    ],
-  },
 ];
 
 export const statusMeta: Record<ProductStatus, { label: string; dot: string }> = {

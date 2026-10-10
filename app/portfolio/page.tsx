@@ -6,7 +6,7 @@ import { products, statusMeta, categories } from '@/lib/products-data';
 export const metadata: Metadata = {
   title: 'Portfolio — Persistent Momentum',
   description:
-    'The Persistent Momentum portfolio. Persistent Workforce is live. Persistent Sales is coming soon.',
+    'The Persistent Momentum portfolio. Persistent Workforce is live.',
 };
 
 export default function PortfolioPage() {
@@ -50,7 +50,7 @@ export default function PortfolioPage() {
         }}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 max-w-3xl mx-auto">
             {products.map((p) => {
               const status = statusMeta[p.status];
               const isLive = p.status === 'live';
@@ -146,7 +146,7 @@ export default function PortfolioPage() {
                   </ul>
 
                   <span
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
+                    className="inline-flex max-w-full flex-wrap items-center [overflow-wrap:anywhere] gap-1.5 text-sm font-semibold transition-colors"
                     style={{ color: 'var(--color-primary)' }}
                   >
                     {p.externalUrl

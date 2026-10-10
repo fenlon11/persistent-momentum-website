@@ -66,14 +66,6 @@ export default function ContactPage() {
                   style={{ color: 'var(--color-primary)' }}
                 >
                   Persistent Workforce
-                </a>{' '}
-                or{' '}
-                <a
-                  href="https://sales.persistentmomentum.com"
-                  className="font-semibold underline-offset-4 hover:underline"
-                  style={{ color: 'var(--color-primary)' }}
-                >
-                  Persistent Sales
                 </a>
                 .
               </p>

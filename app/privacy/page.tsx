@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicy() {
-  const lastUpdated = '2026-07-08';
+  const lastUpdated = '2026-10-10';
 
   return (
     <main>
@@ -56,11 +56,12 @@ export default function PrivacyPolicy() {
           >
             <Intro>
               <p>
-                Persistent Momentum (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or
-                &ldquo;us&rdquo;) is committed to protecting your privacy. This
-                Privacy Policy explains how we collect, use, disclose, and
-                safeguard your information when you visit our website or
-                interact with us.
+                Persistent Momentum, LLC (&ldquo;Persistent Momentum,&rdquo;
+                &ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is
+                committed to protecting your privacy. This Privacy Policy
+                explains how we collect, use, disclose, and safeguard your
+                information when you visit our website, read our emails and
+                newsletters, use our products, or otherwise interact with us.
               </p>
               <p>
                 By accessing or using our services, you acknowledge that you
@@ -110,7 +111,49 @@ export default function PrivacyPolicy() {
             </Section>
 
             <Section num="03" title="How we share your information">
-              <SubHeading>3.1 Service providers</SubHeading>
+              <SubHeading>3.1 Within Persistent Momentum and our affiliates</SubHeading>
+              <p>
+                Persistent Momentum, LLC operates several products and brands,
+                and may own or control other businesses in the future. In this
+                policy, &ldquo;affiliates&rdquo; means any company that
+                Persistent Momentum, LLC owns or controls, or that is under
+                common ownership or control with it.
+              </p>
+              <p>
+                Information you provide to Persistent Momentum, or to any of
+                its products or brands, may be shared with and used by
+                Persistent Momentum and its affiliates for the purposes
+                described in Section 2, including to tell you about their
+                products where the law allows. Affiliates that receive your
+                information must protect it in line with this Privacy Policy.
+              </p>
+              <ul>
+                <li>
+                  <strong>SMS data is excluded</strong> &middot; we never
+                  share your mobile number or SMS opt-in with affiliates for
+                  their marketing (see Section 12)
+                </li>
+                <li>
+                  <strong>Consent where required</strong> &middot; where the
+                  law requires your consent before an affiliate contacts you
+                  for marketing (for example, in the EU, the UK, or Canada), we
+                  ask for it first, and every marketing email includes a way to
+                  unsubscribe
+                </li>
+                <li>
+                  <strong>Your choice</strong> &middot; you can ask us at any
+                  time to stop sharing your information with our affiliates for
+                  their marketing (see Section 4)
+                </li>
+              </ul>
+              <p>
+                This section applies to information we collect on or after
+                October 10, 2026. We will not share information collected
+                before that date with our affiliates for their marketing
+                unless you agree.
+              </p>
+
+              <SubHeading>3.2 Service providers</SubHeading>
               <p>
                 We may share information with third-party providers performing
                 services on our behalf, including:
@@ -122,20 +165,20 @@ export default function PrivacyPolicy() {
                 <li>Payment processing</li>
               </ul>
 
-              <SubHeading>3.2 Business transfers</SubHeading>
+              <SubHeading>3.3 Business transfers</SubHeading>
               <p>
                 If we are involved in a merger, acquisition, financing,
                 reorganization, bankruptcy, or sale of assets, your information
                 may transfer as part of that transaction.
               </p>
 
-              <SubHeading>3.3 Legal requirements</SubHeading>
+              <SubHeading>3.4 Legal requirements</SubHeading>
               <p>
                 We may disclose your information if required by law or in
                 response to valid government requests.
               </p>
 
-              <SubHeading>3.4 With your consent</SubHeading>
+              <SubHeading>3.5 With your consent</SubHeading>
               <p>
                 We may share information with third parties when you give us
                 explicit consent.
@@ -168,6 +211,11 @@ export default function PrivacyPolicy() {
                 <li>
                   <strong>Restriction</strong> &middot; ask us to restrict
                   processing
+                </li>
+                <li>
+                  <strong>Affiliate sharing</strong> &middot; ask us to stop
+                  sharing your information with our affiliates for their
+                  marketing
                 </li>
               </ul>
               <p>
@@ -239,7 +287,10 @@ export default function PrivacyPolicy() {
               <p>
                 We may update this Privacy Policy from time to time. We will
                 post the new version on this page and update the &ldquo;Last
-                updated&rdquo; date.
+                updated&rdquo; date. If we make a material change to how we use
+                or share information we already hold, we will tell you before
+                the change applies to that information and, where the law
+                requires, ask for your consent.
               </p>
             </Section>
 

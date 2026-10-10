@@ -1,17 +1,7 @@
-import { Metadata } from 'next';
-import PagePlaceholder from '@/components/PagePlaceholder';
+import ContentIndex, { indexMetadata } from '@/components/content/ContentIndex';
 
-export const metadata: Metadata = {
-  title: 'Guides — Persistent Momentum',
-  robots: { index: false },
-};
+export const generateMetadata = () => indexMetadata('guide');
 
-export default function GuidesPage() {
-  return (
-    <PagePlaceholder
-      eyebrow="Guides"
-      title="Guides, coming soon."
-      body="Plain explainers on putting AI to work in a business. The first guides publish soon."
-    />
-  );
+export default function Page() {
+  return <ContentIndex type="guide" />;
 }

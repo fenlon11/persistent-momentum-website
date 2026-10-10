@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.pmos.pm-news-drafts</string>
+    <!-- Runs scripts/news/run.sh as merged on origin/main, so a merge is the deploy. The script is read into a
+         variable first (not a process substitution) so a missing run.sh exits non-zero. fenlon11/pmOS#686 -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>R="$PM_NEWS_REPO"; git -C "$R" fetch -q origin &amp;&amp; S="$(git -C "$R" show "origin/$PM_NEWS_REF:scripts/news/run.sh")" &amp;&amp; /bin/bash -c "$S"</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/macminipro</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/Users/macminipro/.local/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>PM_NEWS_REPO</key>
+        <string>/Users/macminipro/pmOS/projects/persistent-momentum/persistent-momentum-website</string>
+        <key>PM_NEWS_REF</key>
+        <string>main</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key><integer>1</integer>
+        <key>Hour</key><integer>7</integer>
+        <key>Minute</key><integer>0</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/Users/macminipro/pmOS/agents/logs/pm-news-drafts.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/macminipro/pmOS/agents/logs/pm-news-drafts.stderr.log</string>
+</dict>
+</plist>

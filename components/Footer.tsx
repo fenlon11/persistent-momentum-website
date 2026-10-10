@@ -6,19 +6,18 @@ const columns: {
   links: { href: string; label: string; external?: boolean }[];
 }[] = [
   {
-    heading: 'Products',
+    heading: 'Read',
     links: [
-      {
-        href: 'https://workforce.persistentmomentum.com/pricing',
-        label: 'Persistent Workforce',
-        external: true,
-      },
+      { href: '/newsletter', label: 'Newsletter' },
+      { href: '/news', label: 'News' },
+      { href: '/guides', label: 'Guides' },
     ],
   },
   {
     heading: 'Company',
     links: [
-      { href: '/contact', label: 'Contact' },
+      { href: '/consulting', label: 'Consulting' },
+      { href: '/about', label: 'About' },
     ],
   },
   {
@@ -63,7 +62,8 @@ export default function Footer() {
               className="mt-4 max-w-xs text-sm leading-relaxed"
               style={{ color: 'rgba(230,238,255,0.62)' }}
             >
-              We build products as persistent as you.
+              AI news for business operators, plus business and AI systems
+              consulting.
             </p>
             <p className="mt-4 text-sm">
               <a
@@ -126,7 +126,15 @@ export default function Footer() {
             &copy; {year} Persistent Momentum, LLC &middot; All rights reserved
           </p>
           <p className="text-xs" style={{ color: 'rgba(230,238,255,0.55)' }}>
-            persistentmomentum.com
+            Our products:{' '}
+            <a
+              href="https://workforce.persistentmomentum.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-4 hover:underline"
+            >
+              Persistent Workforce
+            </a>
           </p>
         </div>
       </div>

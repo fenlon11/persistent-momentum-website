@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 
@@ -10,12 +11,12 @@ const openSans = Open_Sans({
 });
 
 const description =
-  "We build products as persistent as you — to keep your momentum going. Persistent Workforce is live.";
+  "What the AI companies actually shipped, what it means for your business, and one thing to try. Plus business and AI systems consulting.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://persistentmomentum.com"),
   title: {
-    default: "Persistent Momentum — We build products",
+    default: "Persistent Momentum — AI news for business operators",
     template: "%s",
   },
   description,
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Persistent Momentum',
-    title: 'Persistent Momentum — We build products',
+    title: 'Persistent Momentum — AI news for business operators',
     description,
     url: 'https://persistentmomentum.com',
     images: [{ url: '/logo.png', width: 762, height: 720, alt: 'Persistent Momentum' }],
@@ -54,6 +55,12 @@ export default function RootLayout({
       <body className={`${openSans.variable} antialiased`}>
         <Navigation />
         {children}
+        {/* HubSpot tracking, PM portal 247620603 (Matt approved 2026-10-08). */}
+        <Script
+          id="hs-script-loader"
+          src="https://js-na2.hs-scripts.com/247620603.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

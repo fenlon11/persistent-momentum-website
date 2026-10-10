@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
@@ -61,12 +62,20 @@ export default function ContactPage() {
                 our products, the product&apos;s own site is where you want to
                 go &mdash;{' '}
                 <a
-                  href="https://workforce.persistentmomentum.com/pricing"
+                  href="https://workforce.persistentmomentum.com"
                   className="font-semibold underline-offset-4 hover:underline"
                   style={{ color: 'var(--color-primary)' }}
                 >
                   Persistent Workforce
                 </a>
+                . Interested in consulting?{' '}
+                <Link
+                  href="/consulting"
+                  className="font-semibold underline-offset-4 hover:underline"
+                  style={{ color: 'var(--color-primary)' }}
+                >
+                  Start at our consulting page
+                </Link>
                 .
               </p>
 

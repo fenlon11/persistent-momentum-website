@@ -236,6 +236,9 @@ export default function PrivacyPolicy() {
                 We use cookies and similar tracking technologies. You can
                 instruct your browser to refuse cookies or warn you when one is
                 sent. Some portions of the site may not work without cookies.
+                We use HubSpot analytics cookies to understand how visitors use
+                the site and to connect newsletter and consulting sign-ups to
+                our records.
               </p>
             </Section>
 

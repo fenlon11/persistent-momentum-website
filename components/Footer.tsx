@@ -18,6 +18,8 @@ const columns: {
     links: [
       { href: '/consulting', label: 'Consulting' },
       { href: '/about', label: 'About' },
+      { href: '/editorial-policy', label: 'Editorial policy' },
+      { href: '/corrections', label: 'Corrections' },
     ],
   },
   {

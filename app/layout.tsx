@@ -3,6 +3,9 @@ import { Open_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import JsonLd from "@/components/JsonLd";
+import { organizationJsonLd } from "@/lib/seo/jsonld";
+import { FEED_TYPES } from "@/lib/site";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -20,6 +23,10 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description,
+  // Full snippets and large image previews everywhere; never nosnippet/noarchive/nocache
+  // (playbook P1 #17, fenlon11/pmOS#685).
+  robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  alternates: { types: FEED_TYPES },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -53,6 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <body className={`${openSans.variable} antialiased`}>
+        <JsonLd data={organizationJsonLd()} />
         <Navigation />
         {children}
         {/* HubSpot tracking, PM portal 247620603 (Matt approved 2026-10-08). */}

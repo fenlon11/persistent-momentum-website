@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
+import JsonLd from '@/components/JsonLd';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { getAuthor, getRelated, type Article } from '@/lib/content';
 import { statusLabels } from '@/lib/content/schema';
 import { reviewers } from '@/content/reviewers';
@@ -21,6 +23,8 @@ export default function ArticlePage({ article }: { article: Article }) {
 
   return (
     <main>
+      <JsonLd data={articleJsonLd(article)} />
+      <JsonLd data={breadcrumbJsonLd(article)} />
       <article className="px-6 pt-12 pb-20 md:pt-20" style={{ background: 'var(--color-bg)' }}>
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-primary)', letterSpacing: '0.12em' }}>
@@ -101,16 +105,23 @@ export default function ArticlePage({ article }: { article: Article }) {
             </ol>
           </section>
 
-          {author.kind === 'ai' && (
-            <p className="mt-8 text-sm" style={muted}>
-              Drafted by {author.name}, our {author.title ?? 'AI editor'} (an AI system). Reviewed and approved by{' '}
-              {reviewer?.name ?? 'a Persistent Momentum editor'}. How we work:{' '}
-              <Link href="/editorial-policy" className="underline underline-offset-2" style={{ color: 'var(--color-primary)' }}>
-                /editorial-policy
-              </Link>
-              .
-            </p>
-          )}
+          {/* "How this was made" on every article (playbook §5 P0 #6). */}
+          <p className="mt-8 text-sm" style={muted}>
+            {author.kind === 'ai' ? (
+              <>Drafted by {author.name}, our {author.title ?? 'AI editor'} (an AI system).</>
+            ) : (
+              <>Researched and drafted with AI assistance.</>
+            )}{' '}
+            Reviewed and approved by {reviewer?.name ?? 'a Persistent Momentum editor'}. How we work:{' '}
+            <Link href="/editorial-policy" className="underline underline-offset-2" style={{ color: 'var(--color-primary)' }}>
+              /editorial-policy
+            </Link>
+            . Spot an error?{' '}
+            <Link href="/corrections" className="underline underline-offset-2" style={{ color: 'var(--color-primary)' }}>
+              /corrections
+            </Link>
+            .
+          </p>
 
           {article.tags.length > 0 && (
             <ul className="mt-8 flex flex-wrap gap-2" aria-label="Tags">

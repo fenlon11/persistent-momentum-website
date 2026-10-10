@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticlePage from '@/components/content/ArticlePage';
 import { getArticle, getArticles } from '@/lib/content';
+import { articleMetadata } from '@/lib/seo/metadata';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -11,11 +12,7 @@ export const generateStaticParams = () => getArticles('news').map((a) => ({ slug
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticle('news', (await params).slug);
-  if (!article) return {};
-  return {
-    title: `${article.title} — Persistent Momentum`,
-    description: article.description,
-  };
+  return article ? articleMetadata(article) : {};
 }
 
 export default async function Page({ params }: Props) {

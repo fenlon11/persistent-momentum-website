@@ -3,12 +3,12 @@ import Link from 'next/link';
 import PageShell from '@/components/content/PageShell';
 import { formatDate } from '@/components/content/format';
 import { corrections } from '@/content/corrections';
-import { SITE_EMAIL } from '@/lib/site';
+import { FEED_TYPES, SITE_EMAIL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Corrections — Persistent Momentum',
   description: 'How to report an error on Persistent Momentum, and the log of every correction we have made.',
-  alternates: { canonical: '/corrections' },
+  alternates: { canonical: '/corrections', types: FEED_TYPES },
 };
 
 const text = { color: 'var(--color-text-dark)' };

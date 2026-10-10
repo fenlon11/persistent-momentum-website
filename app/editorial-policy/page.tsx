@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import PageShell from '@/components/content/PageShell';
 import { defaultReviewer } from '@/content/reviewers';
-import { SITE_EMAIL } from '@/lib/site';
+import { FEED_TYPES, SITE_EMAIL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Editorial policy — Persistent Momentum',
   description:
     'How Persistent Momentum sources, drafts, reviews and corrects its AI news, and which steps are automated and which are done by a person.',
-  alternates: { canonical: '/editorial-policy' },
+  alternates: { canonical: '/editorial-policy', types: FEED_TYPES },
 };
 
 const text = { color: 'var(--color-text-dark)' };

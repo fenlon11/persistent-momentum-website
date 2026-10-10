@@ -45,6 +45,13 @@ test('no Person anywhere in the JSON-LD; Organization on every page', { skip: !b
   }
 });
 
+test('every prerendered page links the RSS feed in head', { skip: !built }, () => {
+  const missing = html
+    .filter((f) => !/<link rel="alternate" type="application\/rss\+xml"[^>]*href="[^"]*\/feed.xml"/.test(fs.readFileSync(f, 'utf8')))
+    .map((f) => path.relative(root, f));
+  assert.deepEqual(missing, []);
+});
+
 test('every prerendered article: JSON-LD dates and headline equal the visible text', { skip: !built }, (t) => {
   const articles = html.filter((f) => /\/(news|guides)\/[^/]+\.html$/.test(f) && !/\/page\//.test(f));
   const checked = articles.filter((f) => {

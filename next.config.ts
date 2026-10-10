@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // /news-sitemap.xml renders per request and reads content/ from disk (fenlon11/pmOS#685).
+  outputFileTracingIncludes: {
+    '/news-sitemap.xml': ['./content/**/*'],
+  },
   async redirects() {
     return [
       // Path renames over the corporate site's history. All permanent so search

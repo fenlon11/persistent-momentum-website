@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test lib/content/schema.test.ts"
+    "test": "node --test lib/content/schema.test.ts lib/seo/*.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

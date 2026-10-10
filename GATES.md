@@ -13,7 +13,7 @@ Copied verbatim from the spec's `## Gates` section, before any code.
   EXPECT: REPO CHECK PASS
   EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-680; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=d4617db47d90b10313ab9eb336d6448622a18dcdbb3c28d6fbcf4a97044f0fc9; output-bytes=115
 - [x] G6: (manual) screenshots at 375×812 and 1440×900 of / and /about show no horizontal scroll, no Persistent Sales, no pricing. Evidence: screenshot paths plus scrollWidth readings.
-  EVIDENCE: `node ~/pmOS/scripts/verify/capture-pmos680.mjs` against `next start` (this branch), 2026-10-10: 375x812 / scrollWidth=375, /about 375, /consulting 375; 1440x900 / 1440, /about 1440, /consulting 1440 — all OK; forbidden=[] ("Persistent Sales", "sales.persistentmomentum.com", "$") on every page; mobile nav items News/Guides/Newsletter/Consulting/Subscribe. Screenshots: ~/pmOS/scripts/verify/screenshots/pmos-680-{home,about,consulting}-{375x812,1440x900}.png, pmos-680-mobile-nav-375x812.png. Reviewer re-checks by eye.
+  EVIDENCE: `node ~/pmOS/scripts/verify/capture-pmos680.mjs` against `next start` (this branch, review-fix rebuild), 2026-10-10: 375x812 / scrollWidth=375, /about 375, /consulting 375; 1440x900 / 1440, /about 1440, /consulting 1440 — all OK; forbidden=[] ("Persistent Sales", "sales.persistentmomentum.com", "$", "Matt", "Fenlon") on every page; mobile nav items News/Guides/Newsletter/Consulting/Subscribe. Screenshots: ~/pmOS/scripts/verify/screenshots/pmos-680-{home,about,consulting}-{375x812,1440x900}.png, pmos-680-mobile-nav-375x812.png. Reviewer re-checks by eye.
 
 G1/G2 `--dir` is retargeted from the main checkout to this worktree: run verbatim, it would build
 `main`, not this branch (a false green).

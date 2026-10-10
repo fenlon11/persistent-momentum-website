@@ -29,6 +29,7 @@ Tokens are CSS vars in `app/globals.css` (re-exposed via Tailwind `@theme inline
 
 - `next.config.ts` has permanent 308 redirects: `/portfolio`, `/products*` and `/pmos*` → `/about` (portfolio page retired in the 2026-10-10 AI news reset; pmOS is internal-only since 2026-05-15). Don't recreate those routes.
 - **`pm-analytics-sync/` is a nested independent git repo** (CF Worker syncing RevenueCat + ASC metrics into pmOS Supabase every 6h) — excluded from `tsconfig.json`, not part of the Next.js build, has its own wrangler secrets. Don't stage it from this repo.
+- **No personal name, home address or phone on any public page, feed or structured data** (Matt, 2026-10-10). Reviewer credit is the role in `content/reviewers.ts` ("a Persistent Momentum editor"). Elle Evate is the Head of AI Content and is always disclosed as AI — "(AI)" on every byline, never `Person` in JSON-LD, never `reviewedBy`.
 - Persistent Sales was retired 2026-10-10 (Matt: "It's all Persistent Workforce now"). Don't re-add it or link sales.persistentmomentum.com.
 
 ## Key files

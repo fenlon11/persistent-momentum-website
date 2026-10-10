@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import { defaultReviewer } from '@/content/reviewers';
 
 export const metadata: Metadata = {
   title: 'About — Persistent Momentum',
@@ -27,7 +28,7 @@ const standards = [
   {
     title: 'AI-assisted drafting, human review',
     detail:
-      'AI helps us research and draft. A person checks every fact, link and date against the source and approves each item before it publishes.',
+      'Elle Evate, our Head of AI Content (an AI system), researches and drafts. A human editor at Persistent Momentum checks every fact, link and date against the source and approves each item before it publishes.',
   },
 ];
 
@@ -51,9 +52,42 @@ export default function AboutPage() {
           <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-dark-muted)' }}>
             Persistent Momentum covers what the AI companies actually ship,
             what it means for your business, and one thing to try. The site is
-            published by Persistent Momentum, LLC. Matt Fenlon, who runs
-            Persistent Momentum, reviews and approves every article before it
-            publishes.
+            published by Persistent Momentum, LLC. A human editor reviews and
+            approves every article before it publishes.
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="px-6 py-16"
+        style={{ background: 'var(--color-bg)', borderTop: '1px solid var(--color-border)' }}
+      >
+        <div className="max-w-3xl mx-auto">
+          <h2
+            className="text-2xl md:text-3xl font-bold mb-2"
+            style={{ color: 'var(--color-text-dark)', letterSpacing: '-0.02em' }}
+          >
+            Who writes this
+          </h2>
+          <p className="text-sm font-semibold mb-5" style={{ color: 'var(--color-text-dark-muted)' }}>
+            Elle Evate · Head of AI Content (AI)
+          </p>
+          <p className="text-base leading-relaxed mb-4" style={{ color: 'var(--color-text-dark-muted)' }}>
+            Elle Evate is Persistent Momentum&apos;s Head of AI Content. Elle is an AI
+            system, not a person. A human editor at Persistent Momentum reviews and
+            approves everything Elle drafts before it is published.
+          </p>
+          <p className="text-base leading-relaxed" style={{ color: 'var(--color-text-dark-muted)' }}>
+            Drafted by Elle Evate, our Head of AI Content (an AI system). Reviewed and
+            approved by {defaultReviewer.name}. More about{' '}
+            <Link
+              href="/authors/elle-evate"
+              className="font-semibold underline-offset-4 hover:underline"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              Elle Evate
+            </Link>
+            .
           </p>
         </div>
       </section>

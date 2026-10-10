@@ -13,11 +13,6 @@ const columns: {
         label: 'Persistent Workforce',
         external: true,
       },
-      {
-        href: 'https://sales.persistentmomentum.com',
-        label: 'Persistent Sales',
-        external: true,
-      },
     ],
   },
   {

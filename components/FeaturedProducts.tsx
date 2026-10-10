@@ -43,12 +43,12 @@ export default function FeaturedProducts() {
             className="text-lg"
             style={{ color: 'var(--color-text-dark-muted)' }}
           >
-            Persistent Workforce helps you hire faster. Persistent Sales
-            helps you close more. Both built to scale with your business.
+            Persistent Workforce helps you hire faster, and it&apos;s built to
+            scale with your business.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 max-w-3xl mx-auto">
           {products.map((p) => {
             const status = statusMeta[p.status];
             const isLive = p.status === 'live';

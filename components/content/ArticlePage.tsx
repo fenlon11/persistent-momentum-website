@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import { NEWSLETTER_NAME } from '@/lib/newsletter-copy';
 import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { getAuthor, getRelated, type Article } from '@/lib/content';
 import { statusLabels } from '@/lib/content/schema';
@@ -62,6 +63,12 @@ export default function ArticlePage({ article }: { article: Article }) {
               {article.description}
             </p>
           </section>
+
+          {/* Signup right after the answer, again at the end and in the footer; never a pop-up
+              (playbook §5 P0 #10). */}
+          <div className="mb-10">
+            <NewsletterSignup tone="light" compact />
+          </div>
 
           {article.heroImage && (
             <Image src={article.heroImage} alt="" width={1200} height={630} className="w-full h-auto mb-10" style={{ borderRadius: 'var(--radius-lg)' }} />
@@ -141,11 +148,11 @@ export default function ArticlePage({ article }: { article: Article }) {
         </div>
       </article>
 
-      {/* Newsletter slot: the disabled placeholder until fenlon11/pmOS#682 wires it up. */}
+      {/* End-of-article signup (fenlon11/pmOS#682). */}
       <section className="px-6 py-14" style={{ background: 'var(--color-bg-light-secondary)', borderTop: '1px solid var(--color-border)' }}>
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-2" style={heading}>
-            Get the weekly AI news
+            Get {NEWSLETTER_NAME}
           </h2>
           <p className="text-base mb-5" style={muted}>
             What shipped, what it means for your business, and one thing to try.

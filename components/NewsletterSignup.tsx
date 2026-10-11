@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import Link from 'next/link';
-import { NEWSLETTER_NAME, SUCCESS_MESSAGE } from '@/lib/newsletter-copy';
+import { COMMUNICATIONS_TEXT, CONSENT_TO_PROCESS_PARTS, NEWSLETTER_NAME, SUCCESS_MESSAGE } from '@/lib/newsletter-copy';
 
 // Newsletter signup (fenlon11/pmOS#682). Posts to /api/newsletter, which submits to the PM
 // HubSpot form and keeps a Supabase backup. `tone` follows the section background: dark for the
@@ -127,11 +127,11 @@ export default function NewsletterSignup({
         </p>
       )}
       <p className="mt-3 text-sm" style={{ color: muted }}>
-        Free. By subscribing you agree to receive {NEWSLETTER_NAME} by email and to our{' '}
+        Free. {COMMUNICATIONS_TEXT} {CONSENT_TO_PROCESS_PARTS[0]}
         <Link href="/privacy" className="underline underline-offset-2" style={{ color: linkColor }}>
-          Privacy Policy
+          {CONSENT_TO_PROCESS_PARTS[1]}
         </Link>
-        . Unsubscribe any time.
+        {CONSENT_TO_PROCESS_PARTS[2]}
       </p>
     </form>
   );

@@ -2,7 +2,10 @@
 // stubbed; nothing here touches HubSpot or a database.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
+  COMMUNICATIONS_TEXT,
+  CONSENT_TO_PROCESS_PARTS,
   CONVERSION_FORM,
   buildHubSpotPayload,
   NEWSLETTER_SUBSCRIPTION_TYPE_ID,
@@ -143,4 +146,15 @@ test('rate limiter: allows the limit per window, then blocks, then recovers', ()
   assert.equal(allow('1.2.3.4', 20), false);
   assert.equal(allow('5.6.7.8', 20), true);
   assert.equal(allow('1.2.3.4', 1500), true);
+});
+
+test('consent: HubSpot records exactly the words the form shows', () => {
+  const consent = buildHubSpotPayload({ email: 'reader@test.example', firstname: '' }, undefined).legalConsentOptions.consent;
+  assert.equal(consent.text, CONSENT_TO_PROCESS_PARTS.join(''));
+  assert.equal(consent.communications[0].text, COMMUNICATIONS_TEXT);
+  // The form must render those same constants, not its own copy of the wording.
+  const form = readFileSync(new URL('../components/NewsletterSignup.tsx', import.meta.url), 'utf8');
+  assert.match(form, /\{COMMUNICATIONS_TEXT\}/);
+  for (const i of [0, 1, 2]) assert.match(form, new RegExp(`\\{CONSENT_TO_PROCESS_PARTS\\[${i}\\]\\}`));
+  assert.doesNotMatch(form, /\bagree\b/i);
 });

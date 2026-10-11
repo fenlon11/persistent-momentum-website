@@ -39,3 +39,10 @@ whatever branch the main checkout has parked (`copy/thesis-operators-for-operato
   The screenshots were local to the build session; review should take its own on the preview deploy.
 - G3 passes before merge only because the old placeholder page also contains "newsletter";
   re-run it after the deploy.
+- Round 3 (REVIEW FAIL, consent text): the form now renders `COMMUNICATIONS_TEXT` and
+  `CONSENT_TO_PROCESS_PARTS` (the middle part is the /privacy link), and `buildHubSpotPayload` sends
+  the same constants. New unit test `consent: HubSpot records exactly the words the form shows` is red
+  against the round-2 form and green now. Fresh `next build` + `next start`: `/` and `/newsletter`
+  each contain both consent sentences twice (page form + footer) and "By subscribing you agree" zero
+  times. The visible copy got longer; G5 screenshots must be re-taken (no Playwright on this host in
+  the build session, so no viewport check was run for round 3).

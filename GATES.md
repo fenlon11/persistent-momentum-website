@@ -9,7 +9,7 @@ whatever branch the main checkout has parked (`copy/thesis-operators-for-operato
 - [x] G1: build passes
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682 --task=build
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=65b7b17062ac2aaeb934823354ea7b62b5ec03339df47604ec940fb2aa7f3cd0; output-bytes=116
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=0d4f44c02086f97964a21d77aae16638e3565f5bd0749ff3882b00348767bddf; output-bytes=116
 - [x] G2: route unit tests pass
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682 --task=test
   EXPECT: REPO CHECK PASS
@@ -23,10 +23,16 @@ whatever branch the main checkout has parked (`copy/thesis-operators-for-operato
 
 ## Builder notes for the manual gates (not verdicts)
 
-- G4: the built route (`next start`, prod build) posted one `.example` address with first name
-  "pmOS682 Test" to the live form at 2026-10-11T19:55:57Z and returned 200, which the route only does
-  on a 2xx from HubSpot. The reviewer still has to read the submission and its
-  `pm_conversion_form` value in HubSpot.
+- G4 (round 2, after REVIEW FAIL): the `.example` submission at 2026-10-11T19:55:57Z got a 200 from
+  `api.hsforms.com` but **never became a contact**. HubSpot accepts reserved-domain addresses and then
+  drops them silently, so the spec's ".example is acceptable" does not hold for HubSpot-form gates.
+  Re-test through the same built route (prod build, `next start`, real GUID) with a PM-domain address
+  (`persistentmomentum.com`, iCloud MX), first name "pmOS682 Retest": route 200 at 2026-10-11T20:16:00Z.
+  Read back with the `hsos-claude` key (portal 247620603): contact **567771282115**, createdate
+  2026-10-11T20:16:00.716Z, `pm_conversion_form = ai_news_newsletter`, `lifecyclestage = subscriber`.
+  Flagged afterwards per the spec: `pm_mock_record = true` (read back `'true'`), which puts it in
+  segment 12 "Mock records, never email". The form-submissions list itself needs a `forms`-scoped key
+  that this portal does not have in Bitwarden; the contact read is the proof.
 - G5: local Playwright renders at 375×812 and 1440×900 of `/`, `/newsletter` and the draft article
   (`next dev`) showed `scrollWidth == innerWidth` on every page, with 2 signup forms on `/` and
   `/newsletter` (page + footer) and 3 on an article (after the summary, end of article, footer).

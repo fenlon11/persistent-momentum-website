@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: 'Persistent Momentum — AI news for business operators',
     description,
     url: 'https://persistentmomentum.com',
-    images: [{ url: '/logo.png', width: 762, height: 720, alt: 'Persistent Momentum' }],
+    images: [{ url: '/logo.png', width: 780, height: 780, alt: 'Persistent Momentum' }],
   },
   twitter: {
     card: 'summary',

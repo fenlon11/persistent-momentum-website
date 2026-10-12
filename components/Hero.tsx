@@ -51,15 +51,15 @@ export default function Hero() {
             letterSpacing: '-0.025em',
           }}
         >
-          What the AI companies actually shipped.
+          Stay up to date on the AI news that matters.
         </h1>
 
         <p
           className="text-base md:text-xl mb-8 md:mb-10 max-w-2xl leading-relaxed"
           style={{ color: 'rgba(230,238,255,0.72)' }}
         >
-          What it means for your business, and one thing to try. Every item
-          links to its primary source.
+          AI moves fast. We track what the big AI companies ship and explain
+          what it means for your business.
         </p>
 
         <NewsletterSignup />

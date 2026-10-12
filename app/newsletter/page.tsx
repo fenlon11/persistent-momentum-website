@@ -7,12 +7,12 @@ import { NEWSLETTER_NAME } from '@/lib/newsletter-copy';
 export const metadata: Metadata = {
   title: `${NEWSLETTER_NAME} — Persistent Momentum`,
   description:
-    'The Momentum Update: what the AI companies actually shipped, what it means for your business, and one thing to try. Every item links to its primary source.',
+    'The Momentum Update: stay up to date on the AI news that matters. We track what the big AI companies ship and explain what it means for your business. Every item links to its primary source.',
 };
 
 const whatYouGet = [
   {
-    title: 'What actually shipped',
+    title: 'What the big AI companies ship',
     detail:
       'The releases from the AI companies that matter to a business, and whether each one is announced, in preview, or available today.',
   },
@@ -45,7 +45,7 @@ export default function NewsletterPage() {
             {NEWSLETTER_NAME}
           </h1>
           <p className="text-lg mb-8" style={{ color: 'var(--color-text-dark-muted)' }}>
-            What the AI companies actually shipped, what it means for your business, and one thing to try.
+            Stay up to date on the AI news that matters. We track what the big AI companies ship and explain what it means for your business.
           </p>
 
           <NewsletterSignup tone="light" />

@@ -50,8 +50,9 @@ export default function AboutPage() {
             AI news for people who run a business.
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-dark-muted)' }}>
-            Persistent Momentum covers what the AI companies actually ship,
-            what it means for your business, and one thing to try. The site is
+            Persistent Momentum helps you stay up to date on the AI news that
+            matters. AI moves fast, so we track what the big AI companies ship
+            and explain what it means for your business. The site is
             published by Persistent Momentum, LLC. A human editor reviews and
             approves every article before it publishes.
           </p>

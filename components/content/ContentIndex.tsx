@@ -9,7 +9,7 @@ const copy = {
     basePath: '/news',
     eyebrow: 'News',
     title: 'AI news',
-    intro: 'What the AI companies shipped, what it means for your business, and one thing to try. Every story links to its primary source.',
+    intro: "AI moves fast. Here's what the big AI companies ship and what it means for your business. Every story links to its primary source.",
     empty: 'The first stories publish soon. Subscribe to the newsletter to get them when they do.',
     metaTitle: 'AI News — Persistent Momentum',
   },

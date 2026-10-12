@@ -5,7 +5,7 @@ export const SITE_NAME = 'Persistent Momentum';
 export const SITE_LEGAL_NAME = 'Persistent Momentum, LLC';
 export const SITE_EMAIL = 'info@persistentmomentum.com';
 export const SITE_DESCRIPTION =
-  'What the AI companies actually shipped, what it means for your business, and one thing to try. Plus business and AI systems consulting.';
+  'Stay up to date on the AI news that matters: what the big AI companies ship and what it means for your business. Plus business and AI systems consulting.';
 
 // Spread into `alternates.types` wherever a page sets its own `alternates`: Next replaces the
 // parent's object, so the feed link would otherwise drop off that page.

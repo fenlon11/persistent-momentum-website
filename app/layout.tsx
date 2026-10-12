@@ -14,7 +14,7 @@ const openSans = Open_Sans({
 });
 
 const description =
-  "What the AI companies actually shipped, what it means for your business, and one thing to try. Plus business and AI systems consulting.";
+  "Stay up to date on the AI news that matters: what the big AI companies ship and what it means for your business. Plus business and AI systems consulting.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://persistentmomentum.com"),

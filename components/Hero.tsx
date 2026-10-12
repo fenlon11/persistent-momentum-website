@@ -41,7 +41,7 @@ export default function Hero() {
             letterSpacing: '0.14em',
           }}
         >
-          AI News &amp; Updates
+          The Momentum Update
         </span>
 
         <h1

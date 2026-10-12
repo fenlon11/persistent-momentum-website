@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 const columns: {
   heading: string;
@@ -67,6 +68,9 @@ export default function Footer() {
               AI news for business operators, plus business and AI systems
               consulting.
             </p>
+            <div className="mt-5">
+              <NewsletterSignup compact />
+            </div>
             <p className="mt-4 text-sm">
               <a
                 href="mailto:info@persistentmomentum.com"

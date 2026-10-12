@@ -155,7 +155,7 @@ export default function ArticlePage({ article }: { article: Article }) {
             Get {NEWSLETTER_NAME}
           </h2>
           <p className="text-base mb-5" style={muted}>
-            What shipped, what it means for your business, and one thing to try.
+            AI moves fast. We track what the big AI companies ship and explain what it means for your business.
           </p>
           <NewsletterSignup tone="light" />
         </div>

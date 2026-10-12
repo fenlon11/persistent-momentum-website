@@ -26,14 +26,20 @@ Drafts are written by **Elle Evate, PM's Head of AI Content**, and she is always
 invented bio or credentials. A human reviews and approves every issue and article before it goes out, and that human is the
 accountable reviewer. Never present Elle as a person. Logs: [[2026-10-10-elle-evate-crawlers-forms-search]], [[2026-10-10-elle-head-of-ai-content]].
 
-## Theme (proposed)
-**"What the AI companies actually shipped this week, what it means for your business, and one thing to try."**
+## Theme (Matt, set 2026-10-11)
+**"Stay up to date on the AI news that matters."**
+Supporting line: "AI moves fast. We track what the big AI companies ship and explain what it means for your business."
+Same message as the site's home hero ([[2026-10-11-home-hero-copy]]). Cadence is weekly (Matt, 2026-10-11), but the hero and the theme
+line still carry no cadence words; Matt didn't like "every week" there. Signup helper copy may say "one email a week" only if Matt OKs it. Each issue still ends with one thing to try (format below).
+Retired 2026-10-11: "What the AI companies actually shipped this week, what it means for your business, and one thing to try."
 - **Reader:** AI Operator Ari (persona): a business owner or operator who wants to use AI better,
   isn't an engineer, and has 5 minutes.
 - **Promise:** primary sources only, plain English, no hype. If you read only this, you didn't miss anything big.
 - **Why this angle:** most AI newsletters are written for engineers or investors. Operators are underserved,
   and they're the people PW will sell to later.
-- **Name:** "AI News & Updates" (working name, already on `/ai-news`). Matt decides the final name.
+- **Name:** "The Momentum Update" (Matt, set 2026-10-11; was the working name "AI News & Updates"). Masthead in Georgia,
+  sub-line "AI NEWS THAT MATTERS · FROM PERSISTENT MOMENTUM". Say "The Momentum Update" in full; never shorten it to "the Update".
+  Decision and renames: [[2026-10-11-newsletter-name-the-momentum-update]].
 
 ## Issue format (weekly, about 600–900 words)
 Worked example built from real 2026-10-10 items: `03-builds/ai-news-sample-issue.html` (never sent).

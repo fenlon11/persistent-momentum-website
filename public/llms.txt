@@ -1,6 +1,6 @@
 # Persistent Momentum
 
-> AI news for people who run a business: what the AI companies actually shipped, what it means for your business, and one thing to try. Every article links to its primary sources, is drafted by Elle Evate (our Head of AI Content, an AI system) and is reviewed and approved by a human editor at Persistent Momentum before it is published. Persistent Momentum also offers business and AI systems consulting.
+> AI news for people who run a business. AI moves fast: we track what the big AI companies ship and explain what it means for your business. Every article links to its primary sources, is drafted by Elle Evate (our Head of AI Content, an AI system) and is reviewed and approved by a human editor at Persistent Momentum before it is published. Persistent Momentum also offers business and AI systems consulting.
 
 ## Read
 

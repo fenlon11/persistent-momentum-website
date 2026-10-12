@@ -142,7 +142,8 @@ async function submitToHubSpot(
 
   const text = await res.text().catch(() => '');
   row.hubspot_error = text.slice(0, 500) || null;
-  log('[newsletter] HubSpot rejected submission', res.status, text);
+  // Status and error codes only: HubSpot's rejection body can echo the submitted address.
+  log('[newsletter] HubSpot rejected submission', res.status, text.match(/[A-Z][A-Z_]{3,}/g)?.join(',') ?? '');
 
   // HubSpot's own email check is stricter than zod's; surface it as a field error.
   if (res.status === 400 && /INVALID_EMAIL|BLOCKED_EMAIL/.test(text)) {

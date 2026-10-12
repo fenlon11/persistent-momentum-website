@@ -42,7 +42,7 @@ export default function NewsletterSignup({
         setState('done');
         return;
       }
-      setError(json.fields?.email ?? json.error ?? 'Something went wrong. Please try again.');
+      setError(json.fields?.email ?? Object.values(json.fields ?? {})[0] ?? json.error ?? 'Something went wrong. Please try again.');
     } catch {
       setError('Something went wrong. Please try again.');
     }
@@ -79,7 +79,9 @@ export default function NewsletterSignup({
         <input id={`${id}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* Compact forms sit in narrow columns (footer, article summary): stay stacked until lg, or the
+          email field collapses to ~80px at 640px beside the fixed-width button. */}
+      <div className={`flex flex-col gap-3 ${compact ? 'lg:flex-row' : 'sm:flex-row'}`}>
         {!compact && (
           <>
             <label htmlFor={`${id}-firstname`} className="sr-only">

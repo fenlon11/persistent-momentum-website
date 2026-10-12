@@ -13,7 +13,7 @@ whatever branch the main checkout has parked (`copy/thesis-operators-for-operato
 - [x] G2: route unit tests pass
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682 --task=test
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=8000edc5b5ab04ef4b1472d9b5a3eda3d106b87e5a2c9999b094b7b95ce7c79d; output-bytes=115
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-682; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=b65fd882c7680281f45b25c4b7feefd1cceb49aa5fef07a120cb92588548723b; output-bytes=115
 - [x] G3: live /newsletter serves the signup form
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/http.mjs --url=https://persistentmomentum.com/newsletter --expect-status=200 --marker='newsletter'
   EXPECT: HTTP CHECK PASS
@@ -46,3 +46,13 @@ whatever branch the main checkout has parked (`copy/thesis-operators-for-operato
   each contain both consent sentences twice (page form + footer) and "By subscribing you agree" zero
   times. The visible copy got longer; G5 screenshots must be re-taken (no Playwright on this host in
   the build session, so no viewport check was run for round 3).
+- Round 4 (REVIEW FAIL, footer email field collapsed at 640–800px): `compact` forms now stay stacked
+  until `lg` (non-compact keep `sm:flex-row`). Prod build + `next start`, Playwright, footer form
+  (form / email input / button px): 640 → 223/223/223, 667 → 235/235/235, 768 → 277/277/277
+  (stacked, full width), 1024 → 383/239/133, 1440 → 437/292/133. Was 640 → 223/79/133. Page forms
+  unchanged; `scrollWidth == innerWidth` at 375, 640, 667, 768, 1024, 1280, 1440 on `/` and
+  `/newsletter`. Draft article (`next dev`) compact slot: 640 → email 576, 1024 → 431; no overflow.
+  Screenshots: `~/pmOS/scripts/verify/screenshots/pmOS-682-r4-{home,newsletter}-{375x812,1440x900}.png`
+  and `pmOS-682-r4-footer-form-640.png`. Also from the non-blocking list: a 400 on a non-email
+  field shows that field's message, and the HubSpot rejection log line carries the status and error
+  codes only (the body can echo the address; `hubspot_error` in the DB row is unchanged).

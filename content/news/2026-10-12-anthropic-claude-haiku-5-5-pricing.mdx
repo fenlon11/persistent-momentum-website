@@ -1,0 +1,60 @@
+---
+title: >-
+  Anthropic's Claude Haiku 5.5: about 75% cheaper than Haiku 4.5 for most tasks,
+  with a 1M-token context window
+description: >-
+  Claude Haiku 5.5 is live on Anthropic's API and Amazon Bedrock at $0.10/$0.50
+  per million tokens, around 75% less than Haiku 4.5 for most tasks.
+type: news
+publishedAt: '2026-10-12'
+updatedAt: '2026-10-12'
+author: elle-evate
+status: published
+tags:
+  - anthropic
+  - claude-haiku
+  - amazon-bedrock
+  - ai-pricing
+statusLabel: available
+sources:
+  - title: Release v2.1.293 · anthropics/claude-code
+    url: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.293'
+    publisher: Anthropic
+  - title: Introducing Claude Haiku 5.5 on AWS
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/introducing-claude-haiku-5-5-on-aws/
+    publisher: Amazon
+  - title: Release v1.12.0 · anthropics/anthropic-sdk-python
+    url: 'https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.12.0'
+    publisher: Anthropic
+---
+Anthropic released Claude Haiku 5.5 on October 7. It is now the default Haiku model on the Anthropic API, and it is also on Amazon Bedrock. Per Anthropic, as cited by AWS, it costs around 75 percent less than Claude Haiku 4.5 for most tasks. If you run a lot of routine AI work, like sorting support tickets, pulling details out of documents or running small agent steps, this could cut that bill.
+
+## What shipped
+
+Anthropic's [Claude Code v2.1.293 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.293) list the model as claude-haiku-5-5. They give its price as **$0.10/$0.50 per million tokens**, rising to **$0.50/$2.50 for prompts over 100K tokens**. A token is a small chunk of text, and AI providers bill by the token. The model also has a **1M-token context window**, meaning it can read up to about a million tokens of text at once.
+
+Anthropic's [Python SDK v1.12.0](https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.12.0), also dated 2026-10-07, added the same model ID. Developers using that library can call the model now.
+
+The [AWS launch post](https://aws.amazon.com/blogs/machine-learning/introducing-claude-haiku-5-5-on-aws/) says Haiku 5.5 is available on Amazon Bedrock and through Claude Platform on AWS. Citing Anthropic, AWS calls it the fastest and most efficient model in the Claude 5.5 family, built for subagents and high-volume, cost-sensitive work. A subagent is a smaller AI worker that a lead model hands one narrow task to. The post also says:
+
+- It is the first Haiku model with **effort controls**, so you can trade cost against intelligence task by task instead of choosing one setting for a whole workload.
+- AWS lists routing requests, classifying and summarizing text, pulling key information from small-to-medium documents and answering quick questions over a knowledge base as good fits.
+- It can work as a computer use subagent for repetitive browser and desktop tasks.
+- AWS suggests pairing it with Claude Opus 5.5: Opus plans and makes the judgment calls, and Haiku carries out the well-defined tasks.
+
+On Bedrock it runs through US, EU, Australia, Japan and global inference profiles, and in AWS GovCloud (US). AWS says Claude Platform on AWS offers it in North America. AWS sends you to its Bedrock pricing page for rates there, so don't assume they match Anthropic's API pricing.
+
+## What it means for your business
+
+The main change is the price of repetitive work. Some tasks probably didn't pay off on a more expensive model, like tagging every inbound email or summarizing every call note. Those are worth pricing again.
+
+**A concrete example:** say your support team gets hundreds of tickets a day. You could have Haiku 5.5 read each ticket, tag it by topic and urgency, and draft a short summary. Only the tricky cases go to a larger model or a person. That split is the setup AWS describes: a cheap, fast model does the volume, and a stronger model handles the judgment calls.
+
+Before you switch, check three things:
+
+- **The 100K-token line.** Above it, the listed price is five times higher. The 1M context window is useful, but a workflow that pushes whole document sets into every prompt can cost more than you expect. If you can, split the work into smaller prompts.
+- **"Most tasks" is not all tasks.** The 75 percent figure is Anthropic's claim, with that qualifier attached. Run a sample of your own real work through Haiku 4.5 and Haiku 5.5 and compare cost and quality.
+- **Where you buy it.** If your company already runs on AWS, Bedrock keeps your data inside AWS with regional data residency. It works with the access, audit and monitoring controls your team already uses, and the charges show up on your AWS bill. That can make approval easier than signing up with a new vendor.
+
+If you use effort controls, start at a low setting for simple jobs like tagging. Raise it only where the output isn't good enough.

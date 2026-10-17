@@ -4,8 +4,8 @@ import { absoluteUrl } from '@/lib/site';
 
 // Canonical, indexable URLs only (fenlon11/pmOS#685). lastmod is set only where it is real:
 // an article's updatedAt, or the newest updatedAt among the articles a page lists. Google
-// ignores priority/changefreq, so neither is emitted. Noindex placeholders (/consulting, an
-// empty index) stay out.
+// ignores priority/changefreq, so neither is emitted. Noindex placeholders (an empty index)
+// stay out.
 export default function sitemap(): MetadataRoute.Sitemap {
   const articles = getArticles();
   const newest = (list: typeof articles) =>
@@ -25,6 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...articles.map((a) => entry(a.href, a.updatedAt)),
     ...getAuthors().map((a) => entry(a.href, newest(articles.filter((x) => x.author === a.slug)))),
     ...getTags().map((t) => entry(`/tags/${t}`, newest(articles.filter((x) => x.tags.includes(t))))),
-    ...['/newsletter', '/about', '/editorial-policy', '/corrections', '/contact', '/careers', '/privacy', '/terms'].map((p) => entry(p)),
+    ...['/newsletter', '/about', '/consulting', '/editorial-policy', '/corrections', '/contact', '/careers', '/privacy', '/terms'].map((p) => entry(p)),
   ];
 }

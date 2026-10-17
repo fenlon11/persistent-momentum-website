@@ -8,7 +8,6 @@ import path from 'node:path';
 import {
   CONVERSION_FORM,
   buildHubSpotPayload,
-  createRateLimiter,
   handleInquiry,
   type Inquiry,
   type InquiryDeps,
@@ -191,14 +190,6 @@ test('Supabase and HubSpot both failing: 500', async () => {
   });
   const res = await handleInquiry(valid, undefined, h.deps);
   assert.equal(res.status, 500);
-});
-
-test('rate limiter: 5 per window per key', () => {
-  const allow = createRateLimiter(5, 1000);
-  for (let i = 0; i < 5; i++) assert.equal(allow('1.2.3.4', 0), true);
-  assert.equal(allow('1.2.3.4', 10), false);
-  assert.equal(allow('5.6.7.8', 10), true);
-  assert.equal(allow('1.2.3.4', 1001), true);
 });
 
 // Rendered-text rule: no pricing anywhere on /consulting.

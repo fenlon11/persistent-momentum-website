@@ -10,12 +10,12 @@ whatever branch the main checkout has parked (an old `copy/` branch), not this o
 - [x] G1: build passes
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683 --task=build
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=b44d077b7e0008cf17d8ea7b738375bb4bc30f3a3e34621a5925539a438f35df; output-bytes=116
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=31647e3d4df421eeee5f565c1a225c3dcb0c3f6d28542c939c879a1985c60501; output-bytes=116
 - [x] G2: route and no-pricing tests pass
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683 --task=test
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=b457c8e694b55576be328ab55883957613fae079fc4087611641d6ff33e3b4f1; output-bytes=115
-- [ ] G3: (manual, post-deploy) a `.example` test inquiry appears on HubSpot form "PM – Consulting inquiry" with `pm_conversion_form = consulting_inquiry` (evidence: contact record ID, never the email). Verifier: an interactive session with the claude.ai HubSpot connector, after the production deploy. Cleanup in the same pass: delete the build's probe submission (2026-10-11T20:39Z, firstname "T", company "X", email "not-an-email").
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-683; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=05d2d529f9798352f6f9b907f1f612593cccd83adcf026f94fe61a1d29ac8783; output-bytes=116
+- [ ] G3: (manual, post-deploy) a test inquiry on prod appears on HubSpot form "PM – Consulting inquiry" with `pm_conversion_form = consulting_inquiry` (evidence: contact record ID, never the email; use a `persistentmomentum.com` address, HubSpot silently drops `.example`). Verifier: an interactive session with the HubSpot connector after the deploy; it also deletes the build's probe submission (2026-10-11T20:39Z, firstname "T", company "X").
 - [ ] G4: (manual) screenshots at both viewports of /consulting.
 
 ## Builder notes for the manual gates (not verdicts)

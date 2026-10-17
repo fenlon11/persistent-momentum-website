@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { supabaseAdmin } from '@/lib/supabase';
-import { createRateLimiter, handleInquiry, NEEDS, type Inquiry, type InquiryRow } from '@/lib/consulting';
+import { handleInquiry, NEEDS, type Inquiry, type InquiryRow } from '@/lib/consulting';
+import { createRateLimiter } from '@/lib/newsletter';
 
 // Consulting inquiry → Supabase + HubSpot form + email notification (fenlon11/pmOS#683). Logic
 // lives in lib/consulting.ts so it can be unit-tested without Next.

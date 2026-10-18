@@ -124,7 +124,7 @@ export default function NewsletterSignup({
       </div>
 
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-3 text-sm font-semibold" style={{ color: dark ? '#ffb4b4' : '#b42318' }}>
+        <p id={`${id}-error`} role="alert" className="mt-3 text-sm font-semibold" style={{ color: dark ? 'var(--color-error-on-dark)' : 'var(--color-error)' }}>
           {error}
         </p>
       )}

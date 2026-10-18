@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { revenueTargets } from '@/lib/dashboard-data';
+import { palette } from '@/lib/theme';
 
 interface ApiProject {
   id: string;
@@ -54,7 +55,7 @@ function ProgressRing({ current, target }: { current: number; target: number }) 
             cy={100}
             r={radius}
             fill="none"
-            stroke="#1E5BFF"
+            stroke={palette.electricBlue}
             strokeWidth={stroke}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -91,7 +92,7 @@ function MonthlyBars() {
             <div key={m.period} className="flex items-center gap-3">
               <span
                 className={`w-20 text-xs shrink-0 ${
-                  isCurrent ? 'text-[#1E5BFF] font-semibold' : 'text-[var(--color-text-dark-muted)]'
+                  isCurrent ? 'text-electric font-semibold' : 'text-[var(--color-text-dark-muted)]'
                 }`}
               >
                 {m.period}
@@ -102,7 +103,7 @@ function MonthlyBars() {
                     isPast
                       ? 'bg-white/15'
                       : isCurrent
-                        ? 'border border-[#1E5BFF]/40 bg-[#1E5BFF]/10'
+                        ? 'border border-electric/40 bg-electric/10'
                         : 'border border-[var(--color-border)]'
                   }`}
                   style={{ width: `${targetWidth}%` }}
@@ -110,7 +111,7 @@ function MonthlyBars() {
                 {m.current > 0 && (
                   <div
                     className={`absolute inset-y-0 left-0 rounded ${
-                      isCurrent ? 'bg-[#1E5BFF]' : 'bg-emerald-500/70'
+                      isCurrent ? 'bg-electric' : 'bg-emerald-500/70'
                     }`}
                     style={{ width: `${currentWidth}%` }}
                   />
@@ -224,7 +225,7 @@ function RevenueRunway({ currentMRR }: { currentMRR: number }) {
         {targetDate ? (
           <p className="text-xs text-[var(--color-text-dark-muted)]">
             {fmt(targetMRR2026)} target:{' '}
-            <span className="text-[#1E5BFF] font-semibold">
+            <span className="text-electric font-semibold">
               {targetDate.toLocaleString('en', { month: 'short', year: 'numeric' })}
             </span>{' '}
             ({monthsToTarget} months)

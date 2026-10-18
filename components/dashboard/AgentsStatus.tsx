@@ -155,7 +155,7 @@ export default function AgentsStatus() {
                         href={`https://github.com/${worker.repo}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[#1E5BFF] hover:underline"
+                        className="text-electric hover:underline"
                       >
                         {worker.repo}
                       </a>

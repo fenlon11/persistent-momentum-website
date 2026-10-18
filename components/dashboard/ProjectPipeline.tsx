@@ -45,7 +45,7 @@ function PhaseTimeline({ project }: { project: ApiProject }) {
                   status === 'completed'
                     ? 'bg-emerald-500 border-emerald-400'
                     : status === 'active'
-                    ? 'border-[#1E5BFF] bg-[#1E5BFF] animate-pulse'
+                    ? 'border-electric bg-electric animate-pulse'
                     : 'bg-[var(--color-bg-light-secondary)] border-[var(--color-border)]'
                 }`}
               >
@@ -56,7 +56,7 @@ function PhaseTimeline({ project }: { project: ApiProject }) {
                   status === 'completed'
                     ? 'text-emerald-400'
                     : status === 'active'
-                    ? 'text-[#1E5BFF] font-medium'
+                    ? 'text-electric font-medium'
                     : 'text-[color:rgba(100,116,139,0.7)]'
                 }`}
               >
@@ -109,7 +109,7 @@ function ProjectCard({ project }: { project: ApiProject }) {
               href={`https://${project.domain}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#1E5BFF] hover:underline"
+              className="text-electric hover:underline"
             >
               {project.domain}
             </a>
@@ -155,7 +155,7 @@ function ProjectCard({ project }: { project: ApiProject }) {
       {project.nextActions.length > 0 && (
         <div className="mt-4">
           <h4 className="text-xs font-medium text-[var(--color-text-dark-muted)] uppercase tracking-wider mb-2">Next actions</h4>
-          <div className="border-l-2 border-[#1E5BFF]/30 pl-3 space-y-1.5">
+          <div className="border-l-2 border-electric/30 pl-3 space-y-1.5">
             {project.nextActions.map((action, i) => (
               <p key={i} className="text-xs text-[var(--color-text-dark)]">
                 {action}
@@ -223,7 +223,7 @@ export default function ProjectPipeline() {
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-emerald-500 to-[#1E5BFF] rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-emerald-500 to-electric rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

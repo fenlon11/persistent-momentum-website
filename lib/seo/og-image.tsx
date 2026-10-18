@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import type { Article } from '@/lib/content';
+import { palette } from '@/lib/theme';
 
 // Per-article social/Discover image (fenlon11/pmOS#685, playbook P1 #18): 1200×675 (16:9),
 // generated at build by next/og. Title card in the site palette; never a logo-only image.
@@ -17,17 +18,17 @@ export function articleOgImage(article: Article) {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
-          background: 'linear-gradient(160deg, #07112c 0%, #0b1c44 100%)',
-          color: '#ffffff',
+          background: `linear-gradient(160deg, ${palette.deepNavy} 0%, ${palette.royalBlue} 100%)`,
+          color: palette.trueWhite,
         }}
       >
-        <div style={{ display: 'flex', fontSize: 30, fontWeight: 700, letterSpacing: 4, color: '#a8c5ff' }}>
+        <div style={{ display: 'flex', fontSize: 30, fontWeight: 700, letterSpacing: 4, color: palette.iceBlue }}>
           {section.toUpperCase()}
         </div>
         <div style={{ display: 'flex', fontSize: article.title.length > 70 ? 56 : 68, fontWeight: 700, lineHeight: 1.1 }}>
           {article.title}
         </div>
-        <div style={{ display: 'flex', fontSize: 30, color: '#e6eeff' }}>Persistent Momentum · persistentmomentum.com</div>
+        <div style={{ display: 'flex', fontSize: 30, color: palette.glowWhite }}>Persistent Momentum · persistentmomentum.com</div>
       </div>
     ),
     ogImageSize,

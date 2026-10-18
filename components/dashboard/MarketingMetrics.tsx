@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { palette, siteColors } from '@/lib/theme';
 import {
   BarChart,
   Bar,
@@ -56,13 +57,13 @@ interface MarketingData {
   error?: string;
 }
 
-const COLORS = ['#1E5BFF', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
+const COLORS = [palette.electricBlue, siteColors.chartSuccess, siteColors.chartWarning, siteColors.chartViolet, siteColors.chartPink];
 
 const tooltipStyle = {
-  backgroundColor: '#1e293b',
+  backgroundColor: siteColors.chartTooltipBg,
   border: '1px solid rgb(51 65 85 / 0.5)',
   borderRadius: '8px',
-  color: '#e2e8f0',
+  color: siteColors.chartTooltipText,
   fontSize: 12,
 };
 
@@ -179,10 +180,10 @@ export default function MarketingMetrics({ range }: { range: number }) {
             <ResponsiveContainer width="100%" height={140}>
               <BarChart data={dailyPosts}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgb(51 65 85 / 0.4)" />
-                <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 10 }} tickLine={false} />
-                <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} tickLine={false} axisLine={false} allowDecimals={false} />
+                <XAxis dataKey="label" tick={{ fill: siteColors.chartAxis, fontSize: 10 }} tickLine={false} />
+                <YAxis tick={{ fill: siteColors.chartAxis, fontSize: 10 }} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="posts" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="posts" fill={siteColors.chartViolet} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

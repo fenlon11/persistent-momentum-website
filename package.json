@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/audit-theme.mjs && next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test lib/consulting.test.ts lib/content/schema.test.ts lib/newsletter.test.ts lib/seo/*.test.ts scripts/news/*.test.mjs"
+    "tokens": "node scripts/tokens.mjs",
+    "tokens:sync": "node scripts/tokens.mjs --sync",
+    "audit:theme": "node scripts/audit-theme.mjs",
+    "test": "node --test lib/consulting.test.ts lib/content/schema.test.ts lib/newsletter.test.ts lib/seo/*.test.ts scripts/news/*.test.mjs scripts/audit-theme.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

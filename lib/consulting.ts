@@ -9,6 +9,8 @@ import { z } from 'zod';
 export const HUBSPOT_PORTAL_ID = '247620603';
 export const CONVERSION_FORM = 'consulting_inquiry';
 export const SUCCESS_MESSAGE = "Thanks. We'll be in touch soon.";
+// HubSpot Meetings link "Consulting intro call" (portal 247620603, calendar persistentmomentum@gmail.com).
+export const INTRO_CALL_URL = 'https://meetings-na2.hubspot.com/persistent';
 export const CONSENT_TO_PROCESS_TEXT =
   'Persistent Momentum will use the information you provide to respond to your inquiry, as described in our privacy policy.';
 

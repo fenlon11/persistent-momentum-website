@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ConsultingForm from '@/components/ConsultingForm';
+import { INTRO_CALL_URL } from '@/lib/consulting';
 import Footer from '@/components/Footer';
 
 // Consulting page (fenlon11/pmOS#683). Matt's rules: no pricing anywhere, and no invented clients,
@@ -128,6 +129,11 @@ export default function ConsultingPage() {
           </h2>
           <p className="mb-8 leading-relaxed" style={mutedStyle}>
             Whether you want to learn more or are ready to start, send a note and we will reply by email.
+            Prefer to talk first?{' '}
+            <a href={INTRO_CALL_URL} className="underline underline-offset-4" style={{ color: 'var(--color-primary)' }}>
+              Book a 30-minute intro call
+            </a>
+            .
           </p>
           <ConsultingForm />
         </div>

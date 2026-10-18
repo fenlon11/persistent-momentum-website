@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
-import { COMPANY_SIZES, NEEDS, SUCCESS_MESSAGE, inquirySchema } from '@/lib/consulting';
+import { COMPANY_SIZES, INTRO_CALL_URL, NEEDS, SUCCESS_MESSAGE, inquirySchema } from '@/lib/consulting';
 
 // Consulting inquiry form (fenlon11/pmOS#683). Posts to /api/consulting, which validates with the
 // same schema.
@@ -219,6 +219,16 @@ export default function ConsultingForm() {
             }}
           >
             {status.message}
+            {status.type === 'success' && (
+              <>
+                {' '}
+                Want to talk sooner?{' '}
+                <a href={INTRO_CALL_URL} className="underline underline-offset-4">
+                  Book a 30-minute intro call
+                </a>
+                .
+              </>
+            )}
           </div>
         )}
       </div>

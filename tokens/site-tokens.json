@@ -1,0 +1,14 @@
+{
+  "$note": "Colours this site needs that BRAND.md does not define (DESIGN-SYSTEM.md: 'There are no status colours'; internal tools keep their own). The only hand-written hex in the site besides tokens/design-tokens.json. scripts/tokens.mjs turns each key into a --color-<kebab-key> CSS variable; lib/theme.ts reads it for SVG and OG-image code.",
+  "color": {
+    "error": "#b42318",
+    "errorOnDark": "#ffb4b4",
+    "chartSuccess": "#10B981",
+    "chartWarning": "#F59E0B",
+    "chartViolet": "#8B5CF6",
+    "chartPink": "#EC4899",
+    "chartTooltipBg": "#1e293b",
+    "chartTooltipText": "#e2e8f0",
+    "chartAxis": "#94a3b8"
+  }
+}

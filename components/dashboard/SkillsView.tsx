@@ -166,7 +166,7 @@ export default function SkillsView() {
                       key={stat.skill_name}
                       onClick={() => setSelectedSkill(isSelected ? null : stat.skill_name)}
                       className={`border-t border-[var(--color-border-light)] cursor-pointer transition-colors ${
-                        isSelected ? 'bg-[#1E5BFF]/10' : 'hover:bg-[var(--color-bg-light-secondary)]'
+                        isSelected ? 'bg-electric/10' : 'hover:bg-[var(--color-bg-light-secondary)]'
                       }`}
                     >
                       <td className="px-4 py-2.5 text-white font-mono text-xs">{stat.skill_name}</td>
@@ -193,7 +193,7 @@ export default function SkillsView() {
           </div>
           {selectedSkill && (
             <p className="text-xs text-[var(--color-text-dark-muted)]">
-              Filtering invocations to <span className="font-mono text-[#1E5BFF]">{selectedSkill}</span>
+              Filtering invocations to <span className="font-mono text-electric">{selectedSkill}</span>
               {' · '}
               <button
                 onClick={() => setSelectedSkill(null)}

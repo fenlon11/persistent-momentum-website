@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import JsonLd from "@/components/JsonLd";
 import { organizationJsonLd } from "@/lib/seo/jsonld";
 import { FEED_TYPES } from "@/lib/site";
+import { tokensVersion } from "@/lib/theme";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+// Inter is the design system's face (pmOS DESIGN-SYSTEM.md §Type). The variable sits on <html> so the
+// --font-body token on :root can resolve it.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -58,8 +61,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light">
-      <body className={`${openSans.variable} antialiased`}>
+    <html lang="en" data-theme="light" data-design-tokens={tokensVersion} className={inter.variable}>
+      <body className="antialiased">
         <JsonLd data={organizationJsonLd()} />
         <Navigation />
         {children}

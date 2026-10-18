@@ -1,0 +1,94 @@
+{
+  "$schema-note": "Persistent Momentum design tokens. Human-readable rules: DESIGN-SYSTEM.md. Every hex is copied from BRAND.md §Palette; scripts/pmos-loop/pm-design-tokens.test.mjs fails on drift. Everything else references a palette key by name.",
+  "version": "1.0.0",
+  "updated": "2026-10-17",
+  "source": "projects/persistent-momentum/BRAND.md#palette",
+  "color": {
+    "palette": {
+      "deepNavy": { "name": "Deep Navy", "hex": "#020A2E" },
+      "royalBlue": { "name": "Royal Blue", "hex": "#071958" },
+      "electricBlue": { "name": "Electric Blue", "hex": "#2657D4" },
+      "iceBlue": { "name": "Ice Blue", "hex": "#72BCF8" },
+      "glowWhite": { "name": "Glow White", "hex": "#D9FBFF" },
+      "trueWhite": { "name": "True White", "hex": "#FFFFFF" },
+      "midGray": { "name": "Mid-Gray", "hex": "#6B7A99" }
+    },
+    "role": {
+      "light": {
+        "background": { "ref": "trueWhite" },
+        "surface": { "ref": "trueWhite" },
+        "surfaceAlt": { "ref": "glowWhite" },
+        "text": { "ref": "deepNavy" },
+        "textSecondary": { "ref": "royalBlue" },
+        "textMuted": { "ref": "midGray" },
+        "border": { "ref": "deepNavy", "alpha": 0.12 },
+        "accent": { "ref": "electricBlue" },
+        "link": { "ref": "electricBlue" },
+        "onAccent": { "ref": "trueWhite" },
+        "focusRing": { "ref": "electricBlue" }
+      },
+      "dark": {
+        "background": { "ref": "deepNavy" },
+        "surface": { "ref": "royalBlue" },
+        "surfaceAlt": { "ref": "royalBlue" },
+        "text": { "ref": "trueWhite" },
+        "textSecondary": { "ref": "glowWhite" },
+        "textMuted": { "ref": "midGray" },
+        "border": { "ref": "iceBlue", "alpha": 0.2 },
+        "accent": { "ref": "electricBlue" },
+        "link": { "ref": "iceBlue" },
+        "onAccent": { "ref": "trueWhite" },
+        "focusRing": { "ref": "iceBlue" }
+      }
+    }
+  },
+  "font": {
+    "sans": { "family": "Inter", "stack": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif" },
+    "mono": { "family": "ui-monospace", "stack": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" },
+    "email": { "family": "Arial", "stack": "Arial, Helvetica, sans-serif" },
+    "weight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 }
+  },
+  "typeScale": {
+    "caption": { "size": 12, "lineHeight": 1.5, "weight": 500 },
+    "small": { "size": 14, "lineHeight": 1.5, "weight": 400 },
+    "body": { "size": 16, "lineHeight": 1.6, "weight": 400 },
+    "lead": { "size": 18, "lineHeight": 1.55, "weight": 400 },
+    "h4": { "size": 20, "lineHeight": 1.4, "weight": 600 },
+    "h3": { "size": 24, "lineHeight": 1.3, "weight": 600 },
+    "h2": { "size": 32, "lineHeight": 1.2, "weight": 700, "tracking": -0.01 },
+    "h1": { "size": 40, "lineHeight": 1.15, "weight": 700, "tracking": -0.02 },
+    "display": { "size": 56, "lineHeight": 1.05, "weight": 700, "tracking": -0.02, "mobileSize": 40 }
+  },
+  "space": { "0": 0, "1": 4, "2": 8, "3": 12, "4": 16, "5": 24, "6": 32, "7": 48, "8": 64, "9": 96 },
+  "radius": { "sm": 6, "md": 10, "lg": 16, "pill": 9999 },
+  "shadow": {
+    "sm": { "x": 0, "y": 1, "blur": 2, "spread": 0, "color": { "ref": "deepNavy", "alpha": 0.08 } },
+    "md": { "x": 0, "y": 8, "blur": 24, "spread": 0, "color": { "ref": "deepNavy", "alpha": 0.12 } },
+    "glow": { "x": 0, "y": 0, "blur": 24, "spread": 0, "color": { "ref": "electricBlue", "alpha": 0.45 } }
+  },
+  "layout": {
+    "contentMax": 1120,
+    "measureMax": 680,
+    "emailWidth": 600,
+    "breakpoint": { "sm": 640, "md": 768, "lg": 1024, "xl": 1280 },
+    "verifyViewports": [[375, 812], [1440, 900]]
+  },
+  "target": { "minTouch": 44 },
+  "motion": { "durationMs": 200, "easing": "cubic-bezier(0.2, 0, 0, 1)" },
+  "contrast": [
+    { "fg": "deepNavy", "bg": "trueWhite", "min": 4.5, "use": "light text" },
+    { "fg": "royalBlue", "bg": "trueWhite", "min": 4.5, "use": "light secondary text" },
+    { "fg": "electricBlue", "bg": "trueWhite", "min": 4.5, "use": "light links and accent text" },
+    { "fg": "deepNavy", "bg": "glowWhite", "min": 4.5, "use": "text on light alt section" },
+    { "fg": "electricBlue", "bg": "glowWhite", "min": 4.5, "use": "links on light alt section" },
+    { "fg": "trueWhite", "bg": "electricBlue", "min": 4.5, "use": "primary button label" },
+    { "fg": "midGray", "bg": "trueWhite", "min": 3.0, "use": "muted large text (>=24px, or >=19px bold), dividers, disabled" },
+    { "fg": "trueWhite", "bg": "deepNavy", "min": 4.5, "use": "dark text" },
+    { "fg": "glowWhite", "bg": "deepNavy", "min": 4.5, "use": "dark secondary text" },
+    { "fg": "iceBlue", "bg": "deepNavy", "min": 4.5, "use": "dark links" },
+    { "fg": "trueWhite", "bg": "royalBlue", "min": 4.5, "use": "text on dark card" },
+    { "fg": "iceBlue", "bg": "royalBlue", "min": 4.5, "use": "links on dark card" },
+    { "fg": "midGray", "bg": "deepNavy", "min": 3.0, "use": "muted large text on dark, dividers, disabled" },
+    { "fg": "electricBlue", "bg": "deepNavy", "min": 3.0, "use": "accent fills and icons on dark (never small text)" }
+  ]
+}

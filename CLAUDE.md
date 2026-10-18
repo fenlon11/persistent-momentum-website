@@ -6,7 +6,7 @@ Next.js 15 (App Router) + React 19 + Tailwind v4 site with two jobs (set 2026-10
 
 ## Commands
 
-`npm run dev` / `build` / `start` / `lint`. No test script — verify per pmOS protocol (Playwright screenshots 375×812 + 1440×900).
+`npm run dev` / `build` / `start` / `lint` / `test`. `build` runs `audit:theme` first (no raw hex outside the token block; block matches `tokens/*.json`). `npm run tokens` regenerates the block; `npm run tokens:sync` copies pmOS `projects/persistent-momentum/design-tokens.json` in first. Verify UI per pmOS protocol (Playwright screenshots 375×812 + 1440×900).
 
 ## Two Supabase projects — don't conflate
 
@@ -19,11 +19,11 @@ Next.js 15 (App Router) + React 19 + Tailwind v4 site with two jobs (set 2026-10
 
 - **No Rabbit Golf anywhere customer-facing** — not products list, footer, deck, or careers (`lib/products-data.ts` enforces; only Persistent Workforce listed).
 - Forbidden copy terms: "platform" as modifier, "AI-powered" as adjective, synergy, journey, transformation, ecosystem, holistic/end-to-end, unlock, next-generation, revolutionary, empower/enable/accelerate (vague), solutions, leverage. Preferred: product, build/ship, portfolio, operator, customer, factory, compound.
-- BRAND.md's palette/typography (Deep Navy `#07112C` / Electric Blue / Geist) is **aspirational `[GAP]`** — the shipped site uses primary `#15448e` + Open Sans, token names shared with recruiter.persistentmomentum.com so components can move between sites.
+- Colours, type, spacing and radii come from pmOS `projects/persistent-momentum/design-tokens.json` + `DESIGN-SYSTEM.md` (BRAND.md palette, Inter) since 2026-10-17 (fenlon11/pmOS#942). Token names stay shared with the PW site so components can move between sites.
 
 ## Design tokens + design-sync
 
-Tokens are CSS vars in `app/globals.css` (re-exposed via Tailwind `@theme inline`; light theme only). The `com.pmos.pmweb-design-sync` LaunchAgent reconciles them bidirectionally with Claude Design — **its source of truth is the worktree `~/pmOS/.claude/worktrees/pmweb-design-source` (branch `design-source` tracking origin/main), not this checkout**. Token edits on main drive the forward sync; Claude Design edits come back as `design/reverse-sync-<date>` branches for review. It syncs tokens, it does not deploy code.
+Tokens are CSS vars in the generated `/* tokens:start */…/* tokens:end */` block of `app/globals.css` (re-exposed via Tailwind `@theme inline`; light theme only), written by `scripts/tokens.mjs` from `tokens/design-tokens.json` (committed copy — Vercel builds this repo alone) and `tokens/site-tokens.json` (site-only colours BRAND.md lacks: form errors, dashboard charts). Never hand-edit the block or write a raw hex in code: SVG/OG-image code reads `lib/theme.ts`. A Claude Design reverse-sync edit to the block is overwritten by the next `npm run tokens` — token changes land in pmOS `design-tokens.json` first. The `com.pmos.pmweb-design-sync` LaunchAgent reconciles them bidirectionally with Claude Design — **its source of truth is the worktree `~/pmOS/.claude/worktrees/pmweb-design-source` (branch `design-source` tracking origin/main), not this checkout**. Token edits on main drive the forward sync; Claude Design edits come back as `design/reverse-sync-<date>` branches for review. It syncs tokens, it does not deploy code.
 
 ## Gotchas
 

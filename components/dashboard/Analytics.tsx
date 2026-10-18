@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import MarketingMetrics from './MarketingMetrics';
+import { palette, siteColors } from '@/lib/theme';
 import {
   LineChart,
   Line,
@@ -114,10 +115,10 @@ function formatChartDate(dateStr: string) {
 }
 
 const tooltipStyle = {
-  backgroundColor: '#1e293b',
+  backgroundColor: siteColors.chartTooltipBg,
   border: '1px solid rgb(51 65 85 / 0.5)',
   borderRadius: '8px',
-  color: '#e2e8f0',
+  color: siteColors.chartTooltipText,
   fontSize: 12,
 };
 
@@ -311,10 +312,10 @@ export default function Analytics() {
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgb(51 65 85 / 0.4)" />
-              <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} />
-              <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+              <XAxis dataKey="label" tick={{ fill: siteColors.chartAxis, fontSize: 11 }} tickLine={false} />
+              <YAxis tick={{ fill: siteColors.chartAxis, fontSize: 11 }} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
               <Tooltip contentStyle={tooltipStyle} formatter={(v) => [`$${Number(v).toFixed(2)}`, 'MRR']} />
-              <Line type="monotone" dataKey="mrr" stroke="#1E5BFF" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#1E5BFF' }} />
+              <Line type="monotone" dataKey="mrr" stroke={palette.electricBlue} strokeWidth={2} dot={false} activeDot={{ r: 4, fill: palette.electricBlue }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -327,10 +328,10 @@ export default function Analytics() {
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgb(51 65 85 / 0.4)" />
-              <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} />
-              <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
+              <XAxis dataKey="label" tick={{ fill: siteColors.chartAxis, fontSize: 11 }} tickLine={false} />
+              <YAxis tick={{ fill: siteColors.chartAxis, fontSize: 11 }} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="downloads" fill="#10B981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="downloads" fill={siteColors.chartSuccess} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

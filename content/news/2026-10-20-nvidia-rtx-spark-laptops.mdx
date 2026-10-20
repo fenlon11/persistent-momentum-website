@@ -1,0 +1,61 @@
+---
+title: >-
+  NVIDIA RTX Spark laptops go on sale from $2,399, built to run AI on the laptop
+  itself
+description: >-
+  RTX Spark laptops from ASUS, Dell, HP, Lenovo, Microsoft and MSI are on sale
+  from $2,399, with up to 128GB of memory for running AI locally.
+type: news
+publishedAt: '2026-10-20'
+updatedAt: '2026-10-20'
+author: elle-evate
+status: published
+tags:
+  - nvidia
+  - rtx-spark
+  - local-ai
+  - laptops
+statusLabel: available
+sources:
+  - title: RTX Spark Ignites Global Celebration
+    url: >-
+      https://blogs.nvidia.com/blog/local-ai-rtx-spark-windows-laptops-celebration/
+    publisher: NVIDIA
+  - title: 'All Systems Go: Global PC App Ecosystem Ready for NVIDIA RTX Spark'
+    url: 'https://blogs.nvidia.com/blog/local-ai-rtx-spark-laptops-software-updates/'
+    publisher: NVIDIA
+---
+NVIDIA RTX Spark laptops are on sale now, starting at $2,399, from ASUS, Dell, HP, Lenovo, Microsoft and MSI. They are Windows laptops built to run AI models on the machine itself instead of sending your work to a cloud service. If you are replacing laptops soon, this is a new option to weigh, especially if you handle client data you would rather keep off third-party servers.
+
+## What went on sale
+
+Per [NVIDIA's launch post](https://blogs.nvidia.com/blog/local-ai-rtx-spark-windows-laptops-celebration/), each RTX Spark laptop runs on a single "superchip" that combines an NVIDIA Blackwell RTX graphics processor with an NVIDIA Grace processor. NVIDIA says it delivers up to 1 petaflop of AI compute and up to 128GB of unified memory. Unified memory means the processor and the graphics chip share one pool of memory, and that pool sets how large an AI model the laptop can hold.
+
+NVIDIA says more systems are on the way. The posts don't say which memory configuration the $2,399 starting price gets you, so check the spec sheet before you assume the base model has 128GB.
+
+## The software at launch
+
+NVIDIA's [app-readiness post](https://blogs.nvidia.com/blog/local-ai-rtx-spark-laptops-software-updates/) lists what was ready when the laptops went on sale on Friday, Oct. 16:
+
+- **Agent setup on first boot.** A "Getting Started" screen lets you pick and install an agent app. An agent is AI software that can take actions for you, not just answer questions. GitHub Copilot, Hermes Agent, OpenClaw, Perplexity, Pi and WorkBuddy will recommend a local model and settings for RTX Spark and set them up in a few clicks.
+- **Sandboxing.** NVIDIA OpenShell and Microsoft Execution Containers (MXC) wall agents off from the rest of the system. OpenClaw and GitHub Copilot support MXC now. Hermes Agent gets it by the end of October.
+- **A model built for it.** NVIDIA's Nemotron 3.5 Bolt 74B model, released Oct. 15, fits in 24GB and is fully open source, including training data and weights.
+- **Local and cloud routing.** NVIDIA Switchyard, an open source tool, lets an agent decide which requests run on the laptop and which go to a cloud model. Hermes adds it later in October.
+- **Creative apps.** Adobe says up to 2x faster performance in Photoshop and Premiere. Those builds are in beta for now, and the Substance 3D updates are coming soon.
+- **Pooled compute.** NVIDIA PAIR, a free open source tool that spreads AI work across compatible PCs on your local network, is out of beta.
+
+One caveat for IT: NVIDIA describes the developer tooling in terms of Windows on Arm. It says 97% of the top 15,000 Python packages are ready, which means a small share still isn't.
+
+## What it means for your business
+
+The pitch is simple: buy the hardware once and run AI on it, instead of paying per use for cloud AI and sending your files to someone else's servers. Whether that works for you depends on your data and your software, not the spec sheet.
+
+Take a 12-person accounting firm that wants AI to summarize client tax documents but doesn't want those files going to a cloud provider. Don't buy 12 laptops. Buy one, install an agent app, let it set up a local model such as Nemotron 3.5 Bolt 74B, and run a week of real (or realistic dummy) client work through it. Ask two questions. Is the output good enough? Does every app the firm depends on run properly?
+
+Before you rely on it for privacy, check three things:
+
+1. **Routing settings.** Tools like Switchyard and Copilot's router are built to send some requests to the cloud. If keeping data local is the whole point, make sure that routing is off or limited to work you're happy to send out.
+2. **App compatibility.** Given the Windows on Arm framing, test your accounting, CRM and other line-of-business software on the machine before you replace a fleet.
+3. **Memory per configuration.** Larger local models need more memory. Price the configuration that actually runs the model you tested, not the $2,399 starting point.
+
+If you're not replacing machines this year, watch two things: how quickly the remaining apps catch up, and whether the Adobe and agent features move out of beta.

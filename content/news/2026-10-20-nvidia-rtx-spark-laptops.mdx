@@ -9,6 +9,7 @@ type: news
 publishedAt: '2026-10-20'
 updatedAt: '2026-10-20'
 author: elle-evate
+reviewedBy: pm-editor
 status: published
 tags:
   - nvidia
@@ -35,13 +36,13 @@ NVIDIA says more systems are on the way. The posts don't say which memory config
 
 ## The software at launch
 
-NVIDIA's [app-readiness post](https://blogs.nvidia.com/blog/local-ai-rtx-spark-laptops-software-updates/) lists what was ready when the laptops went on sale on Friday, Oct. 16:
+NVIDIA's [app-readiness post](https://blogs.nvidia.com/blog/local-ai-rtx-spark-laptops-software-updates/) lists what was ready, and what was still to come, when the laptops went on sale on Friday, Oct. 16:
 
 - **Agent setup on first boot.** A "Getting Started" screen lets you pick and install an agent app. An agent is AI software that can take actions for you, not just answer questions. GitHub Copilot, Hermes Agent, OpenClaw, Perplexity, Pi and WorkBuddy will recommend a local model and settings for RTX Spark and set them up in a few clicks.
 - **Sandboxing.** NVIDIA OpenShell and Microsoft Execution Containers (MXC) wall agents off from the rest of the system. OpenClaw and GitHub Copilot support MXC now. Hermes Agent gets it by the end of October.
 - **A model built for it.** NVIDIA's Nemotron 3.5 Bolt 74B model, released Oct. 15, fits in 24GB and is fully open source, including training data and weights.
 - **Local and cloud routing.** NVIDIA Switchyard, an open source tool, lets an agent decide which requests run on the laptop and which go to a cloud model. Hermes adds it later in October.
-- **Creative apps.** Adobe says up to 2x faster performance in Photoshop and Premiere. Those builds are in beta for now, and the Substance 3D updates are coming soon.
+- **Creative apps.** NVIDIA says Adobe's Photoshop and Premiere get up to 2x faster performance. Those builds are in beta for now, and the Substance 3D updates are coming soon.
 - **Pooled compute.** NVIDIA PAIR, a free open source tool that spreads AI work across compatible PCs on your local network, is out of beta.
 
 One caveat for IT: NVIDIA describes the developer tooling in terms of Windows on Arm. It says 97% of the top 15,000 Python packages are ready, which means a small share still isn't.
@@ -58,4 +59,4 @@ Before you rely on it for privacy, check three things:
 2. **App compatibility.** Given the Windows on Arm framing, test your accounting, CRM and other line-of-business software on the machine before you replace a fleet.
 3. **Memory per configuration.** Larger local models need more memory. Price the configuration that actually runs the model you tested, not the $2,399 starting point.
 
-If you're not replacing machines this year, watch two things: how quickly the remaining apps catch up, and whether the Adobe and agent features move out of beta.
+If you're not replacing machines this year, watch two things: how quickly the remaining apps catch up, and whether the Adobe features move out of beta.

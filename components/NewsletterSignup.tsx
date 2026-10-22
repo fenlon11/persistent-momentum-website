@@ -71,8 +71,10 @@ export default function NewsletterSignup({
     color: dark ? 'var(--color-glow-white)' : 'var(--color-text-dark)',
   };
 
+  // HubSpot's collected-forms script skips forms marked data-hs-do-not-collect. This form already posts to
+  // HubSpot's forms API, so capturing it too counted each signup twice and set the contact to lead (2026-10-22).
   return (
-    <form onSubmit={onSubmit} aria-label={`Subscribe to ${NEWSLETTER_NAME}`} className="w-full max-w-xl" noValidate>
+    <form onSubmit={onSubmit} aria-label={`Subscribe to ${NEWSLETTER_NAME}`} className="w-full max-w-xl" noValidate data-hs-do-not-collect="true">
       {/* Honeypot: off-screen, skipped by keyboard and screen readers. */}
       <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor={`${id}-website`}>Website</label>

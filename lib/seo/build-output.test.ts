@@ -84,6 +84,22 @@ test('robots.txt names the answer-engine bots and both sitemaps', { skip: !built
   assert.doesNotMatch(robots, /^Disallow: \/$/m, 'no site-wide Disallow (training crawlers are allowed)');
 });
 
+test('forms that post to HubSpot directly opt out of collected forms; the contact form does not', { skip: !built }, () => {
+  const forms = (page: string) => {
+    const f = path.join(appOut, page);
+    return [...fs.readFileSync(f, 'utf8').matchAll(/<form\b[^>]*>/g)].map((m) => m[0]);
+  };
+  for (const page of ['newsletter.html', 'consulting.html']) {
+    const tags = forms(page);
+    assert.ok(tags.length > 0, `${page}: no <form>`);
+    for (const tag of tags) assert.match(tag, /data-hs-do-not-collect="true"/, `${page}: ${tag}`);
+  }
+  // contact.html also carries the newsletter signup (footer); only the contact form itself must stay collectable.
+  const contact = forms('contact.html').filter((tag) => !/aria-label="Subscribe to /.test(tag));
+  assert.ok(contact.length > 0, 'contact.html: no contact form');
+  for (const tag of contact) assert.doesNotMatch(tag, /data-hs-do-not-collect/, `contact.html: ${tag}`);
+});
+
 test('exactly one IndexNow key file, named after the key it holds', () => {
   const keyFiles = fs.readdirSync(path.join(root, 'public')).filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
   assert.equal(keyFiles.length, 1);

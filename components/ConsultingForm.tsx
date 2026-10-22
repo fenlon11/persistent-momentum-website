@@ -69,9 +69,12 @@ export default function ConsultingForm() {
     }
   };
 
+  // HubSpot's collected-forms script skips forms marked data-hs-do-not-collect. This form already posts to
+  // HubSpot's forms API, so capturing it too counted each signup twice and set the contact to lead (2026-10-22).
   return (
     <form
       id="inquiry"
+      data-hs-do-not-collect="true"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="p-6 sm:p-8"

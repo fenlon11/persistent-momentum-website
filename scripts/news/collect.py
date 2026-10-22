@@ -65,7 +65,9 @@ def parse_feed(body):
         if local(el.tag) not in ("item", "entry"):
             continue
         f = {local(c.tag): c for c in el}
-        link = f.get("link")
+        # Atom entries can carry several links (e.g. NVIDIA adds rel="replies" comment feeds); take the article.
+        links = [c for c in el if local(c.tag) == "link"]
+        link = next((c for c in links if c.get("rel", "alternate") == "alternate"), links[0] if links else None)
         url = (link.get("href") or link.text or "").strip() if link is not None else ""
         when = next((f[k].text for k in ("pubDate", "published", "updated", "date") if k in f), None)
         summary = next((f[k].text for k in ("description", "summary", "content") if k in f), "")

@@ -9,6 +9,7 @@ import {
   CONSENT_TO_PROCESS_TEXT,
   CONVERSION_FORM,
   HUBSPOT_PORTAL_ID,
+  NEWSLETTER_PERSONA,
   NEWSLETTER_SUBSCRIPTION_TYPE_ID,
   SUCCESS_MESSAGE,
 } from './newsletter-copy.ts';
@@ -51,6 +52,7 @@ export function buildHubSpotPayload(
     { objectTypeId: '0-1', name: 'email', value: input.email },
     ...(input.firstname ? [{ objectTypeId: '0-1', name: 'firstname', value: input.firstname }] : []),
     { objectTypeId: '0-1', name: 'pm_conversion_form', value: CONVERSION_FORM },
+    { objectTypeId: '0-1', name: 'hs_persona', value: NEWSLETTER_PERSONA },
   ];
   const context: Record<string, string> = {};
   if (hutk) context.hutk = hutk;

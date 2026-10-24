@@ -8,6 +8,7 @@ import {
   CONSENT_TO_PROCESS_PARTS,
   CONVERSION_FORM,
   buildHubSpotPayload,
+  NEWSLETTER_PERSONA,
   NEWSLETTER_SUBSCRIPTION_TYPE_ID,
   createRateLimiter,
   handleSignup,
@@ -38,7 +39,7 @@ function harness(response: () => Response | Promise<Response>) {
 
 const valid = { email: 'reader@test.example', firstname: 'Ada', pageUri: 'https://persistentmomentum.com/', pageName: 'Home' };
 
-test('valid email: 200, one HubSpot submission with the stamp, consent and context', async () => {
+test('valid email: 200, one HubSpot submission with the stamp, persona, consent and context', async () => {
   const h = harness(() => new Response('{"inlineMessage":"Thanks"}', { status: 200 }));
   const res = await handleSignup(valid, 'abc123', h.deps);
 
@@ -54,8 +55,10 @@ test('valid email: 200, one HubSpot submission with the stamp, consent and conte
       ['0-1', 'email', 'reader@test.example'],
       ['0-1', 'firstname', 'Ada'],
       ['0-1', 'pm_conversion_form', CONVERSION_FORM],
+      ['0-1', 'hs_persona', NEWSLETTER_PERSONA],
     ],
   );
+  assert.equal(NEWSLETTER_PERSONA, 'persona_1');
   assert.deepEqual(p.context, { hutk: 'abc123', pageUri: valid.pageUri, pageName: 'Home' });
   assert.equal(p.legalConsentOptions.consent.consentToProcess, true);
   assert.equal(p.legalConsentOptions.consent.communications[0].subscriptionTypeId, NEWSLETTER_SUBSCRIPTION_TYPE_ID);

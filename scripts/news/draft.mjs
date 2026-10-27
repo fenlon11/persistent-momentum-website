@@ -45,6 +45,17 @@ const BANNED = [
 // ---------- sources and URLs ----------
 
 // URL prefixes we accept as primary: the hosts of tier-1/2 sources, narrowed to org/repo on GitHub.
+// The style rules live in pmOS (fenlon11/pmOS#1513). STYLE.md here is the fallback snapshot, read only
+// when that path is missing; `log` names the file loaded so a silent fallback is visible in the run log.
+export const CANONICAL_STYLE = 'pmOS/projects/persistent-momentum/hubspot/02-rules/ai-newsletter-style.md';
+
+export function resolveStyle({ env = process.env, home = os.homedir(), here = HERE } = {}) {
+  const want = (env.PM_NEWS_STYLE_PATH || path.join('~', CANONICAL_STYLE)).replace(/^~(?=\/|$)/, home);
+  if (fs.existsSync(want)) return { path: want, text: fs.readFileSync(want, 'utf8'), log: `style: ${want}` };
+  const fallback = path.join(here, 'STYLE.md');
+  return { path: fallback, text: fs.readFileSync(fallback, 'utf8'), log: `style: fallback ${fallback} (${want} not found)` };
+}
+
 export function primaryPrefixes(sources) {
   const prefixes = new Set();
   for (const s of sources) {
@@ -527,7 +538,8 @@ async function main() {
   const itemsFile = latestItemsFile(args.items);
   const { items } = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
   const { sources } = JSON.parse(fs.readFileSync(path.join(HERE, 'sources.json'), 'utf8'));
-  const style = fs.readFileSync(path.join(HERE, 'STYLE.md'), 'utf8');
+  const { text: style, log: styleLog } = resolveStyle();
+  console.log(styleLog);
   const existing = loadExisting(ROOT);
   console.log(`drafting ${args.date} from ${itemsFile} (${items.length} items), model ${MODEL}`);
 

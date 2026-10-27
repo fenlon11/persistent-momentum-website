@@ -2,7 +2,7 @@
 """Collect recent AI news items from the sources in sources.json.
 
 Step 1 of the persistentmomentum.com AI news pipeline (fenlon11/pmOS#686): collect -> draft.mjs ->
-draft PR -> a human reviews and merges. Ported from ~/hsOS/tools/newsletter/ on 2026-10-10; this copy
+draft PR -> a human reviews and merges. Ported from ~/pmOS/projects/persistent-momentum/hubspot/tools/newsletter/ on 2026-10-10; this copy
 is canonical now. This step only gathers links; it never writes copy.
 
 Standard library only. One polite request per source, an honest User-Agent, and no attempt to get

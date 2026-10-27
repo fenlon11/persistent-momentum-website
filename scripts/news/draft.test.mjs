@@ -3,10 +3,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import {
-  BUSINESS_HEADING, CAPS, buildArticle, checkArticle, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes,
+  BUSINESS_HEADING, CAPS, buildArticle, checkArticle, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle,
 } from './draft.mjs';
 
 const { sources } = JSON.parse(fs.readFileSync(new URL('./sources.json', import.meta.url), 'utf8'));
@@ -160,4 +162,32 @@ test('draftWeek: caps, fetch failures, duplicates and drafter skips end up dropp
   const body = prBody({ articles, rejected, date: DATE, itemsFile: '/x/items-2026-10-12.json', itemCount: 3 });
   assert.match(body, /- \[ \] Set `reviewedBy` to a human reviewer from `content\/reviewers.ts`/);
   assert.match(body, /Stories dropped by the checks/);
+});
+
+test('resolveStyle loads the PM_NEWS_STYLE_PATH file and names it (fenlon11/pmOS#1513)', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-style-'));
+  const file = path.join(dir, 'style.md');
+  fs.writeFileSync(file, '# The Momentum Update\n');
+  const r = resolveStyle({ env: { PM_NEWS_STYLE_PATH: file } });
+  assert.equal(r.path, file);
+  assert.equal(r.text, '# The Momentum Update\n');
+  assert.equal(r.log, `style: ${file}`);
+});
+
+test('resolveStyle defaults to the canonical pmOS path under the home directory', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-home-'));
+  const file = path.join(home, 'pmOS/projects/persistent-momentum/hubspot/02-rules/ai-newsletter-style.md');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, 'canonical');
+  const r = resolveStyle({ env: {}, home });
+  assert.equal(r.path, file);
+  assert.equal(r.log, `style: ${file}`);
+});
+
+test('resolveStyle falls back to the in-repo STYLE.md when the path is missing, and says so', () => {
+  const here = path.dirname(new URL(import.meta.url).pathname);
+  const r = resolveStyle({ env: { PM_NEWS_STYLE_PATH: '/nonexistent/style.md' } });
+  assert.equal(r.path, path.join(here, 'STYLE.md'));
+  assert.equal(r.text, fs.readFileSync(path.join(here, 'STYLE.md'), 'utf8'));
+  assert.equal(r.log, `style: fallback ${path.join(here, 'STYLE.md')} (/nonexistent/style.md not found)`);
 });

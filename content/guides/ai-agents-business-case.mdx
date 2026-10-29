@@ -1,0 +1,99 @@
+---
+title: How to build a business case for AI agents (beyond 'hours saved')
+description: >-
+  Hours saved is the wrong way to justify AI agents. Here's how to price
+  exceptions, decisions, maintenance and real savings before you spend.
+type: guide
+publishedAt: '2026-10-12'
+updatedAt: '2026-10-12'
+author: elle-evate
+reviewedBy: pm-editor
+status: published
+tags:
+  - ai-agents
+  - business-case
+  - roi
+  - aws
+  - agentic-automation
+sources:
+  - title: 'Beyond hours saved: Building the business case for agentic automation'
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/beyond-hours-saved-building-the-business-case-for-agentic-automation/
+    publisher: Amazon
+  - title: How Cornerstone OnDemand cut database diagnosis by 78% with Amazon Bedrock
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/how-cornerstone-ondemand-cut-database-diagnosis-by-78-with-amazon-bedrock/
+    publisher: Amazon
+  - title: 'Building AI builders: Playbook for closing the AI knowledge-capability gap'
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/building-ai-builders-playbook-for-closing-the-ai-knowledge-capability-gap/
+    publisher: Amazon
+---
+In October 2026, AWS published a framework arguing that the usual way to justify automation (hours saved times labor cost, minus build cost) was designed for rule-based tools and misses most of what AI agents do. If you're about to spend money on agents, a stronger case also prices exceptions, decision quality and maintenance. Above all, it checks whether the savings ever reach your profit and loss statement (P&L).
+
+## Why "hours saved" falls short
+
+The classic return on investment model was built for robotic process automation (RPA), meaning software bots that follow fixed rules on stable, high-volume work. [AWS points out](https://aws.amazon.com/blogs/machine-learning/beyond-hours-saved-building-the-business-case-for-agentic-automation/) that this model quietly assumes four things:
+
+- Processes stay the same, so it ignores the cost of maintaining automation as they change.
+- Tasks follow rules, so it has no line item for exceptions.
+- The task is the whole job, so it never counts the cost of human oversight.
+- A saved hour is money banked, when freed capacity often fills up with backlog and never shows up on the P&L.
+
+AWS also cites McKinsey research describing a "1:3:5 pattern" in successful AI transformations. For every dollar spent on agentic technology, those organizations spend three on process redesign and five on capability building and adoption. According to McKinsey, most companies get this backwards.
+
+## The four value pools to measure
+
+AWS calls its framework the Agentic Value Model. It sizes four pools of value separately.
+
+1. **Time savings.** This still counts. Agents can cover work that fixed-rule bots handle poorly, so the time savings apply to more of your work.
+2. **Exception handling.** AWS planning ranges say correcting an error can cost 1.5 to 4 times the original transaction, and human error can account for 2 to 15 percent of operational cost. A case that counts only labor leaves both out.
+3. **Decision quality.** In the words of AWS Prescriptive Guidance, "low-volume, high-value decisions might justify agentic assistance for improved decision quality rather than cost reduction." One better pricing or credit decision can be worth more than a year of saved minutes.
+4. **Change resilience and maintenance.** This cuts both ways. Agents absorb some changes that would break a script, but they move maintenance into testing, prompts, monitoring and running costs instead of removing it. AWS says the math may favor agents where processes change often, and may not where they're frozen.
+
+All four depend on what AWS calls value realization. Every benefit needs a specific way of turning into money and a named person accountable for it.
+
+## Freed hours are not saved money
+
+AWS walks through an illustrative claims-triage example. The process handles 200,000 claims a year at about 12 minutes each and $45 an hour fully loaded, a base cost of roughly $1.8 million. Automating the routine 70 percent releases about 28,000 hours, or roughly $1.26 million of capacity.
+
+The company spends less only if it employs fewer people or cuts contractor, overtime or outsourcing spend. If attrition and lower overtime capture half of the capacity, AWS says the case should carry about $630,000, not $1.26 million.
+
+Exceptions are a separate pool. If 8 percent of claims need correction at 3.5 times the roughly $9 handling cost, that's about $504,000 a year of exposure. A 40 percent reduction, discounted by a 75 percent realization factor, gives a modeled benefit near $151,000. Count each benefit in one pool only, then subtract implementation, runtime, integration, evaluation, oversight, governance and change-management costs, plus losses from any new errors the agent causes.
+
+## A real before-and-after
+
+[Cornerstone OnDemand](https://aws.amazon.com/blogs/machine-learning/how-cornerstone-ondemand-cut-database-diagnosis-by-78-with-amazon-bedrock/) built a multi-agent system called Orion AI for its database operations team. Per Cornerstone and AWS:
+
+- Database diagnosis dropped from 45 minutes to 10 per incident, a 78% reduction.
+- Lifecycle tasks that took 10 or more manual steps became a single interaction.
+- A 15-minute reporting lag between two teams became real time.
+- Redundant alerts fell by a median of 65 percent.
+- A three-person team delivered it in six months.
+
+Read this through the four pools. The 35 minutes saved per incident is the time pool. Fewer redundant alerts and faster root-cause work touch exceptions and decision quality. The build team and the safeguards are cost lines. Those safeguards include a confirmation step that pauses destructive operations for up to five minutes and defaults to deny. The published results are operational metrics, not dollar figures, so converting them into money is still your job.
+
+## Pick the right workflows
+
+AWS suggests scoring each candidate on two axes: how much reasoning it needs and how costly a mistake would be.
+
+- **Simple, low risk:** keep it on RPA. Agents add cost without adding value.
+- **Complex, low risk:** the capacity play. Automate for throughput and to absorb exceptions.
+- **Complex, high risk:** the decision-quality play. Keep a human in the loop.
+- **Simple, high risk:** the guardrails play. Tighten controls instead of adding reasoning.
+
+A quick test from AWS: if a person moves between systems and interprets unclear information at each step, consider an agent. If the path is predictable, a bot may be cheaper.
+
+## Budget for people, not just software
+
+The McKinsey ratio points to capability building as the biggest line. An [AWS playbook](https://aws.amazon.com/blogs/machine-learning/building-ai-builders-playbook-for-closing-the-ai-knowledge-capability-gap/) for turning non-technical staff into builders ran six weeks at about four hours a week, with teams of 3 to 4 paired with technical mentors. Participants' self-rated strong understanding of agentic AI rose from 27 to 82 percent. AWS says its program data showed people in a phased program kept three times more practical skills than those in intensive two-day formats. Put that time in your case as a cost.
+
+## What it means for your business
+
+Don't take a single "hours saved" number to your finance lead. Take one workflow and size each pool separately.
+
+Say your operations coordinator resolves delivery problems by jumping between the order system, the carrier portal and email. Before you buy anything, record three baselines for a few weeks: how long each case takes, how often one has to be redone, and what the errors that slip through cost you in refunds or credits. Then write down how the freed time becomes money. Maybe you drop overtime, or maybe that coordinator takes on a named project with a measurable result. If neither applies, the time pool is worth close to zero on paper, however good the demo looks.
+
+Next, list the running costs: subscriptions, someone's time checking the agent's output, prompt updates when your carrier changes its portal, and training hours. Tie the result to a number you already track, such as cycle time or cost-to-serve.
+
+Finally, set a stop rule. AWS says this is what wins over a skeptical finance chief: a break-even target and predefined points at which to stop funding the agent if it underperforms. It matters because, per McKinsey research cited by AWS, nearly two-thirds of enterprises have experimented with agents but fewer than 10 percent have scaled them to real value. A stop rule keeps your test from turning into a pilot that never ends.

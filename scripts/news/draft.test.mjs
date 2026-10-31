@@ -8,7 +8,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import {
-  BUSINESS_HEADING, CAPS, buildArticle, checkArticle, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle,
+  BUSINESS_HEADING, CAPS, buildArticle, checkArticle, claudeFailureMessage, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle,
 } from './draft.mjs';
 
 const { sources } = JSON.parse(fs.readFileSync(new URL('./sources.json', import.meta.url), 'utf8'));
@@ -190,4 +190,29 @@ test('resolveStyle falls back to the in-repo STYLE.md when the path is missing, 
   assert.equal(r.path, path.join(here, 'STYLE.md'));
   assert.equal(r.text, fs.readFileSync(path.join(here, 'STYLE.md'), 'utf8'));
   assert.equal(r.log, `style: fallback ${path.join(here, 'STYLE.md')} (/nonexistent/style.md not found)`);
+});
+
+// fenlon11/pmOS#1625: the 2026-10-26 run logged only usage counters because the reason sat past char 500.
+const ENVELOPE_1026 = JSON.stringify({
+  duration_api_ms: 0, stop_reason: 'stop_sequence', session_id: '84e50abe-ec45-4938-9612-28438d1f907c', total_cost_usd: 0,
+  usage: { output_tokens_details: { thinking_tokens: 0 }, input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0, server_tool_use: { web_search_requests: 0, web_fetch_requests: 0 }, service_tier: 'standard' },
+  modelUsage: {}, permission_denials: [], uuid: 'e3c0f1a2-0000-4000-8000-000000000000', type: 'result', subtype: 'success',
+  is_error: true, duration_ms: 412, num_turns: 1,
+  result: 'Invalid API key · Please run /login', api_error_status: 401,
+});
+
+test('claudeFailureMessage puts the result text from the JSON envelope at the front', () => {
+  assert.ok(ENVELOPE_1026.indexOf('Invalid API key') > 500, 'fixture must reproduce the cut-off');
+  const msg = claudeFailureMessage(1, ENVELOPE_1026, '');
+  assert.ok(msg.startsWith('claude exited 1: result="Invalid API key · Please run /login" is_error=true api_error_status=401'), msg);
+});
+
+test('claudeFailureMessage omits api_error_status when the envelope has none', () => {
+  const msg = claudeFailureMessage(1, JSON.stringify({ is_error: true, result: 'Credit balance is too low' }));
+  assert.equal(msg, 'claude exited 1: result="Credit balance is too low" is_error=true');
+});
+
+test('claudeFailureMessage falls back to the raw text when stdout is not JSON', () => {
+  assert.equal(claudeFailureMessage(1, 'Error: not logged in', ''), 'claude exited 1: Error: not logged in');
+  assert.equal(claudeFailureMessage(2, '', 'spawn failed'), 'claude exited 2: spawn failed');
 });

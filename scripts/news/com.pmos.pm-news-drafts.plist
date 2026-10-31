@@ -25,12 +25,30 @@
     </dict>
     <key>RunAtLoad</key>
     <false/>
+    <!-- Mon–Thu 07:00: run.sh exits 0 once this week's draft PR exists, so Tue–Thu only retry a failed Monday. fenlon11/pmOS#1625 -->
     <key>StartCalendarInterval</key>
-    <dict>
-        <key>Weekday</key><integer>1</integer>
-        <key>Hour</key><integer>7</integer>
-        <key>Minute</key><integer>0</integer>
-    </dict>
+    <array>
+        <dict>
+            <key>Weekday</key><integer>1</integer>
+            <key>Hour</key><integer>7</integer>
+            <key>Minute</key><integer>0</integer>
+        </dict>
+        <dict>
+            <key>Weekday</key><integer>2</integer>
+            <key>Hour</key><integer>7</integer>
+            <key>Minute</key><integer>0</integer>
+        </dict>
+        <dict>
+            <key>Weekday</key><integer>3</integer>
+            <key>Hour</key><integer>7</integer>
+            <key>Minute</key><integer>0</integer>
+        </dict>
+        <dict>
+            <key>Weekday</key><integer>4</integer>
+            <key>Hour</key><integer>7</integer>
+            <key>Minute</key><integer>0</integer>
+        </dict>
+    </array>
     <key>StandardOutPath</key>
     <string>/Users/macminipro/pmOS/agents/logs/pm-news-drafts.stdout.log</string>
     <key>StandardErrorPath</key>

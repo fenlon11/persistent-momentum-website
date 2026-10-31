@@ -44,7 +44,8 @@ export const inquirySchema = z.object({
     .max(5000),
   // Honeypot: hidden from people, filled by bots.
   website: z.string().optional().default(''),
-  pageUri: z.string().url().max(2000).optional(),
+  // http(s) only: `javascript:` and `data:` URIs are valid URLs but not pages.
+  pageUri: z.url({ protocol: /^https?$/ }).max(2000).optional(),
   pageName: z.string().max(300).optional(),
 });
 
@@ -66,10 +67,15 @@ export type InquiryDeps = {
   fetch: typeof fetch;
   save: (row: InquiryRow) => Promise<void>;
   notify: (inquiry: Inquiry) => Promise<void>;
+  // Rate limiter, consulted only for valid, non-honeypot submissions.
+  allow: () => boolean;
   log?: (...args: unknown[]) => void;
+  timeoutMs?: number;
 };
 
 export type InquiryResult = { status: number; body: Record<string, unknown> };
+
+export const TIMEOUT_MS = 8000;
 
 const RETRY_MESSAGE =
   "We couldn't send your message just now. Please try again, or email info@persistentmomentum.com.";
@@ -115,6 +121,10 @@ export async function handleInquiry(body: unknown, hutk: string | undefined, dep
   // Bots get the same success a person gets, and nothing is sent or stored.
   if (input.website) return { status: 200, body: { success: true, message: SUCCESS_MESSAGE } };
 
+  if (!deps.allow()) {
+    return { status: 429, body: { error: 'Too many attempts. Please try again in a few minutes.' } };
+  }
+
   let saved = true;
   try {
     await deps.save({
@@ -150,9 +160,20 @@ async function submitToHubSpot(deps: InquiryDeps, input: Inquiry, hutk: string |
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(buildHubSpotPayload(input, hutk)),
+    signal: AbortSignal.timeout(deps.timeoutMs ?? TIMEOUT_MS),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`HubSpot ${res.status}: ${text.slice(0, 500)}`);
+    // Status and error codes only: HubSpot's rejection body can echo the submitted address.
+    throw new Error(`HubSpot ${res.status} ${text.match(/[A-Z][A-Z_]{3,}/g)?.join(',') ?? ''}`.trim());
   }
+}
+
+// Rejects after `ms` so a hung call becomes a failed leg instead of holding the request open.
+export function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { supabaseAdmin } from '@/lib/supabase';
-import { handleInquiry, NEEDS, type Inquiry, type InquiryRow } from '@/lib/consulting';
+import { handleInquiry, NEEDS, TIMEOUT_MS, withTimeout, type Inquiry, type InquiryRow } from '@/lib/consulting';
 import { createRateLimiter } from '@/lib/newsletter';
 
 // Consulting inquiry → Supabase + HubSpot form + email notification (fenlon11/pmOS#683). Logic
@@ -18,7 +18,7 @@ async function notify(inquiry: Inquiry) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.NOTIFICATION_EMAIL;
   if (!key || !to) throw new Error('RESEND_API_KEY or NOTIFICATION_EMAIL not set');
-  const { error } = await new Resend(key).emails.send({
+  const send = new Resend(key).emails.send({
     from: 'Persistent Momentum <noreply@persistentmomentum.com>',
     to,
     replyTo: inquiry.email,
@@ -34,14 +34,12 @@ async function notify(inquiry: Inquiry) {
       inquiry.message,
     ].join('\n'),
   });
+  const { error } = await withTimeout(send, TIMEOUT_MS, 'Resend');
   if (error) throw new Error(error.message);
 }
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  if (!allow(ip)) {
-    return NextResponse.json({ error: 'Too many attempts. Please try again in a few minutes.' }, { status: 429 });
-  }
 
   let body: unknown;
   try {
@@ -55,6 +53,7 @@ export async function POST(request: NextRequest) {
     fetch,
     save,
     notify,
+    allow: () => allow(ip),
   });
   return NextResponse.json(result.body, { status: result.status });
 }

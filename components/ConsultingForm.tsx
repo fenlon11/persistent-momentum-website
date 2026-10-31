@@ -13,6 +13,8 @@ const formSchema = inquirySchema.omit({ pageUri: true, pageName: true });
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
+const FALLBACK_MESSAGE = 'Something went wrong. Email info@persistentmomentum.com.';
+
 const fieldShell = 'w-full px-4 py-3 text-base transition-colors focus:outline-none';
 
 const fieldStyle = {
@@ -51,20 +53,21 @@ export default function ConsultingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, pageUri: window.location.href, pageName: document.title }),
       });
-      const result = await response.json();
-      if (!response.ok) {
+      // Parse only our own JSON errors: a proxy 502 or a crash page is HTML, and gets the fallback.
+      const isJson = response.headers.get('content-type')?.includes('application/json') ?? false;
+      if (!response.ok || !isJson) {
+        const result = isJson ? await response.json().catch(() => ({})) : {};
         for (const [name, message] of Object.entries((result.fields ?? {}) as Record<string, string>)) {
           if (name in formSchema.shape) setError(name as keyof FormInput, { message });
         }
-        throw new Error(result.error || 'Something went wrong.');
+        throw new Error(result.error || FALLBACK_MESSAGE);
       }
       setStatus({ type: 'success', message: SUCCESS_MESSAGE });
       reset();
     } catch (error) {
       setStatus({
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'Something went wrong. Email info@persistentmomentum.com.',
+        message: error instanceof Error ? error.message : FALLBACK_MESSAGE,
       });
     }
   };

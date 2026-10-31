@@ -5,10 +5,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import {
   CONVERSION_FORM,
   buildHubSpotPayload,
   handleInquiry,
+  withTimeout,
   type Inquiry,
   type InquiryDeps,
   type InquiryRow,
@@ -18,11 +20,14 @@ const GUID = '00000000-0000-0000-0000-000000000000';
 
 type Payload = ReturnType<typeof buildHubSpotPayload>;
 
-function harness(opts: { hubspot?: () => Response; save?: () => void; notify?: () => void } = {}) {
+function harness(
+  opts: { hubspot?: () => Response; save?: () => void; notify?: () => void; allow?: () => boolean } = {},
+) {
   const calls: { url: string; body: Payload }[] = [];
   const saved: InquiryRow[] = [];
   const notified: Inquiry[] = [];
   const logged: unknown[][] = [];
+  const limiter = { calls: 0 };
   const deps: InquiryDeps = {
     formGuid: GUID,
     fetch: (async (url: string, init: RequestInit) => {
@@ -37,9 +42,13 @@ function harness(opts: { hubspot?: () => Response; save?: () => void; notify?: (
       opts.notify?.();
       notified.push(inquiry);
     },
+    allow: () => {
+      limiter.calls++;
+      return opts.allow?.() ?? true;
+    },
     log: (...args) => logged.push(args),
   };
-  return { calls, saved, notified, logged, deps };
+  return { calls, saved, notified, logged, limiter, deps };
 }
 
 const valid = {
@@ -190,6 +199,71 @@ test('Supabase and HubSpot both failing: 500', async () => {
   });
   const res = await handleInquiry(valid, undefined, h.deps);
   assert.equal(res.status, 500);
+});
+
+test('HubSpot 400 echoing the email: the logged error carries status and codes, never the email', async () => {
+  const body = JSON.stringify({
+    status: 'error',
+    message: 'The request is not valid',
+    errors: [{ message: `Email address ${valid.email} is invalid`, errorType: 'INVALID_EMAIL' }],
+  });
+  const h = harness({ hubspot: () => new Response(body, { status: 400 }) });
+  const res = await handleInquiry(valid, undefined, h.deps);
+  assert.equal(res.status, 200);
+  const logged = inspect(h.logged, { depth: 10 });
+  assert.match(logged, /HubSpot 400/);
+  assert.match(logged, /INVALID_EMAIL/);
+  assert.ok(!logged.includes(valid.email), `email leaked into log: ${logged}`);
+});
+
+test('HubSpot fetch that never resolves is abandoned at the timeout; the inquiry is still saved', async () => {
+  const h = harness();
+  // Like the real fetch: hangs until its signal aborts.
+  h.deps.fetch = ((_url: string, init: RequestInit) =>
+    new Promise((_, reject) => init.signal?.addEventListener('abort', () => reject(init.signal?.reason)))) as typeof fetch;
+  h.deps.timeoutMs = 50;
+  const started = Date.now();
+  const res = await handleInquiry(valid, undefined, h.deps);
+  assert.ok(Date.now() - started < 2000);
+  assert.equal(res.status, 200);
+  assert.equal(h.saved.length, 1);
+  assert.ok(h.logged.some((l) => String(l[0]).includes('HubSpot')));
+});
+
+test('withTimeout rejects a call that never settles, and passes through one that does', async () => {
+  await assert.rejects(withTimeout(new Promise(() => {}), 20, 'Resend'), /Resend timed out after 20ms/);
+  assert.equal(await withTimeout(Promise.resolve('ok'), 20, 'Resend'), 'ok');
+});
+
+test('pageUri accepts http(s) only', async () => {
+  for (const pageUri of ['javascript:alert(1)', 'data:text/html,hi']) {
+    const h = harness();
+    const res = await handleInquiry({ ...valid, pageUri }, undefined, h.deps);
+    assert.equal(res.status, 400, pageUri);
+    assert.ok((res.body.fields as Record<string, string>).pageUri, pageUri);
+    assert.equal(h.saved.length + h.calls.length, 0);
+  }
+  for (const pageUri of ['https://persistentmomentum.com/consulting', 'http://localhost:3000/consulting']) {
+    const res = await handleInquiry({ ...valid, pageUri }, undefined, harness().deps);
+    assert.equal(res.status, 200, pageUri);
+  }
+});
+
+test('rate limit: validation failures and honeypot hits never consume a slot', async () => {
+  const h = harness();
+  await handleInquiry({ ...valid, email: 'nope' }, undefined, h.deps);
+  await handleInquiry({ ...valid, website: 'http://spam.example' }, undefined, h.deps);
+  assert.equal(h.limiter.calls, 0);
+  await handleInquiry(valid, undefined, h.deps);
+  assert.equal(h.limiter.calls, 1);
+});
+
+test('rate limit exceeded: 429 with no side effects', async () => {
+  const h = harness({ allow: () => false });
+  const res = await handleInquiry(valid, undefined, h.deps);
+  assert.equal(res.status, 429);
+  assert.deepEqual(res.body, { error: 'Too many attempts. Please try again in a few minutes.' });
+  assert.equal(h.saved.length + h.calls.length + h.notified.length, 0);
 });
 
 // Rendered-text rule: no pricing anywhere on /consulting.

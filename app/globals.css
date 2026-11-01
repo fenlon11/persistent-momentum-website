@@ -50,36 +50,36 @@
   --color-chart-axis: #94a3b8;
 
   /* Type scale */
-  --pm-text-caption: 12px;
+  --pm-text-caption: 0.75rem;
   --pm-leading-caption: 1.5;
-  --pm-text-small: 14px;
+  --pm-text-small: 0.875rem;
   --pm-leading-small: 1.5;
-  --pm-text-body: 16px;
+  --pm-text-body: 1rem;
   --pm-leading-body: 1.6;
-  --pm-text-lead: 18px;
+  --pm-text-lead: 1.125rem;
   --pm-leading-lead: 1.55;
-  --pm-text-h4: 20px;
+  --pm-text-h4: 1.25rem;
   --pm-leading-h4: 1.4;
-  --pm-text-h3: 24px;
+  --pm-text-h3: 1.5rem;
   --pm-leading-h3: 1.3;
-  --pm-text-h2: 32px;
+  --pm-text-h2: 2rem;
   --pm-leading-h2: 1.2;
-  --pm-text-h1: 40px;
+  --pm-text-h1: 2.5rem;
   --pm-leading-h1: 1.15;
-  --pm-text-display: 56px;
+  --pm-text-display: 3.5rem;
   --pm-leading-display: 1.05;
 
   /* Space (4px base) */
   --pm-space-0: 0;
-  --pm-space-1: 4px;
-  --pm-space-2: 8px;
-  --pm-space-3: 12px;
-  --pm-space-4: 16px;
-  --pm-space-5: 24px;
-  --pm-space-6: 32px;
-  --pm-space-7: 48px;
-  --pm-space-8: 64px;
-  --pm-space-9: 96px;
+  --pm-space-1: 0.25rem;
+  --pm-space-2: 0.5rem;
+  --pm-space-3: 0.75rem;
+  --pm-space-4: 1rem;
+  --pm-space-5: 1.5rem;
+  --pm-space-6: 2rem;
+  --pm-space-7: 3rem;
+  --pm-space-8: 4rem;
+  --pm-space-9: 6rem;
 
   /* Radii */
   --pm-radius-sm: 6px;

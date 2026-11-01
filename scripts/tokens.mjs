@@ -13,11 +13,12 @@
 //
 // Vercel builds this repo alone, so the copy is committed; --sync is how a token change reaches it.
 
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const BRAND_FILE = join(ROOT, 'tokens/design-tokens.json');
 const SITE_FILE = join(ROOT, 'tokens/site-tokens.json');
 const CSS_FILE = join(ROOT, 'app/globals.css');
@@ -59,6 +60,8 @@ const PALETTE_VARS = {
 
 const kebab = (s) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 const px = (n) => (n === 0 ? '0' : `${n}px`);
+// Type and space scale with the browser's default font size: px ÷ 16 (equal to the px value at a 16px root).
+const rem = (n) => (n === 0 ? '0' : `${n / 16}rem`);
 
 function rgba(hex, alpha) {
   const n = parseInt(hex.slice(1), 16);
@@ -95,12 +98,12 @@ export function renderBlock(brand, site) {
     '',
     '  /* Type scale */',
     ...Object.entries(brand.typeScale).flatMap(([step, t]) => [
-      `  --pm-text-${step}: ${px(t.size)};`,
+      `  --pm-text-${step}: ${rem(t.size)};`,
       `  --pm-leading-${step}: ${t.lineHeight};`,
     ]),
     '',
     '  /* Space (4px base) */',
-    ...Object.entries(brand.space).map(([k, v]) => `  --pm-space-${k}: ${px(v)};`),
+    ...Object.entries(brand.space).map(([k, v]) => `  --pm-space-${k}: ${rem(v)};`),
     '',
     '  /* Radii */',
     ...Object.entries(brand.radius).map(([k, v]) => `  --pm-radius-${k}: ${px(v)};`),
@@ -137,7 +140,7 @@ export function blockIsCurrent() {
   return applyBlock(css, renderBlock(brand, site)) === css;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   const args = process.argv.slice(2);
   if (args.includes('--sync')) {
     const src = process.env.PM_DESIGN_TOKENS || PMOS_TOKENS;

@@ -6,16 +6,18 @@
 // Hex lives only in tokens/design-tokens.json (brand) and tokens/site-tokens.json (site-only).
 // Code that cannot read CSS variables (recharts, next/og) imports lib/theme.ts.
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { END, START, blockIsCurrent } from './tokens.mjs';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const DIRS = ['app', 'components', 'lib', 'content'];
-const EXT = /\.(tsx|ts|css|mjs)$/;
+const EXT = /\.(tsx|ts|jsx|js|mjs|css|mdx)$/;
 
-// A # right after a letter, digit or slash is an issue reference (`pmOS#685`, `owner/repo#12`).
-export const HEX = /(?<![\w/])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![0-9a-zA-Z_-])/g;
+// A # right after a letter, digit or slash is an issue reference (`pmOS#685`, `owner/repo#12`); after
+// `&` it is an HTML entity (`&#8217;`); inside `url(...)` or `href="..."` it is a fragment (`url(#fade)`).
+export const HEX = /(?<![\w/&])(?<!url\(\s*['"]?)(?<!href=\{?\s*['"`])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![0-9a-zA-Z_-])/g;
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -42,7 +44,7 @@ export function findViolations(rel, text) {
   return found;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   const violations = DIRS.flatMap((d) => walk(join(ROOT, d))).flatMap((file) =>
     findViolations(relative(ROOT, file), readFileSync(file, 'utf8')),
   );

@@ -161,7 +161,7 @@ export function claudeFailureMessage(status, stdout = '', stderr = '') {
   return `claude exited ${status}: ${(stderr || stdout || '').slice(0, 500)}`;
 }
 
-export function askClaude(prompt, schema) {
+export function askClaude(prompt, schema, system = SYSTEM) {
   const env = { ...process.env };
   delete env.ANTHROPIC_API_KEY; // Max OAuth only (pmOS auth pin)
   const r = spawnSync(
@@ -170,7 +170,7 @@ export function askClaude(prompt, schema) {
       '-p', '--model', MODEL, '--effort', 'high',
       '--tools', '', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}',
       '--setting-sources', 'project', '--disable-slash-commands', '--no-session-persistence',
-      '--system-prompt', SYSTEM, '--json-schema', JSON.stringify(schema), '--output-format', 'json',
+      '--system-prompt', system, '--json-schema', JSON.stringify(schema), '--output-format', 'json',
     ],
     { input: prompt, encoding: 'utf8', env, cwd: os.tmpdir(), maxBuffer: 64 * 1024 * 1024, timeout: 20 * 60_000 },
   );
@@ -236,7 +236,7 @@ export const DRAFT_SCHEMA = {
 
 // Angle brackets inside a fence become ‹ › so fetched text (decoded entities included) can never close it.
 const defang = (s) => s.replace(/</g, '‹').replace(/>/g, '›');
-const fence = (tag, attrs, body) => `<${tag}${attrs}>\n${defang(body)}\n</${tag}>`;
+export const fence = (tag, attrs, body) => `<${tag}${attrs}>\n${defang(body)}\n</${tag}>`;
 
 export function selectionPrompt(candidates, existing, date) {
   const items = candidates

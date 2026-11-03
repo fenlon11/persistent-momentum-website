@@ -7,7 +7,7 @@
 - [x] G2: the site still builds
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=. --task=build
   EXPECT: REPO CHECK PASS
-  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-2210; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=2a8f1a04df157c7263a9ec1a40a651a7fad65afdc2319632d19bbdcb2e80df2c; output-bytes=117
+  EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-2210; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=1d0247a7e9729c1fe7abac789e719bb2d0ff37e95b6d1b191e2f59c99352a346; output-bytes=117
 - [x] G3: `merge-approved.mjs --pr 44 --dry-run` on the mini prints the waiting/decision line and makes no write (manual: reviewer quotes the output and `gh pr view 44 --json state`)
   EVIDENCE: 2026-11-03 17:40 ET `PMOS_REPO=$HOME/pmOS node --no-warnings scripts/news/merge-approved.mjs --pr 44 --dry-run` → `PR #44: not merging: PR #44 is MERGED, not OPEN; mergeable is UNKNOWN; decision 438c9cf0 is class delegated, not matt-only`, exit 0; `gh pr view 44 --json state` → `{"state":"MERGED"}` (already merged as 62662772 by operator-pass at 17:21 UTC, before this build; the script wrote nothing)
 - [x] G4: `run.sh` decide-only prints `decision: merge-check #<n>` for an open fact-checked PR (manual: reviewer quotes the line)

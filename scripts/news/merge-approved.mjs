@@ -28,6 +28,9 @@ export const VIEW_FIELDS = 'number,state,isDraft,headRefName,headRefOid,url,file
 export const POLL_MS = 60_000;
 export const POLL_ROUNDS = 15; // first check at merge time, then every 60 s: 15 min in all
 const MARKER_RE = new RegExp(`<!-- ${MARKER} head=([0-9a-f]{7,40}) -->`);
+// factcheck.mjs comments as the repo owner's gh login; a marker from anyone else is ignored, so a
+// stranger's comment cannot vouch for a commit pushed after the fact-check.
+export const MARKER_AUTHOR = GH_REPO.split('/')[0];
 
 const id8 = (id) => String(id).slice(0, 8);
 
@@ -50,7 +53,10 @@ export function decideMerge({ pr, view, rows }) {
   const other = (view.files ?? []).map((f) => f.path).filter((p) => !isContentFile(p));
   if (!(view.files ?? []).length) reasons.push(`PR #${pr} changes no files`);
   if (other.length) reasons.push(`changes files outside content/**/*.mdx (${other.join(', ')})`);
-  const markers = (view.comments ?? []).map((c) => MARKER_RE.exec(c.body ?? '')).filter(Boolean);
+  const markers = (view.comments ?? [])
+    .filter((c) => c.author?.login === MARKER_AUTHOR)
+    .map((c) => MARKER_RE.exec(c.body ?? ''))
+    .filter(Boolean);
   const checked = markers.at(-1)?.[1];
   if (!checked) reasons.push('no fact-check marker comment');
   else if (checked !== view.headRefOid) reasons.push(`fact-checked head ${checked.slice(0, 7)} is not the PR head ${String(view.headRefOid).slice(0, 7)} (commit after the fact-check)`);

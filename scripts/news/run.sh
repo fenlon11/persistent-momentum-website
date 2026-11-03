@@ -49,7 +49,7 @@ if [[ -n "$RECENT" ]]; then
   MARKERS=0
   if [[ "$RECENT_STATE" == "OPEN" ]]; then
     MARKERS="$(gh pr view "$RECENT_PR" --repo fenlon11/persistent-momentum-website --json comments \
-      --jq '[.comments[].body | select(contains("<!-- pm-news-factcheck "))] | length')"
+      --jq '[.comments[] | select(.author.login == "fenlon11") | .body | select(contains("<!-- pm-news-factcheck "))] | length')"
   fi
   if [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "true" && "$MARKERS" == "0" ]]; then
     FACTCHECK_PR="$RECENT_PR"

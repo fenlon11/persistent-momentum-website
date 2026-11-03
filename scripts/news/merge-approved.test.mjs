@@ -31,7 +31,7 @@ const view = (over = {}) => ({
     { __typename: 'StatusContext', context: 'Vercel', state: 'SUCCESS' },
     { __typename: 'CheckRun', name: 'Vercel Preview Comments', status: 'COMPLETED', conclusion: 'SUCCESS' },
   ],
-  comments: [{ body: '[vc]: preview' }, { body: `<!-- pm-news-factcheck head=${HEAD} -->\n## Fact-check, week of ${WEEK}` }],
+  comments: [{ author: { login: 'vercel' }, body: '[vc]: preview' }, { author: { login: 'fenlon11' }, body: `<!-- pm-news-factcheck head=${HEAD} -->\n## Fact-check, week of ${WEEK}` }],
   ...over,
 });
 const row = (over = {}) => ({
@@ -62,6 +62,7 @@ test('decideMerge refuses every other case, naming why', () => {
     ['row names #44 but is not the merge question', view(), [row({ question: 'Something about PR #44' })], /no .* decision row/],
     ['head moved after the fact-check', view({ headRefOid: 'abcdef1234567890abcdef1234567890abcdef12' }), [row()], /commit after the fact-check/],
     ['no marker', view({ comments: [] }), [row()], /no fact-check marker/],
+    ['a marker from someone else vouching for a moved head', view({ headRefOid: 'abcdef1234567890abcdef1234567890abcdef12', comments: [...view().comments, { author: { login: 'stranger' }, body: '<!-- pm-news-factcheck head=abcdef1234567890abcdef1234567890abcdef12 -->' }] }), [row()], /commit after the fact-check/],
     ['a non-content file', view({ files: [{ path: NEWS }, { path: 'package.json' }] }), [row()], /outside content.*package\.json/],
     ['a failed check', view({ statusCheckRollup: [{ context: 'Vercel', state: 'FAILURE' }] }), [row()], /check Vercel is FAILURE/],
     ['a pending check run', view({ statusCheckRollup: [{ name: 'ci', status: 'IN_PROGRESS', conclusion: '' }] }), [row()], /check ci is IN_PROGRESS/],

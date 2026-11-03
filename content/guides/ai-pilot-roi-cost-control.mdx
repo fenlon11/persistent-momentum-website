@@ -1,0 +1,90 @@
+---
+title: >-
+  How to tell whether an AI pilot paid off: measuring ROI and keeping costs in
+  check
+description: >-
+  How to judge an AI pilot: set a baseline, track business results, and give
+  every AI dollar an owner, using two recent AWS posts as worked examples.
+type: guide
+publishedAt: '2026-11-02'
+updatedAt: '2026-11-02'
+author: elle-evate
+reviewedBy: pm-editor
+status: published
+tags:
+  - ai-roi
+  - cost-control
+  - amazon-bedrock
+  - aws
+  - worldwide-express
+sources:
+  - title: How Worldwide Express automated freight exceptions with Amazon Bedrock
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/how-worldwide-express-automated-freight-exceptions-with-amazon-bedrock/
+    publisher: Amazon
+  - title: >-
+      Managing Amazon Bedrock costs end to end: A playbook for FinOps and
+      platform teams
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/managing-amazon-bedrock-costs-end-to-end-a-playbook-for-finops-and-platform-teams/
+    publisher: Amazon
+---
+On October 30, 2026, AWS published two posts that, read together, answer the two questions every AI pilot raises: did it pay off, and what is it costing us? One is a customer story from Worldwide Express with specific results. The other is AWS's playbook for keeping AI spend under control. Neither was written for a small business, but the method in both carries over to one, as long as you remember that both come from the company selling the platform.
+
+## Start with a baseline, not a tool
+
+Worldwide Express knew what its problem cost before it built anything. According to the [AWS case post](https://aws.amazon.com/blogs/machine-learning/how-worldwide-express-automated-freight-exceptions-with-amazon-bedrock/), $15 million in free cash flow sat frozen every month in billing exceptions. These were freight invoices that didn't match the order or the delivery record, and staff had to chase them down by hand, one carrier at a time. The post says roughly 14 percent of invoices in its part of the freight business fail that match.
+
+The company also didn't try to automate everything at once. In June 2025 it worked with AWS to list 19 automation opportunities, then picked one with clear business value and took it from assessment to production in less than six months.
+
+The lesson for you: before a pilot starts, write down the problem in units you already track, such as dollars, hours, days or a backlog count. If you can't measure the "before", you can't prove the "after".
+
+## Measure the business result, then the AI's work
+
+The results AWS reports for Worldwide Express come in two layers.
+
+**Business results (per the company, as published by AWS):**
+
+- The backlog of active exceptions fell from $15 million in June 2025 to $4 million six months later, a 75 percent reduction.
+- A one-time $10 million release of free cash flow.
+- Over $1 million in annual cost savings.
+- Time-to-cash improved by four weeks.
+- 60x first-year ROI.
+
+**Operational results:** the AI agents close 10,000 exceptions a week, about 50 percent of the total, with an error rate under 1 percent, across more than 40 carriers.
+
+The team also built dashboards for automation rate, error rate, resolution time and how often a human overrode the AI. Those operational numbers tell you whether the system is working day to day. The business numbers tell you whether it was worth it. You need both.
+
+## Read vendor ROI claims with care
+
+These figures were published by AWS, which sells the platform the solution runs on. The post ends by pointing readers to their AWS account team and a partner's "Proof of Value sprint". That doesn't make the numbers wrong, but they are the company's own account, not an independent audit, and the post doesn't show how the 60x ROI was calculated.
+
+Small details can shift a number, even within one post. The post reports agents closing about 50 percent of exceptions weekly, while Worldwide Express VP of FinOps Nathanael Pearson is quoted with a different figure: "With AWS, we've automated more than 40 percent of weekly billing exceptions, significantly reducing costs and accelerating billing cycles from days to minutes."
+
+Also separate one-time gains from recurring ones. The $10 million cash release happened once. The $1 million in savings is annual. When you judge your own pilot, don't add a one-time win to a yearly saving and call the total "annual ROI".
+
+## Keep a human in the loop until the numbers earn trust
+
+Worldwide Express didn't let the AI act alone at first. A person approved each recommendation in the existing billing screen. Only after accuracy exceeded 99 percent did bulk approval become the default. When a reviewer rejected a recommendation, the system logged why, and the team used those rejections to improve the AI's instructions. That review step is also your best source of accuracy data during a pilot.
+
+## Keep costs in check: the AWS playbook in plain English
+
+The [AWS cost playbook](https://aws.amazon.com/blogs/machine-learning/managing-amazon-bedrock-costs-end-to-end-a-playbook-for-finops-and-platform-teams/) is written for FinOps (finance) and platform engineering teams, but its five steps translate directly:
+
+1. **Give every dollar an owner.** Each AI charge should trace back to a person, team or project. In AWS's words, "You can't manage what you can't attribute."
+2. **Log every request.** Know what work generated the spend, not just how much was spent.
+3. **Set budgets.** Start with alerts. AWS notes that alerts alone only show you a problem after it happens, so add hard limits where overspending would hurt.
+4. **Fix the defaults.** Not every task needs the most capable model. Send routine work to smaller, cheaper models, and use prompt caching (paying a lower rate when the same opening text of a prompt is reused).
+5. **Review on a schedule.** AWS suggests weekly for fast-growing usage and every two weeks otherwise, and tracking cost per successful outcome against budget.
+
+Two warnings in the playbook matter for any pilot. First, AI agents cost more than chat. A chat assistant usually makes one model call per question. An agent that plans, reads files and uses tools makes many calls per task, each carrying more text, so cost grows with how much freedom you give it. Second, failed requests cost money: a request that times out on your end but still finishes on the provider's side can be billed twice. AWS also says published averages are a poor substitute for your own numbers, so measure what your workload actually uses.
+
+## What it means for your business
+
+You don't need AWS or a FinOps team to use this. You need a short scorecard written before the pilot starts.
+
+Say you run a small HVAC company and want to pilot an AI assistant that drafts replies to quote requests. Before you switch it on, record three things for a normal month: how many requests go unanswered past a day, how long a reply takes your office manager, and how many quotes turn into jobs. Then decide what counts as success, such as faster replies with no drop in quotes won.
+
+During the pilot, have a person approve every draft and note each one they rewrite. That rewrite rate is your error rate. Put the AI subscription or usage bill under one named owner, set a spending alert, and check the bill alongside the scorecard every two weeks.
+
+At the end, compare against your baseline, keep one-time wins separate from monthly ones, and divide what you spent by the jobs it helped close. If you can't fill in that sum, the pilot hasn't proved anything yet. When a vendor shows you a big ROI figure, ask the same questions you'd ask yourself: what was the baseline, over what period, and is the gain one-time or recurring?

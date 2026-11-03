@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { authorSchema, frontmatterSchema, isVisible, type Author, type Frontmatter } from './schema';
+import { guideFile, newsFile } from './paths';
 
 export type ContentType = 'news' | 'guide';
 
@@ -18,8 +19,6 @@ export type AuthorEntry = Author & { slug: string; href: string; body: string };
 
 const root = path.join(process.cwd(), 'content');
 const dirs: Record<ContentType, string> = { news: 'news', guide: 'guides' };
-const newsFile = /^(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.mdx$/;
-const guideFile = /^([a-z0-9]+(?:-[a-z0-9]+)*)\.mdx$/;
 
 function mdxFiles(dir: string) {
   const full = path.join(root, dir);

@@ -7,6 +7,9 @@
 #
 # Steps: IndexNow ping for last week's merged articles -> collect.py -> draft.mjs (opens a draft PR,
 # never merges); a later run that week -> factcheck.mjs (readies the PR, files the merge decision).
+# A human approves the article by merging its PR or by answering its merge decision "merge"; a later
+# run that week then executes that answer -> merge-approved.mjs (merges only on "merge", then reads the
+# article back from the live site; fenlon11/pmOS#2210).
 # Runs in a throwaway worktree. State (seen.json, items, IndexNow baseline) lives in $PM_NEWS_STATE.
 # Exits non-zero when the collector loses 3+ tier-1 sources or no draft passes.
 #
@@ -34,17 +37,26 @@ echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') start, ref origin/$REF"
 # A gh failure stops the run (set -e) rather than risk a second PR; the next weekday retries.
 # When that PR is open, still a draft and has no fact-check marker comment, the run fact-checks it
 # instead (factcheck.mjs, fenlon11/pmOS#2017); the Mon–Thu schedule gives that stage its retries.
+# When it is open, ready and carries the marker, the run checks its merge decision (merge-approved.mjs).
 # PM_NEWS_DECIDE_ONLY=1 prints the decision and exits before any write (tests use it).
 SINCE="$(date -u -r "$(date -v-mon -v0H -v0M -v0S +%s)" '+%Y-%m-%dT%H:%M:%SZ')"
 RECENT="$(gh pr list --repo fenlon11/persistent-momentum-website --state all --limit 100 --json number,headRefName,createdAt,state,isDraft \
   --jq "[.[] | select((.headRefName | startswith(\"content/ai-news-\")) and .createdAt >= \"$SINCE\")] | .[0] // empty | \"\\(.headRefName) \\(.number) \\(.state) \\(.isDraft)\"")"
 FACTCHECK_PR=""
+MERGE_PR=""
 if [[ -n "$RECENT" ]]; then
   read -r RECENT_REF RECENT_PR RECENT_STATE RECENT_DRAFT <<< "$RECENT"
-  if [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "true" ]] && [[ "$(gh pr view "$RECENT_PR" --repo fenlon11/persistent-momentum-website --json comments \
-    --jq '[.comments[].body | select(contains("<!-- pm-news-factcheck "))] | length')" == "0" ]]; then
+  MARKERS=0
+  if [[ "$RECENT_STATE" == "OPEN" ]]; then
+    MARKERS="$(gh pr view "$RECENT_PR" --repo fenlon11/persistent-momentum-website --json comments \
+      --jq '[.comments[] | select(.author.login == "fenlon11") | .body | select(contains("<!-- pm-news-factcheck "))] | length')"
+  fi
+  if [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "true" && "$MARKERS" == "0" ]]; then
     FACTCHECK_PR="$RECENT_PR"
     echo "[pm-news-drafts] already drafted this week ($RECENT_REF, PR #$RECENT_PR, draft, not fact-checked); fact-checking it"
+  elif [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "false" && "$MARKERS" != "0" ]]; then
+    MERGE_PR="$RECENT_PR"
+    echo "[pm-news-drafts] already drafted this week ($RECENT_REF, PR #$RECENT_PR, fact-checked and ready); checking its merge decision"
   else
     echo "[pm-news-drafts] already drafted this week ($RECENT_REF, PR #$RECENT_PR opened since $SINCE); nothing to do"
     [[ -n "${PM_NEWS_DECIDE_ONLY:-}" ]] && echo "decision: skip"
@@ -52,7 +64,9 @@ if [[ -n "$RECENT" ]]; then
   fi
 fi
 if [[ -n "${PM_NEWS_DECIDE_ONLY:-}" ]]; then
-  if [[ -n "$FACTCHECK_PR" ]]; then echo "decision: factcheck #$FACTCHECK_PR"; else echo "decision: draft"; fi
+  if [[ -n "$FACTCHECK_PR" ]]; then echo "decision: factcheck #$FACTCHECK_PR"
+  elif [[ -n "$MERGE_PR" ]]; then echo "decision: merge-check #$MERGE_PR"
+  else echo "decision: draft"; fi
   exit 0
 fi
 
@@ -67,6 +81,11 @@ npm ci --no-audit --no-fund --ignore-scripts --loglevel=error
 
 if [[ -n "$FACTCHECK_PR" ]]; then
   node scripts/news/factcheck.mjs --pr "$FACTCHECK_PR"
+  echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
+  exit 0
+fi
+if [[ -n "$MERGE_PR" ]]; then
+  node scripts/news/merge-approved.mjs --pr "$MERGE_PR"
   echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
   exit 0
 fi

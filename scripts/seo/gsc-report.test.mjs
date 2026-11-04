@@ -14,11 +14,19 @@ const SCRIPT = path.join(HERE, 'gsc-report.mjs');
 const FIX = path.join(HERE, 'fixtures');
 const NO_NETWORK = 'data:text/javascript,globalThis.fetch=()=>{throw new Error("network call in test")}';
 
-function run(args, env = {}) {
+function run(args, env = {}, preload = NO_NETWORK) {
   const base = { ...process.env };
   delete base.GSC_SERVICE_ACCOUNT_FILE;
-  const r = spawnSync(process.execPath, ['--import', NO_NETWORK, SCRIPT, ...args], { encoding: 'utf8', env: { ...base, ...env } });
+  const r = spawnSync(process.execPath, ['--import', preload, SCRIPT, ...args], { encoding: 'utf8', env: { ...base, ...env } });
   return { code: r.status, out: r.stdout, err: r.stderr };
+}
+
+// A throwaway service-account key signed with a fresh RSA key (never a real credential).
+function writeKey(dir) {
+  const { privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const keyFile = path.join(dir, 'sa.json');
+  fs.writeFileSync(keyFile, JSON.stringify({ client_email: 'report@example.iam.gserviceaccount.com', private_key: privateKey.export({ type: 'pkcs8', format: 'pem' }) }));
+  return keyFile;
 }
 
 test('all-indexed property: 2/2 sitemaps, 4/4 articles, exit 0', () => {
@@ -60,10 +68,7 @@ test('no credentials: skip line, exit 0, no network call', () => {
 });
 
 test('stubbed 403: exit 1 names endpoint and status, never the token or key', () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gsc-key-'));
-  const { privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
-  const keyFile = path.join(dir, 'sa.json');
-  fs.writeFileSync(keyFile, JSON.stringify({ client_email: 'report@example.iam.gserviceaccount.com', private_key: privateKey.export({ type: 'pkcs8', format: 'pem' }) }));
+  const keyFile = writeKey(fs.mkdtempSync(path.join(os.tmpdir(), 'gsc-key-')));
   const r = run(['--fixtures', path.join(FIX, 'forbidden')], { GSC_SERVICE_ACCOUNT_FILE: keyFile });
   assert.equal(r.code, 1);
   assert.match(r.err, /GET https:\/\/www\.googleapis\.com\/webmasters\/v3\/sites\/sc-domain%3Apersistentmomentum\.com\/sitemaps -> HTTP 403/);
@@ -71,6 +76,31 @@ test('stubbed 403: exit 1 names endpoint and status, never the token or key', ()
     assert.doesNotMatch(s, /ya29\./);
     assert.doesNotMatch(s, /-----BEGIN/);
   }
+});
+
+test('a leading ~/ in GSC_SERVICE_ACCOUNT_FILE (as launchd passes it) resolves against HOME', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'gsc-home-'));
+  writeKey(home);
+  const r = run(['--fixtures', path.join(FIX, 'forbidden')], { HOME: home, GSC_SERVICE_ACCOUNT_FILE: '~/sa.json' });
+  assert.doesNotMatch(r.out, /skipped/, 'the key was found, not skipped');
+  assert.equal(r.code, 1);
+  assert.match(r.err, /sitemaps -> HTTP 403/);
+});
+
+test('a stalled network call times out: exit 1 names the endpoint, never hangs', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gsc-timeout-'));
+  const keyFile = writeKey(dir);
+  // Stub fetch: a call without an AbortSignal would hang forever; with one, it fails as the timeout
+  // would fire (TimeoutError), so the test proves the signal is passed without waiting 20 s.
+  const stub = path.join(dir, 'stall.mjs');
+  fs.writeFileSync(stub, `globalThis.fetch = (url, init = {}) => init.signal instanceof AbortSignal
+    ? Promise.reject(new DOMException('The operation was aborted due to timeout', 'TimeoutError'))
+    : new Promise(() => setInterval(() => {}, 1e9));\n`);
+  const r = spawnSync(process.execPath, ['--import', stub, SCRIPT], { encoding: 'utf8', timeout: 10_000, env: { ...process.env, GSC_SERVICE_ACCOUNT_FILE: keyFile } });
+  assert.equal(r.signal, null, 'script hung: fetch was called without a timeout signal');
+  assert.equal(r.status, 1, r.stderr);
+  assert.equal(r.stderr, 'gsc-report: failed: POST https://oauth2.googleapis.com/token -> timeout after 20s\n');
+  assert.doesNotMatch(r.stdout + r.stderr, /-----BEGIN|ya29\./);
 });
 
 test('the only Google endpoints in the source are token, sitemaps GET and urlInspection', () => {

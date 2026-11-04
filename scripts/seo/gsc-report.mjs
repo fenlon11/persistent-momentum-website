@@ -13,6 +13,7 @@
 // Exit: 0 report produced or skipped; 1 an API or token call failed.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const SITE = 'https://persistentmomentum.com';
@@ -22,6 +23,7 @@ const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const SITEMAPS_URL = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(PROPERTY)}/sitemaps`;
 const INSPECT_URL = 'https://searchconsole.googleapis.com/v1/urlInspection/index:inspect';
 const EXPECTED_SITEMAPS = [`${SITE}/sitemap.xml`, `${SITE}/news-sitemap.xml`];
+const TIMEOUT_MS = 20_000; // per call, same bound as scripts/news/draft.mjs fetchPage
 
 class CallError extends Error {}
 
@@ -35,7 +37,9 @@ if ((argv.includes('--state') && !stateDir) || (argv.includes('--fixtures') && !
   process.exit(2);
 }
 
-const keyFile = process.env.GSC_SERVICE_ACCOUNT_FILE;
+// launchd passes EnvironmentVariables verbatim, so a leading `~/` is expanded here.
+const rawKeyFile = process.env.GSC_SERVICE_ACCOUNT_FILE;
+const keyFile = rawKeyFile?.startsWith('~/') ? path.join(os.homedir(), rawKeyFile.slice(2)) : rawKeyFile;
 const hasCreds = Boolean(keyFile) && fs.existsSync(keyFile);
 if (!hasCreds && !fixtures) {
   console.log('gsc-report: skipped, no GSC credentials');
@@ -53,9 +57,14 @@ async function call(name, url, init = {}) {
     status = JSON.parse(stubbed)[name] ?? 200;
     text = status === 200 ? fixtureBody(name, init) : JSON.stringify({ error: { code: status, message: 'stubbed' } });
   } else {
-    const res = await fetch(url, init);
-    status = res.status;
-    text = await res.text();
+    try {
+      const res = await fetch(url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+      status = res.status;
+      text = await res.text();
+    } catch (err) {
+      const why = err?.name === 'TimeoutError' ? `timeout after ${TIMEOUT_MS / 1000}s` : `network error (${redact(err?.message ?? err).slice(0, 200)})`;
+      throw new CallError(`${init.method ?? 'GET'} ${url} -> ${why}`);
+    }
   }
   if (status !== 200) {
     let detail = '';

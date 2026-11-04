@@ -192,14 +192,14 @@ GSC_SERVICE_ACCOUNT_FILE=~/.pmos/gsc-service-account.json node scripts/seo/gsc-r
 # gsc-report: sitemaps <n>/2 Success · articles indexed <i>/<total>, then one line per sitemap and article
 ```
 
-Without `GSC_SERVICE_ACCOUNT_FILE` (or with the file missing) it prints `gsc-report: skipped, no GSC credentials` and exits 0. Exit 1 means a token or API call failed; the message names the endpoint and HTTP status.
+Without `GSC_SERVICE_ACCOUNT_FILE` (or with the file missing) it prints `gsc-report: skipped, no GSC credentials` and exits 0. Exit 1 means a token or API call failed or timed out (20 s per call); the message names the endpoint and the HTTP status or timeout.
 
 One-time setup (an operator browser task, free, no billing account needed):
 
 1. In Google Cloud, create a project and a service account; enable the **Google Search Console API**.
 2. Create a JSON key for the service account and save it on the mini as `~/.pmos/gsc-service-account.json`, then `chmod 600` it.
 3. In Search Console, open the `persistentmomentum.com` domain property → Settings → Users and permissions, and add the service account's email as a **Restricted** user.
-4. Set `GSC_SERVICE_ACCOUNT_FILE` to that path in the `EnvironmentVariables` of `com.pmos.pm-news-drafts` (`~/Library/LaunchAgents/com.pmos.pm-news-drafts.plist`) and reload the agent.
+4. Set `GSC_SERVICE_ACCOUNT_FILE` to the **absolute** path (`/Users/macminipro/.pmos/gsc-service-account.json`) in the `EnvironmentVariables` of `com.pmos.pm-news-drafts` (`~/Library/LaunchAgents/com.pmos.pm-news-drafts.plist`) and reload the agent. launchd does not expand `~`; the script expands a leading `~/` itself, but the plist's other values are absolute, so keep it consistent.
 
 ## Support
 

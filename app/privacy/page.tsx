@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import { pageAlternates } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Persistent Momentum',
   description:
     'Privacy policy for Persistent Momentum and persistentmomentum.com.',
+  alternates: pageAlternates('/privacy'),
 };
 
 export default function PrivacyPolicy() {

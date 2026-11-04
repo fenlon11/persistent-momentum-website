@@ -5,6 +5,10 @@ import { FEED_TYPES, SITE_NAME } from '@/lib/site';
 // Per-article metadata (fenlon11/pmOS#685): canonical URL, the feed link (re-added because a page's
 // own `alternates` replaces the layout's), and article OG/Twitter tags. og:image comes from the
 // route's opengraph-image.tsx.
+// Self-referencing canonical for any indexable page (fenlon11/pmOS#2223). Keeps the feed link,
+// which a page's own `alternates` would otherwise drop.
+export const pageAlternates = (path: string): Metadata['alternates'] => ({ canonical: path, types: FEED_TYPES });
+
 export function articleMetadata(article: Article): Metadata {
   const title = `${article.title} — ${SITE_NAME}`;
   return {

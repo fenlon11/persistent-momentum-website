@@ -1,8 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import ArticleList from '@/components/content/ArticleList';
 import { getArticles } from '@/lib/content';
+import { pageAlternates } from '@/lib/seo/metadata';
+
+export const metadata: Metadata = { alternates: pageAlternates('/') };
 
 export default function Home() {
   return (

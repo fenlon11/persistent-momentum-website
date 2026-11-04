@@ -2,11 +2,13 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { defaultReviewer } from '@/content/reviewers';
+import { pageAlternates } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = {
   title: 'About — Persistent Momentum',
   description:
     'Who writes Persistent Momentum, how every item is sourced and reviewed, and how to reach us.',
+  alternates: pageAlternates('/about'),
 };
 
 const standards = [

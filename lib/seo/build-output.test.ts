@@ -52,6 +52,21 @@ test('every prerendered page links the RSS feed in head', { skip: !built }, () =
   assert.deepEqual(missing, []);
 });
 
+// fenlon11/pmOS#2223: every indexable page names itself as canonical, so a new route can't ship without one.
+test('every prerendered page has exactly one self-referencing canonical', { skip: !built }, () => {
+  const excluded = new Set(['_not-found', '404', '500', 'dashboard']);
+  const wrong = html
+    .map((f) => path.relative(appOut, f).replace(/\.html$/, ''))
+    .filter((route) => !excluded.has(route.split('/')[0]))
+    .flatMap((route) => {
+      const page = fs.readFileSync(path.join(appOut, `${route}.html`), 'utf8');
+      const hrefs = [...page.matchAll(/<link rel="canonical" href="([^"]*)"/g)].map((m) => m[1]);
+      const self = route === 'index' ? ['https://persistentmomentum.com', 'https://persistentmomentum.com/'] : [`https://persistentmomentum.com/${route}`];
+      return hrefs.length === 1 && self.includes(hrefs[0]) ? [] : [`${route}: ${JSON.stringify(hrefs)}`];
+    });
+  assert.deepEqual(wrong, []);
+});
+
 test('every prerendered article: JSON-LD dates and headline equal the visible text', { skip: !built }, (t) => {
   const articles = html.filter((f) => /\/(news|guides)\/[^/]+\.html$/.test(f) && !/\/page\//.test(f));
   const checked = articles.filter((f) => {

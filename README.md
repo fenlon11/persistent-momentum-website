@@ -183,6 +183,24 @@ The `contact_submissions` table stores:
 - [ ] Automated follow-up emails
 - [ ] Integration with CRM
 
+## Google Search Console report
+
+`scripts/seo/gsc-report.mjs` reads the `sc-domain:persistentmomentum.com` property read-only: the submitted sitemaps (`sitemap.xml`, `news-sitemap.xml`) and a URL Inspection of every `/news/` and `/guides/` URL in the live sitemap. It never submits a sitemap, requests indexing or changes anything in Search Console. The weekly news run (`scripts/news/run.sh`) calls it right after the IndexNow ping and writes `gsc-report-YYYY-MM-DD.json` to `$PM_NEWS_STATE`; a failure is a warning, never a stop.
+
+```bash
+GSC_SERVICE_ACCOUNT_FILE=~/.pmos/gsc-service-account.json node scripts/seo/gsc-report.mjs [--json] [--state <dir>]
+# gsc-report: sitemaps <n>/2 Success · articles indexed <i>/<total>, then one line per sitemap and article
+```
+
+Without `GSC_SERVICE_ACCOUNT_FILE` (or with the file missing) it prints `gsc-report: skipped, no GSC credentials` and exits 0. Exit 1 means a token or API call failed or timed out (20 s per call); the message names the endpoint and the HTTP status or timeout.
+
+One-time setup (an operator browser task, free, no billing account needed):
+
+1. In Google Cloud, create a project and a service account; enable the **Google Search Console API**.
+2. Create a JSON key for the service account and save it on the mini as `~/.pmos/gsc-service-account.json`, then `chmod 600` it.
+3. In Search Console, open the `persistentmomentum.com` domain property → Settings → Users and permissions, and add the service account's email as a **Restricted** user.
+4. Set `GSC_SERVICE_ACCOUNT_FILE` to the **absolute** path (`/Users/macminipro/.pmos/gsc-service-account.json`) in the `EnvironmentVariables` of `com.pmos.pm-news-drafts` (`~/Library/LaunchAgents/com.pmos.pm-news-drafts.plist`) and reload the agent. launchd does not expand `~`; the script expands a leading `~/` itself, but the plist's other values are absolute, so keep it consistent.
+
 ## Support
 
 For issues or questions, contact the development team.

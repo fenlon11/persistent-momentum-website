@@ -1,0 +1,45 @@
+{
+  "https://persistentmomentum.com/guides/ai-pilot-roi-cost-control": {
+    "inspectionResult": {
+      "indexStatusResult": {
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "googleCanonical": "https://persistentmomentum.com/guides/ai-pilot-roi-cost-control",
+        "userCanonical": "https://persistentmomentum.com/guides/ai-pilot-roi-cost-control",
+        "lastCrawlTime": "2026-11-02T08:00:00Z"
+      }
+    }
+  },
+  "https://persistentmomentum.com/news/openai-gpt-launch": {
+    "inspectionResult": {
+      "indexStatusResult": {
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "googleCanonical": "https://persistentmomentum.com/news/openai-gpt-launch",
+        "userCanonical": "https://persistentmomentum.com/news/openai-gpt-launch"
+      }
+    }
+  },
+  "https://persistentmomentum.com/news/anthropic-agents": {
+    "inspectionResult": {
+      "indexStatusResult": {
+        "verdict": "NEUTRAL",
+        "coverageState": "Duplicate, Google chose different canonical than user",
+        "googleCanonical": "https://persistentmomentum.com/news",
+        "userCanonical": "https://persistentmomentum.com/news/anthropic-agents",
+        "lastCrawlTime": "2026-11-02T08:00:00Z"
+      }
+    }
+  },
+  "https://persistentmomentum.com/guides/ai-agent-buying-checklist": {
+    "inspectionResult": {
+      "indexStatusResult": {
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "googleCanonical": "https://persistentmomentum.com/guides/ai-agent-buying-checklist",
+        "userCanonical": "https://persistentmomentum.com/guides/ai-agent-buying-checklist",
+        "lastCrawlTime": "2026-11-02T08:00:00Z"
+      }
+    }
+  }
+}

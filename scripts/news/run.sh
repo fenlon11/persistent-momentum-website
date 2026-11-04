@@ -5,12 +5,13 @@
 # launchd runs this file straight from origin/$PM_NEWS_REF (see com.pmos.pm-news-drafts.plist), so the
 # code is always the merged version and the repo's main checkout is never touched.
 #
-# Steps: IndexNow ping for last week's merged articles -> collect.py -> draft.mjs (opens a draft PR,
-# never merges); a later run that week -> factcheck.mjs (readies the PR, files the merge decision).
+# Steps: IndexNow ping for last week's merged articles -> scripts/seo/gsc-report.mjs (read-only Search
+# Console index report; skipped without GSC_SERVICE_ACCOUNT_FILE) -> collect.py -> draft.mjs (opens a
+# draft PR, never merges); a later run that week -> factcheck.mjs (readies the PR, files the merge decision).
 # A human approves the article by merging its PR or by answering its merge decision "merge"; a later
 # run that week then executes that answer -> merge-approved.mjs (merges only on "merge", then reads the
 # article back from the live site; fenlon11/pmOS#2210).
-# Runs in a throwaway worktree. State (seen.json, items, IndexNow baseline) lives in $PM_NEWS_STATE.
+# Runs in a throwaway worktree. State (seen.json, items, IndexNow baseline, gsc-report-*.json) lives in $PM_NEWS_STATE.
 # Exits non-zero when the collector loses 3+ tier-1 sources or no draft passes.
 #
 # Install:  cp scripts/news/com.pmos.pm-news-drafts.plist ~/Library/LaunchAgents/
@@ -90,6 +91,7 @@ if [[ -n "$MERGE_PR" ]]; then
   exit 0
 fi
 node scripts/news/indexnow-since.mjs --state "$STATE" || echo "[pm-news-drafts] WARN: IndexNow ping failed; it retries next run"
+node scripts/seo/gsc-report.mjs --state "$STATE" || echo "[pm-news-drafts] WARN: gsc-report failed; it retries next run"
 python3 scripts/news/collect.py --out "$STATE/items"
 node scripts/news/draft.mjs --items "$STATE/items"
 echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"

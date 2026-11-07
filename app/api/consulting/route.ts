@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { supabaseAdmin } from '@/lib/supabase';
 import { handleInquiry, NEEDS, TIMEOUT_MS, withTimeout, type Inquiry, type InquiryRow } from '@/lib/consulting';
 import { createRateLimiter } from '@/lib/newsletter';
+import { liveFormGuid } from '@/lib/live-forms';
 
 // Consulting inquiry → Supabase + HubSpot form + email notification (fenlon11/pmOS#683). Logic
 // lives in lib/consulting.ts so it can be unit-tested without Next.
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await handleInquiry(body, request.cookies.get('hubspotutk')?.value, {
-    formGuid: process.env.HUBSPOT_PM_CONSULTING_FORM_GUID,
+    formGuid: liveFormGuid(process.env.HUBSPOT_PM_CONSULTING_FORM_GUID),
     fetch,
     save,
     notify,

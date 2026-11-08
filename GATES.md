@@ -8,8 +8,8 @@
   CHECK: node ~/pmOS/scripts/pmos-loop/checks/repo.mjs --dir=. --task=test
   EXPECT: REPO CHECK PASS
   EVIDENCE: exit=0; shell=/bin/sh; cwd=/Users/macminipro/pmOS/.claude/worktrees/pmOS-2454; path=1d6c009ae5f2/5 entries; EXPECT=matched; output-sha256=7d8a5d0b606f8c2ad57d85617866ebf9142509dd957db7f75560a266806ef69f; output-bytes=117
-- [ ] G3: Reviewer confirms the new test fails against origin/main's build output and passes on the branch, and that `.next/server/app/news.html` carries `og:url` `https://persistentmomentum.com/news` (manual gate)
-  EVIDENCE: pending
+- [x] G3: Reviewer confirms the new test fails against origin/main's build output and passes on the branch, and that `.next/server/app/news.html` carries `og:url` `https://persistentmomentum.com/news` (manual gate)
+  EVIDENCE: review lane 2026-11-08 — origin/main d8c73cd built in a temp worktree with the branch's build-output.test.ts copied in: `✖ every prerendered page has exactly one og:url, equal to its canonical`, news.html og:url=https://persistentmomentum.com. Branch 10f870e build: `✔ every prerendered page has exactly one og:url, equal to its canonical`; news.html `<meta property="og:url" content="https://persistentmomentum.com/news"/>`; guides/about/careers/tags/ai-agents/authors/elle-evate equal their canonicals; index keeps https://persistentmomentum.com; article news/google-gemini-4-argon keeps og:type=article.
 
 ## Post-merge checks
 - PM1: production `og:url` matches each page.

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getArticles, pageCount, paginate, type ContentType } from '@/lib/content';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 import ArticleList from './ArticleList';
 import PageShell from './PageShell';
 
@@ -33,10 +33,11 @@ export function indexPageParams(type: ContentType) {
 export function indexMetadata(type: ContentType, page = 1): Metadata {
   const empty = getArticles(type).length === 0;
   return {
-    title: page > 1 ? `${copy[type].metaTitle} — page ${page}` : copy[type].metaTitle,
-    description: copy[type].intro,
-    // Each page is its own canonical, never page 1 (fenlon11/pmOS#2223).
-    alternates: pageAlternates(page > 1 ? `${copy[type].basePath}/page/${page}` : copy[type].basePath),
+    // Each page is its own canonical and og:url, never page 1 (fenlon11/pmOS#2223, fenlon11/pmOS#2454).
+    ...pageMetadata(page > 1 ? `${copy[type].basePath}/page/${page}` : copy[type].basePath, {
+      title: page > 1 ? `${copy[type].metaTitle} — page ${page}` : copy[type].metaTitle,
+      description: copy[type].intro,
+    }),
     // Keep search off the empty state (same rule as PagePlaceholder).
     ...(empty ? { robots: { index: false } } : {}),
   };

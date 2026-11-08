@@ -3,14 +3,13 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import { NEWSLETTER_NAME } from '@/lib/newsletter-copy';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/newsletter', {
   title: `${NEWSLETTER_NAME} — Persistent Momentum`,
   description:
     'The Momentum Update: stay up to date on the AI news that matters. We track what the big AI companies ship and explain what it means for your business. Every item links to its primary source.',
-  alternates: pageAlternates('/newsletter'),
-};
+});
 
 const whatYouGet = [
   {

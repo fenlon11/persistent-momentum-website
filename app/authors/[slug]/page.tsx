@@ -7,7 +7,7 @@ import PageShell from '@/components/content/PageShell';
 import JsonLd from '@/components/JsonLd';
 import { getArticles, getAuthor, getAuthors } from '@/lib/content';
 import { profilePageJsonLd } from '@/lib/seo/jsonld';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -17,7 +17,7 @@ export const generateStaticParams = () => getAuthors().map((a) => ({ slug: a.slu
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const author = getAuthor((await params).slug);
   if (!author) return {};
-  return { title: `${author.name} — Persistent Momentum`, description: author.description, alternates: pageAlternates(author.href) };
+  return pageMetadata(author.href, { title: `${author.name} — Persistent Momentum`, description: author.description });
 }
 
 export default async function Page({ params }: Props) {

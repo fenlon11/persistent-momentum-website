@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import ArticleList from '@/components/content/ArticleList';
 import PageShell from '@/components/content/PageShell';
 import { getArticles, getTags } from '@/lib/content';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
 type Props = { params: Promise<{ tag: string }> };
 
@@ -12,7 +12,7 @@ export const generateStaticParams = () => getTags().map((tag) => ({ tag }));
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
-  return { title: `#${tag} — Persistent Momentum`, alternates: pageAlternates(`/tags/${tag}`) };
+  return pageMetadata(`/tags/${tag}`, { title: `#${tag} — Persistent Momentum` });
 }
 
 export default async function Page({ params }: Props) {

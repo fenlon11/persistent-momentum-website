@@ -2,14 +2,13 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/contact', {
   title: 'Contact — Persistent Momentum',
   description:
     'Talk to Persistent Momentum — investors, partners, talent, press. Customers should go to the relevant product site.',
-  alternates: pageAlternates('/contact'),
-};
+});
 
 const channels = [
   {

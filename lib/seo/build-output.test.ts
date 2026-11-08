@@ -67,6 +67,33 @@ test('every prerendered page has exactly one self-referencing canonical', { skip
   assert.deepEqual(wrong, []);
 });
 
+// fenlon11/pmOS#2454: og:url is the page's own canonical, not the layout's homepage URL. Non-article
+// pages keep the website card (type, site name, logo); articles keep og:type=article.
+test('every prerendered page has exactly one og:url, equal to its canonical', { skip: !built }, () => {
+  const excluded = new Set(['_not-found', '404', '500', 'dashboard']);
+  const og = (page: string, prop: string) =>
+    [...page.matchAll(new RegExp(`<meta property="og:${prop}" content="([^"]*)"`, 'g'))].map((m) => m[1]);
+  const wrong = html
+    .map((f) => path.relative(appOut, f).replace(/\.html$/, ''))
+    .filter((route) => !excluded.has(route.split('/')[0]))
+    .flatMap((route) => {
+      const page = fs.readFileSync(path.join(appOut, `${route}.html`), 'utf8');
+      const canonical = /<link rel="canonical" href="([^"]*)"/.exec(page)?.[1];
+      const urls = og(page, 'url');
+      const errs = urls.length === 1 && urls[0] === canonical ? [] : [`${route}: og:url ${JSON.stringify(urls)} vs canonical ${canonical}`];
+      const article = /^(news|guides)\/[^/]+$/.test(route) && !route.endsWith('/page');
+      if (article) {
+        if (og(page, 'type')[0] !== 'article') errs.push(`${route}: og:type ${og(page, 'type')}`);
+      } else {
+        if (og(page, 'type')[0] !== 'website') errs.push(`${route}: og:type ${og(page, 'type')}`);
+        if (og(page, 'site_name')[0] !== 'Persistent Momentum') errs.push(`${route}: og:site_name ${og(page, 'site_name')}`);
+        if (!og(page, 'image').some((u) => u.endsWith('/logo.png'))) errs.push(`${route}: og:image ${og(page, 'image')}`);
+      }
+      return errs;
+    });
+  assert.deepEqual(wrong, []);
+});
+
 test('every prerendered article: JSON-LD dates and headline equal the visible text', { skip: !built }, (t) => {
   const articles = html.filter((f) => /\/(news|guides)\/[^/]+\.html$/.test(f) && !/\/page\//.test(f));
   const checked = articles.filter((f) => {

@@ -1,14 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/careers', {
   title: 'Careers — Persistent Momentum',
   description:
     'Persistent Momentum builds software for small teams. Small crew, fast cycles, real software shipped without six-month roadmap meetings.',
-  alternates: pageAlternates('/careers'),
-};
+});
 
 const principles = [
   {

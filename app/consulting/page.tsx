@@ -2,16 +2,15 @@ import { Metadata } from 'next';
 import ConsultingForm from '@/components/ConsultingForm';
 import { INTRO_CALL_URL } from '@/lib/consulting';
 import Footer from '@/components/Footer';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
 // Consulting page (fenlon11/pmOS#683). Matt's rules: no pricing anywhere, and no invented clients,
 // logos, testimonials or results. lib/consulting.test.ts checks the rendered text for pricing terms.
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/consulting', {
   title: 'Consulting — Persistent Momentum',
   description:
     'Business and AI systems consulting for owners and operators of small and mid-size businesses: CRM, sales and operations workflows, reporting, AI assistants and agents.',
-  alternates: pageAlternates('/consulting'),
-};
+});
 
 const practices = [
   {

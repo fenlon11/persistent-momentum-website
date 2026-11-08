@@ -1,14 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import { pageAlternates } from '@/lib/seo/metadata';
+import { pageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/terms', {
   title: 'Terms of Service — Persistent Momentum',
   description:
     'Terms of service for Persistent Momentum and persistentmomentum.com.',
-  alternates: pageAlternates('/terms'),
-};
+});
 
 export default function TermsOfService() {
   const lastUpdated = '2026-07-08';

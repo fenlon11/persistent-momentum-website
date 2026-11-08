@@ -28,6 +28,9 @@ import { frontmatterSchema, statusLabels } from '../../lib/content/schema.ts';
 
 export const MODEL = 'claude-opus-5-5';
 export const CAPS = { news: 3, guide: 1 };
+// Ranked extra picks, drafted only to fill the slot of a dropped story (fenlon11/pmOS#2449).
+export const SPARES = 2;
+export const MAX_PICKS = CAPS.news + CAPS.guide + SPARES;
 export const AUTHOR = 'elle-evate';
 export const BUSINESS_HEADING = '## What it means for your business';
 const UA = 'pm-news-drafter/0.1 (+https://persistentmomentum.com)';
@@ -70,10 +73,24 @@ export function primaryPrefixes(sources) {
   return [...prefixes];
 }
 
+// Tracking parameters never change the page, so a copy with them is the same URL (fenlon11/pmOS#2449).
+const TRACKING_PARAMS = new Set(['gclid', 'fbclid', 'mc_cid', 'mc_eid', 'ref_src']);
+const isTracking = (pair) => {
+  let key = pair.split('=')[0];
+  try {
+    key = decodeURIComponent(key);
+  } catch { /* keep the raw key */ }
+  key = key.toLowerCase();
+  return key.startsWith('utm_') || TRACKING_PARAMS.has(key);
+};
+
 export function normUrl(raw) {
   const u = new URL(raw);
   u.hash = '';
-  return `${u.protocol}//${u.host.replace(/^www\./, '')}${u.pathname.replace(/\/+$/, '')}${u.search}`;
+  // Filter the raw query so the remaining parameters keep their order and encoding.
+  const kept = u.search.slice(1).split('&').filter((pair) => pair && !isTracking(pair));
+  const search = kept.length ? `?${kept.join('&')}` : '';
+  return `${u.protocol}//${u.host.replace(/^www\./, '')}${u.pathname.replace(/\/+$/, '')}${search}`;
 }
 
 export function isPrimary(raw, prefixes) {
@@ -187,6 +204,8 @@ export const SELECT_SCHEMA = {
   properties: {
     stories: {
       type: 'array',
+      maxItems: MAX_PICKS,
+      description: `Ranked best first. At most ${CAPS.news} news and ${CAPS.guide} guide, plus up to ${SPARES} spares that are drafted only if a higher pick is dropped.`,
       items: {
         type: 'object',
         additionalProperties: false,
@@ -247,10 +266,11 @@ export function selectionPrompt(candidates, existing, date) {
 The reader is a business owner or operator who wants to use AI better, is not an engineer, and has five minutes. Pick what most changes what that reader can do or buy, not what is most talked about.
 
 Choose at most ${CAPS.news} news stories and at most ${CAPS.guide} evergreen guide. Fewer is fine when the week is thin; a weak article costs the reader's trust and the editor's time.
+After those, you may add up to ${SPARES} spare stories, so at most ${MAX_PICKS} in all. List every story ranked best first, spares last. A spare is only drafted if a higher pick is dropped (for example because its pages fail to load or it has too few sources), so a spare must still be worth publishing.
 - A news story is one concrete thing a company shipped or announced, from that company's own pages.
 - A guide is an evergreen explainer an operator would search for (for example "how to choose between X and Y for a small business"), anchored in this week's items.
 - One story per event. When several items cover the same launch (a blog post, release notes, an SDK release), put them in one story's items list instead of drafting separate pages. Never pick a story that an <existing> article already covers.
-- Prefer items with two or more primary pages about the same thing, because every article must cite at least two primary sources.
+- Every article must cite at least two primary sources, so give each story two or more items from different primary pages whenever the week has them. Prefer stories that have them.
 - Items with "published": null come from undated pages; the "first_seen" date may be the collector's first run, not the publication date. Pick them only if they are likely recent.
 - Skip SDK patch releases, minor bug-fix notes and research papers with no near-term business use.
 
@@ -417,10 +437,12 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
     .map((it, i) => ({ ...it, i }));
   log(`candidates: ${candidates.length} tier-1/2 items on primary hosts (of ${items.length} collected)`);
 
-  const picked = ask(selectionPrompt(candidates, existing, date), SELECT_SCHEMA).stories;
-  const counts = { news: 0, guide: 0 };
-  const stories = picked.filter((s) => (counts[s.type] += 1) <= CAPS[s.type]);
-  log(`selected: ${stories.map((s) => `[${s.type}] ${s.working_title}`).join(' | ') || '(none)'}`);
+  // Ranked best first and truncated to MAX_PICKS. A pick past its type's cap is a spare: drafted only
+  // while a dropped story has left that type's slot open (fenlon11/pmOS#2449).
+  const picked = ask(selectionPrompt(candidates, existing, date), SELECT_SCHEMA).stories.slice(0, MAX_PICKS);
+  const ranks = { news: 0, guide: 0 };
+  const stories = picked.map((s) => ({ ...s, spare: (ranks[s.type] += 1) > CAPS[s.type] }));
+  log(`selected: ${stories.map((s) => `[${s.type}${s.spare ? ', spare' : ''}] ${s.working_title}`).join(' | ') || '(none)'}`);
 
   const articles = [];
   const rejected = [];
@@ -428,7 +450,10 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
   const existingSlugs = new Set(existing.map((e) => `${e.type}/${e.slug}`));
   const cited = new Set();
   const pageCache = new Map();
+  const kept = { news: 0, guide: 0 };
   for (const story of stories) {
+    if (kept.news >= CAPS.news && kept.guide >= CAPS.guide) break;
+    if (kept[story.type] >= CAPS[story.type]) continue;
     const pages = [];
     for (const idx of story.items) {
       const item = candidates.find((c) => c.i === idx);
@@ -477,6 +502,7 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
     article.sources = out.article.sources;
     article.statusLabel = out.article.statusLabel;
     articles.push(article);
+    kept[story.type] += 1;
   }
   return { articles, rejected };
 }

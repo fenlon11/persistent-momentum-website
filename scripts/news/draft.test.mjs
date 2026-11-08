@@ -8,7 +8,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import {
-  BUSINESS_HEADING, CAPS, buildArticle, checkArticle, claudeFailureMessage, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle,
+  BUSINESS_HEADING, CAPS, DRAFT_SCHEMA, SELECT_SCHEMA, SPARES, buildArticle, checkArticle, claudeFailureMessage, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle, selectionPrompt,
 } from './draft.mjs';
 
 const { sources } = JSON.parse(fs.readFileSync(new URL('./sources.json', import.meta.url), 'utf8'));
@@ -153,12 +153,15 @@ test('draftWeek: caps, fetch failures, duplicates and drafter skips end up dropp
   const { articles, rejected } = await draftWeek({
     items, sources, style: 'STYLE', existing: [], date: DATE, deps: { askClaude, fetchPage }, log: () => {},
   });
-  assert.equal(articles.length, 1);
-  assert.deepEqual(rejected.map((r) => r.story), ['Model again', 'Nvidia', 'Guide']);
+  // The caps count kept articles (fenlon11/pmOS#2449): the 4th news pick and the 2nd guide are spares,
+  // drafted because higher picks were dropped. The spare news story duplicates the kept one and is dropped too.
+  assert.deepEqual(articles.map((a) => a.path), [`content/news/${DATE}-example-model-launch.mdx`, 'content/guides/example-model-launch.mdx']);
+  assert.deepEqual(rejected.map((r) => r.story), ['Model again', 'Nvidia', 'Guide', 'Over the cap']);
   assert.match(rejected[0].reasons.join(), /duplicate/);
   assert.match(rejected[1].reasons.join(), /no primary page/);
+  assert.match(rejected[3].reasons.join(), /duplicate/);
   assert.ok(!prompts[0].includes('news.ycombinator.com'), 'tier-3 items are never offered as sources');
-  assert.ok(prompts.length - 1 <= CAPS.news + CAPS.guide);
+  assert.ok(prompts.length - 1 <= CAPS.news + CAPS.guide + SPARES);
   const body = prBody({ articles, rejected, date: DATE, itemsFile: '/x/items-2026-10-12.json', itemCount: 3 });
   assert.match(body, /- \[ \] Set `reviewedBy` to a human reviewer from `content\/reviewers.ts`/);
   assert.match(body, /Stories dropped by the checks/);
@@ -215,4 +218,99 @@ test('claudeFailureMessage omits api_error_status when the envelope has none', (
 test('claudeFailureMessage falls back to the raw text when stdout is not JSON', () => {
   assert.equal(claudeFailureMessage(1, 'Error: not logged in', ''), 'claude exited 1: Error: not logged in');
   assert.equal(claudeFailureMessage(2, '', 'spawn failed'), 'claude exited 2: spawn failed');
+});
+
+// ---------- spare picks and tracking parameters (fenlon11/pmOS#2449) ----------
+
+test('normUrl drops tracking parameters and keeps the rest in order', () => {
+  assert.equal(normUrl('https://blog.google/x/?utm_source=deepmind&utm_medium=referral'), normUrl('https://blog.google/x/'));
+  assert.equal(normUrl('https://example.com/a?id=3&utm_campaign=z'), 'https://example.com/a?id=3');
+  assert.equal(normUrl('https://example.com/a?gclid=1&b=2&fbclid=3&a=1&mc_cid=4&mc_eid=5&ref_src=6&UTM_Term=7'), 'https://example.com/a?b=2&a=1');
+  assert.equal(normUrl('https://example.com/a?ref=home'), 'https://example.com/a?ref=home');
+});
+
+// One distinct openai.com page per item, each linking to a second primary page, so every story can
+// cite two sources of its own and no two stories share one.
+const pageUrl = (k) => `https://openai.com/index/story-${k}`;
+const newsItems = (n) => Array.from({ length: n }, (_, k) => ({
+  source: 'openai-news', company: 'OpenAI', tier: 1, title: `Story ${k}`, url: pageUrl(k), published: null, first_seen: DATE, summary: '',
+}));
+const fakePage = (url) => extractPage(`<main><p>Text of ${url}.</p><a href="${url}/details">Details</a></main>`, url.replace(/\?.*/, ''), prefixes);
+const story = (type, title, items) => ({ type, working_title: title, why: 'w', items });
+const draftFor = (k) => ({
+  ...goodDraft,
+  slug: `story-${k}`,
+  sources: [
+    { title: 'Post', url: pageUrl(k), publisher: 'OpenAI' },
+    { title: 'Details', url: `${pageUrl(k)}/details`, publisher: 'OpenAI' },
+  ],
+});
+
+// Runs draftWeek with a selection; `drop` lists working titles the drafter skips.
+async function runWeek({ items, stories, drop = [] }) {
+  const draftPrompts = [];
+  const logs = [];
+  const fetched = [];
+  const askClaude = (prompt, schema) => {
+    if (schema === SELECT_SCHEMA) return { stories };
+    assert.equal(schema, DRAFT_SCHEMA);
+    draftPrompts.push(prompt);
+    const title = /Working title: (.*)/.exec(prompt)[1];
+    if (drop.includes(title)) return { skip_reason: 'fewer than two citable primary sources' };
+    const k = stories.find((s) => s.working_title === title).items[0];
+    return { skip_reason: '', article: draftFor(k) };
+  };
+  const fetchPage = async (url) => {
+    fetched.push(url);
+    return fakePage(url);
+  };
+  const result = await draftWeek({
+    items, sources, style: 'STYLE', existing: [], date: DATE, deps: { askClaude, fetchPage }, log: (l) => logs.push(l),
+  });
+  return { ...result, draftPrompts, logs, fetched };
+}
+
+test('draftWeek: spares fill the slots of dropped stories', async () => {
+  const stories = [0, 1, 2, 3, 4].map((k) => story('news', `News ${k}`, [k]));
+  const { articles, rejected, logs } = await runWeek({ items: newsItems(5), stories, drop: ['News 0', 'News 1'] });
+  assert.deepEqual(articles.map((a) => a.slug), ['story-2', 'story-3', 'story-4']);
+  assert.deepEqual(rejected.map((r) => r.story), ['News 0', 'News 1']);
+  assert.ok(logs.some((l) => l.includes('[news, spare] News 3') && l.includes('[news, spare] News 4') && l.includes('[news] News 2')), logs.join('\n'));
+});
+
+test('draftWeek: spares are never drafted when no pick is dropped', async () => {
+  const stories = [
+    story('news', 'News 0', [0]), story('news', 'News 1', [1]), story('guide', 'Guide 2', [2]),
+    story('news', 'News 3', [3]), story('news', 'Spare news 4', [4]), story('guide', 'Spare guide 5', [5]),
+  ];
+  const { articles, rejected, draftPrompts } = await runWeek({ items: newsItems(6), stories });
+  assert.ok(!draftPrompts.some((p) => p.includes('Spare news 4') || p.includes('Spare guide 5')));
+  assert.equal(draftPrompts.length, CAPS.news + CAPS.guide);
+  assert.equal(articles.filter((a) => a.type === 'news').length, CAPS.news);
+  assert.equal(articles.filter((a) => a.type === 'guide').length, CAPS.guide);
+  assert.deepEqual(rejected, []);
+});
+
+test('draftWeek: the same page with and without UTM parameters is one document', async () => {
+  const items = [...newsItems(1), { ...newsItems(1)[0], url: `${pageUrl(0)}?utm_source=deepmind&utm_medium=referral` }];
+  const { draftPrompts, fetched } = await runWeek({ items, stories: [story('news', 'News 0', [0, 1])] });
+  assert.equal(draftPrompts.length, 1);
+  assert.equal(draftPrompts[0].match(/<document /g).length, 1);
+  assert.equal(fetched.length, 1);
+});
+
+test('the selection names the spare limit and is truncated to CAPS + SPARES in rank order', async () => {
+  const max = CAPS.news + CAPS.guide + SPARES;
+  assert.equal(SELECT_SCHEMA.properties.stories.maxItems, max);
+  assert.match(SELECT_SCHEMA.properties.stories.description, new RegExp(`up to ${SPARES} spares`));
+  const prompt = selectionPrompt([], [], DATE);
+  assert.match(prompt, new RegExp(`up to ${SPARES} spare stories, so at most ${max} in all`));
+  assert.match(prompt, /only drafted if a higher pick is dropped/);
+  assert.match(prompt, /two or more items from different primary pages/);
+  // Every pick dropped, so nothing stops early: exactly the first `max` are drafted, never the rest.
+  const stories = Array.from({ length: max + 2 }, (_, k) => story('news', `News ${k}`, [k]));
+  const { articles, rejected, draftPrompts } = await runWeek({ items: newsItems(max + 2), stories, drop: stories.map((s) => s.working_title) });
+  assert.equal(articles.length, 0);
+  assert.equal(draftPrompts.length, max);
+  assert.deepEqual(rejected.map((r) => r.story), stories.slice(0, max).map((s) => s.working_title));
 });

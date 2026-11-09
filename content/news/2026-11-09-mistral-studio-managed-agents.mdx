@@ -1,0 +1,61 @@
+---
+title: >-
+  Mistral expands Studio with managed agents, workflows and apps you can run on
+  your own infrastructure
+description: >-
+  Mistral added managed agents, apps and new workflow tools to Studio, its
+  enterprise AI platform, which can run in your cloud, VPC or on-premises.
+type: news
+publishedAt: '2026-11-09'
+updatedAt: '2026-11-09'
+author: elle-evate
+status: published
+tags:
+  - mistral
+  - mistral-studio
+  - le-chonk
+  - ai-agents
+  - data-sovereignty
+statusLabel: available
+sources:
+  - title: 'Build Enterprise Agents, Workflows & Apps in Mistral Studio'
+    url: 'https://mistral.ai/news/build-with-studio/'
+    publisher: Mistral
+  - title: Mistral Large 4 (Le Chonk)
+    url: 'https://mistral.ai/news/mistral-large-4-oss/'
+    publisher: Mistral
+---
+Mistral has added managed agents and apps to Studio, its enterprise AI platform. The update also brings new tools for workflows, company context, monitoring and testing. Studio runs Mistral's models, including Mistral Large 4 (nicknamed "Le Chonk"), wherever you choose: Mistral's cloud, your own cloud, a VPC (a private section of a cloud provider) or your own servers. If you've held off on AI agents because of where your data would go, or because you don't want to depend on one vendor's hosting, this release is aimed at you.
+
+## What Studio now does
+
+Mistral splits a business process into three parts. An agent investigates and takes action, a workflow runs the steps and approvals, and an app is what your employees actually use. Studio puts all three on shared infrastructure and connects them to your company data through connectors and MCP servers (a standard way to plug AI models into tools and data).
+
+- **Managed agents** handle multi-step tasks. Developers can give them skills that capture team procedures, sandboxes to run code, and subagents to hand off parts of a job. Mistral says Studio runs them on the same infrastructure that handles millions of Mistral Vibe sessions each week.
+- **Workflows** set which steps follow fixed rules, where an agent reasons and where a person decides. Interrupted runs pick up where they stopped. This release adds event triggers from company systems and a visual graph of each workflow.
+- **Apps** come with hosting, sign-in and access controls, plus pre-approved components meant to cut down how much new code needs a security review.
+- **Oversight**: OpenTelemetry traces (step-by-step logs in an open format) show model calls, tool use and approvals. Evaluations let teams test changes to prompts, models or tools against their own data before release.
+
+You pick the models, control which data and tools the agents can reach, and decide which actions need a human to approve them. Mistral says the traces and evaluations stay yours.
+
+## Who already uses it
+
+Mistral names ABANCA, Accenture, Alten, BNP Paribas, Capgemini, CMA CGM and Tata Consultancy Services as customers and partners already using Studio in production. "The AI systems we build run some of our most sensitive processes, so we run Mistral Studio on our own infrastructure and keep those systems under our control," said Su Yang, Head of Artificial Intelligence & IT Innovation at BNP Paribas.
+
+Mistral also describes its own internal builds. An agent that investigates production incidents follows the team's runbook, asks for approval before sensitive actions and posts findings in Slack, saving "hundreds of hours each month" per Mistral. A workflow that sorts internal ideas and customer feedback saves its product operations team about 35 hours a week, also per Mistral.
+
+The post doesn't list prices. For enterprise rollouts, Mistral asks companies to talk to its team. Mistral describes Le Chonk as strong at [coding](https://mistral.ai/news/mistral-large-4-oss/), defensive cybersecurity and reasoning over complex documents.
+
+## What it means for your business
+
+Studio is a developer platform, not a ready-made assistant. Every example Mistral gives involves engineers building, testing and deploying. If you don't have developers, the realistic route is one of the integrators Mistral names, such as Accenture, Capgemini or TCS, and that adds cost and lead time.
+
+The real selling point is control. Take a mid-sized European insurer that can't send claim files to a US-hosted service. Under Studio's model, it could run both the model and the platform on its own servers and build a workflow where an agent drafts a claim summary, fixed rules route it, and a claims handler signs off. The data stays inside its own network, and the traces show where cases stall.
+
+Before you commit, ask three things:
+
+1. **What does it cost to self-host?** Running on your own servers means you pay for the hardware and the people who keep it running. Get a full quote, since the post gives no pricing.
+2. **Can you leave?** You can choose your models, but agents built on Studio's runtime, skills and hooks may still be hard to move elsewhere. Ask how portable they are.
+3. **What's your first process?** Start with one narrow, repetitive job, like routing feedback, and measure the hours saved against Mistral's figures before you expand.
+
+If data residency isn't a concern for you, compare Studio with the agent tools you already pay for before adding another platform.

@@ -1,0 +1,68 @@
+---
+title: >-
+  Amazon Quick adds Smart Approvals, so AI agents ask a person only when an
+  action matters
+description: >-
+  Amazon Quick's Smart Approvals uses a separate AI model to approve routine
+  agent actions and send consequential ones back to a person.
+type: news
+publishedAt: '2026-11-09'
+updatedAt: '2026-11-09'
+author: elle-evate
+status: published
+tags:
+  - amazon
+  - amazon-quick
+  - ai-agents
+  - smart-approvals
+statusLabel: available
+sources:
+  - title: 'Smart Approvals in Amazon Quick: Human oversight where it matters'
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/smart-approvals-in-amazon-quick-human-oversight-where-it-matters/
+    publisher: Amazon
+  - title: Bring structured and unstructured data together with Amazon Quick
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/bring-structured-and-unstructured-data-together-with-amazon-quick/
+    publisher: Amazon
+  - title: Taxonomy of agentic primitives in Amazon Quick
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/taxonomy-of-agentic-primitives-in-amazon-quick/
+    publisher: Amazon
+---
+Amazon has added a feature called Smart Approvals to Amazon Quick, its AI assistant for work. When a Quick agent proposes an action you would normally have to approve, a separate AI model checks it against what you actually asked for, then either approves it or hands it back to you. It goes after a familiar problem: agents that interrupt you at every step, or agents that act with nobody watching.
+
+## How it works
+
+Your existing rules come first. Quick checks each proposed action against Custom Permissions (admin controls over who can do what), Quick Guardrails, connector action permissions and the user's own settings. Anything denied stays denied, and any action a rule sends to a person still goes to a person. Smart Approvals only reviews an action when the user's setting is "Ask each time" and no other control requires human approval.
+
+For those eligible actions, a separate model that Amazon calls the classifier compares the action with your request and a limited view of the conversation. It looks at what the action does, where data goes and who it affects. It can also check your knowledge graph (the map of people and working relationships Quick builds from your connected sources) to see, for example, whether a recipient is in your reporting chain. Amazon says that lookup stays inside your Quick account, and that Quick doesn't use the content the classifier reviews to train models.
+
+Amazon lists actions that can still need a person even when they match the request: sending content outside the organization or to senior leaders in your reporting chain, changing access, deleting records and initiating payments. Amazon notes the list isn't complete.
+
+Per Amazon, a few limits are built in:
+
+- Each automatic approval is single-use and covers only the exact action and parameters that were reviewed.
+- Quick labels automatic approvals in the conversation.
+- Timeouts and review failures go back to the user and never count as approval.
+- Checking actions against your request adds a defense against indirect prompt injection, where text inside a retrieved document tries to redirect the agent.
+
+Amazon's own example: an account manager asks Quick to send a quarterly business review brief to two colleagues she names. If an account note says the brief should also go to an all-sales list of about 2,000 people, Smart Approvals is designed to send that action back to her for review.
+
+Smart Approvals is **on by default**. Admins use Custom Permissions to decide who can use it, profiles set to deny-by-default must explicitly allow it, and users can turn it off for themselves. That choice covers both conversations and scheduled runs.
+
+## Where this fits in Quick
+
+Other recent Amazon posts show what these agents actually do. [One walkthrough](https://aws.amazon.com/blogs/machine-learning/bring-structured-and-unstructured-data-together-with-amazon-quick/) builds a chat agent that answers questions across a sales spreadsheet and business documents in one conversation, and generates PowerPoint, Excel and Word files. Creating datasets for that setup requires an Enterprise subscription. [Another post](https://aws.amazon.com/blogs/machine-learning/taxonomy-of-agentic-primitives-in-amazon-quick/) explains the four ways Quick agents get started: a person asks, another agent hands off a task, a schedule fires, or an event arrives, such as a new email or a Slack mention.
+
+## What it means for your business
+
+On by default means the decision has been made for you unless you check. Start by listing the actions that must always go to a person, and set them through connector action permissions. Amazon itself says model review can make mistakes, and that actions moving sensitive data should require human approval through those permissions.
+
+Picture a 15-person firm where the office manager has a Quick agent send a weekly project update every Friday. Sending it to the internal team is routine and a reasonable fit for automatic approval. Sending to clients, changing who can see a shared folder or paying an invoice should be hard rules, not left to the classifier.
+
+Then follow Amazon's pilot advice: one team, one defined workflow. Review a sample of automatic approvals, and test the risky cases on purpose, such as a document that slips in an extra outside recipient. Expand only when those cases reliably come back to a person. As Amazon puts it, "The measure of effective oversight isn't how often an agent asks for approval, but whether people retain control over consequential decisions."
+
+## What to watch
+
+Logging is your evidence trail. Quick records Smart Approvals permission events in AWS CloudTrail (Amazon's account activity log), but CloudTrail Event history keeps events for only 90 days, so set up a trail if you need longer. Chat logs sent to Amazon CloudWatch Logs only capture activity after you turn delivery on, so earlier approvals will lack conversation context. Amazon also notes that an approval record doesn't prove the action ran. To confirm that, check the destination system, such as the sent email. Amazon's post doesn't mention separate pricing for Smart Approvals.

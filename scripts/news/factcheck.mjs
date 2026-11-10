@@ -16,7 +16,9 @@
 // 5. Survivors get `reviewedBy: pm-editor`; the content schema and `npm run build` must pass; the
 //    commit is pushed to the PR branch.
 // 6. One PR comment (marker `<!-- pm-news-factcheck head=<sha> -->`), then `gh pr ready`.
-// 7. One matt-only decision row asking Matt to merge, deduped against `pm.js decisions pending`.
+// 7. One decision row asking to merge, filed as `--class classify` (a site article is a public brand post,
+//    delegated under foundation §2.4, so Matt or the operator pass answers it), deduped against
+//    `pm.js decisions pending`.
 // This script never merges. --dry-run does steps 1-4 and prints what it would write.
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -204,7 +206,7 @@ export function fileDecision({ pr, url, week, kept, pmjs }) {
   if (existing) return { filed: false, existing: existing.id };
   const ctx = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-decision-')), 'context.txt');
   fs.writeFileSync(ctx, decisionContext({ pr, url, week, kept }));
-  const out = pmjs(['decisions', 'add', '--class', 'matt-only', '--title', decisionTitle(pr, week, kept.length), '--context-file', ctx]);
+  const out = pmjs(['decisions', 'add', '--class', 'classify', '--title', decisionTitle(pr, week, kept.length), '--context-file', ctx]);
   return { filed: true, out };
 }
 

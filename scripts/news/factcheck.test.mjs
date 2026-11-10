@@ -99,7 +99,7 @@ test('the decision row is filed once per PR: a pending row naming PR #<n> files 
   const r2 = fileDecision({ pr: 7, url: 'u', week: WEEK, kept, pmjs: pmjs([{ id: 'x2', question: 'Merge PM AI-news PR #70 (week of …)' }]) });
   assert.equal(r2.filed, true);
   const add = calls.find((c) => c[1] === 'add');
-  assert.deepEqual(add.slice(0, 6), ['decisions', 'add', '--class', 'matt-only', '--title', 'Merge PM AI-news PR #7 (week of 2026-10-26, fact-checked: 2 articles). Recommended: merge']);
+  assert.deepEqual(add.slice(0, 6), ['decisions', 'add', '--class', 'classify', '--title', 'Merge PM AI-news PR #7 (week of 2026-10-26, fact-checked: 2 articles). Recommended: merge']);
   const ctx = fs.readFileSync(add[add.indexOf('--context-file') + 1], 'utf8').trim().split('\n');
   assert.equal(ctx.length, 4);
   assert.deepEqual(ctx.map((l) => l.split(':')[0]), ['What', 'Why now', 'Risk', 'If no']);

@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 // Weekly AI news merge executor (fenlon11/pmOS#2210). Step 4 of the pipeline: factcheck.mjs readies the
-// week's content/ai-news-* PR and files one matt-only row "Merge PM AI-news PR #<n> … Recommended: merge".
-// When Matt answers that row "merge", this script carries out his answer; it never decides on its own.
+// week's content/ai-news-* PR and files one `classify` row "Merge PM AI-news PR #<n> … Recommended: merge"
+// (stored as `delegated`: a public brand post, foundation §2.4). When Matt or the operator pass answers that
+// row "merge", this script carries out the answer; it never decides on its own.
 //
 //   node scripts/news/merge-approved.mjs --pr <n> [--dry-run]
 //
 // 1. Reads the PR. It must be open, not a draft, a same-repo content/ai-news-* branch of content files
 //    only, fact-checked on its current head (no commit after the marker), all checks SUCCESS, MERGEABLE.
 // 2. Finds the newest "Merge PM AI-news PR #<n>" row via `pm.js decisions list` (read-only).
-// 3. Merges only when that row is matt-only and answered with an option starting "merge". Anything else
+// 3. Merges only when that row is class matt-only or delegated and answered with an option starting "merge". Anything else
 //    logs why and exits 0 with no write; a "no" never closes, edits or comments on the PR.
 // 4. Squash-merges pinned to the fact-checked head (--match-head-commit). One attempt per run.
 // 5. Polls each merged article's public URL every 60 s for up to 15 min, then comments the read-back
@@ -33,6 +34,8 @@ const MARKER_RE = new RegExp(`<!-- ${MARKER} head=([0-9a-f]{7,40}) -->`);
 export const MARKER_AUTHOR = GH_REPO.split('/')[0];
 
 const id8 = (id) => String(id).slice(0, 8);
+// `delegated` is what pm.js stores for a `classify` row outside the foundation §2.4 closed set.
+export const MERGE_CLASSES = ['matt-only', 'delegated'];
 
 // Newest row whose question is this PR's merge question (`PR #4` never matches `PR #44`).
 export function pickDecision(rows, pr) {
@@ -70,7 +73,7 @@ export function decideMerge({ pr, view, rows }) {
 
   const row = pickDecision(rows, pr);
   if (!row) reasons.push(`no "${QUESTION_PREFIX}${pr}" decision row`);
-  else if (row.decision_class !== 'matt-only') reasons.push(`decision ${id8(row.id)} is class ${row.decision_class}, not matt-only`);
+  else if (!MERGE_CLASSES.includes(row.decision_class)) reasons.push(`decision ${id8(row.id)} is class ${row.decision_class}, not matt-only or delegated`);
   else if (!row.answered) reasons.push(`waiting on ${id8(row.id)}`);
   else if (!/^merge\b/i.test(row.option ?? '')) reasons.push(`answered "${row.option}": not merging`);
   return { merge: !reasons.length, reasons, row };

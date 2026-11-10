@@ -51,12 +51,21 @@ test('decideMerge merges an open, ready, fact-checked, green content PR on a mat
   assert.equal(decideMerge({ pr: 44, view: view(), rows: [row({ option: 'Merge (recommended)' })] }).merge, true);
 });
 
+test('decideMerge merges on a delegated row (filed as classify) answered "merge"', () => {
+  const d = decideMerge({ pr: 44, view: view(), rows: [row({ decision_class: 'delegated' })] });
+  assert.deepEqual(d.reasons, []);
+  assert.equal(d.merge, true);
+});
+
 test('decideMerge refuses every other case, naming why', () => {
   const cases = [
     ['unanswered', view(), [row({ answered: false, option: null })], /waiting on 438c9cf0/],
     ['answered no', view(), [row({ option: 'no' })], /answered "no": not merging/],
     ['a non-merge word', view(), [row({ option: 'mergeless' })], /answered "mergeless"/],
-    ['not matt-only', view(), [row({ decision_class: 'delegated' })], /class delegated, not matt-only/],
+    ['class auto', view(), [row({ decision_class: 'auto' })], /decision 438c9cf0 is class auto, not matt-only or delegated/],
+    ['class default-24h', view(), [row({ decision_class: 'default-24h' })], /class default-24h, not matt-only or delegated/],
+    ['delegated but unanswered', view(), [row({ decision_class: 'delegated', answered: false, option: null })], /waiting on 438c9cf0/],
+    ['delegated answered no', view(), [row({ decision_class: 'delegated', option: 'no' })], /answered "no": not merging/],
     ['no row', view(), [], /no "Merge PM AI-news PR #44" decision row/],
     ['row names PR #4, not #44', view(), [row({ question: decisionTitle(4, WEEK, 2) })], /no "Merge PM AI-news PR #44" decision row/],
     ['row names #44 but is not the merge question', view(), [row({ question: 'Something about PR #44' })], /no .* decision row/],

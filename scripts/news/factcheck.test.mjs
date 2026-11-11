@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import { BUSINESS_HEADING, buildArticle } from './draft.mjs';
-import { MARKER, applyFixes, decisionTitle, factcheckPr, fileDecision, namesPr, reviewArticle, setReviewer } from './factcheck.mjs';
+import { MARKER, applyFixes, commentBody, decisionTitle, factcheckPr, fileDecision, namesPr, reviewArticle, setReviewer } from './factcheck.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const WEEK = '2026-10-26';
@@ -83,6 +83,83 @@ test('a source that failed to fetch drops the article without asking the model',
   const r = reviewArticle({ path: a.path, raw: a.mdx, fetches, result: null });
   assert.equal(r.kept, false);
   assert.deepEqual(r.reasons, [`source failed to fetch (HTTP 403): ${SOURCES[1].url}`]);
+});
+
+// ---------- frontmatter fixes (fenlon11/pmOS#2568) ----------
+
+const titled = (title, description = 'An example article for the fact-check tests.') =>
+  buildArticle('news', { ...draft('fm', 'Example Labs released a model on Monday.'), title, description }, WEEK);
+const fmFix = (field, old, nu) => ({ field, old, new: nu, reason: 'all three sources name it AWS Quick', source: SOURCES[0].url });
+
+test('a sourced title fix corrects the title and keeps the article', () => {
+  const a = titled('Amazon Quick adds Smart Approvals for business teams');
+  const r = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', 'Amazon Quick', 'AWS Quick')] } });
+  assert.equal(r.kept, true, r.reasons.join('; '));
+  const { data } = matter(r.mdx);
+  assert.match(data.title, /AWS Quick/);
+  assert.doesNotMatch(data.title, /Amazon Quick/);
+  assert.equal(data.title, 'AWS Quick adds Smart Approvals for business teams');
+  assert.equal(r.title, data.title);
+  assert.equal(a.path, r.path); // file name and slug never change
+});
+
+test('a description fix applies the same way; one past 160 characters drops with a schema reason', () => {
+  const a = titled('Example', 'Amazon Quick now routes approvals.');
+  const ok = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('description', 'Amazon Quick', 'AWS Quick')] } });
+  assert.equal(ok.kept, true, ok.reasons.join('; '));
+  assert.equal(matter(ok.mdx).data.description, 'AWS Quick now routes approvals.');
+
+  const long = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('description', 'Amazon Quick', 'AWS Quick'.padEnd(170, 'x'))] } });
+  assert.equal(long.kept, false);
+  assert.ok(long.reasons.some((x) => x.startsWith('schema: description')), long.reasons.join('; '));
+});
+
+test('a title fix whose old text occurs 0 or 2 times is skipped and drops the article', () => {
+  const twice = titled('Amazon Quick beats Amazon Quick');
+  const r2 = reviewArticle({ path: twice.path, raw: twice.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', 'Amazon Quick', 'AWS Quick')] } });
+  assert.equal(r2.kept, false);
+  assert.deepEqual(r2.reasons, ['fix could not be applied (old text occurs 2 times in the title): "Amazon Quick"']);
+  assert.equal(r2.skipped.length, 1);
+  assert.equal(r2.applied.length, 0);
+  assert.equal(matter(r2.mdx).data.title, 'Amazon Quick beats Amazon Quick'); // no partial rewrite
+
+  const none = titled('Something else');
+  const r0 = reviewArticle({ path: none.path, raw: none.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', 'Amazon Quick', 'AWS Quick')] } });
+  assert.equal(r0.kept, false);
+  assert.match(r0.reasons[0], /old text not found in the title/);
+});
+
+test('a title holding ": " and a double quote still round-trips through gray-matter after a fix', () => {
+  const a = titled('Amazon Quick: the "Smart Approvals" update, explained at length so the YAML line folds past eighty columns');
+  const r = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', 'Amazon Quick', 'AWS Quick: "Quick"')] } });
+  assert.equal(r.kept, true, r.reasons.join('; '));
+  const { data } = matter(r.mdx);
+  assert.equal(data.title, 'AWS Quick: "Quick": the "Smart Approvals" update, explained at length so the YAML line folds past eighty columns');
+  assert.equal(data.description, 'An example article for the fact-check tests.');
+  assert.equal(data.sources.length, SOURCES.length);
+  assert.equal(frontmatterSchema.safeParse(data).success, true);
+});
+
+test('a body fix never edits the frontmatter, even when old also appears in the title', () => {
+  const a = buildArticle('news', { ...draft('bodyonly', 'Amazon Quick shipped on Monday.'), title: 'Amazon Quick ships' }, WEEK);
+  for (const fix of [
+    { old: 'Amazon Quick', new: 'AWS Quick', reason: 'r', source: SOURCES[0].url },
+    { field: 'body', old: 'Amazon Quick', new: 'AWS Quick', reason: 'r', source: SOURCES[0].url },
+  ]) {
+    const r = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fix] } });
+    assert.equal(r.kept, true, r.reasons.join('; '));
+    const { data, content } = matter(r.mdx);
+    assert.equal(data.title, 'Amazon Quick ships');
+    assert.match(content, /AWS Quick shipped on Monday\./);
+  }
+});
+
+test('commentBody names the field of a frontmatter fix', () => {
+  const a = titled('Amazon Quick adds Smart Approvals');
+  const r = reviewArticle({ path: a.path, raw: a.mdx, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', 'Amazon Quick', 'AWS Quick'), { field: 'body', old: 'on Monday', new: 'on Tuesday', reason: 'r', source: SOURCES[0].url }] } });
+  const body = commentBody({ week: WEEK, head: 'a'.repeat(40), reviews: [r], today: WEEK });
+  assert.match(body, /^- title: "Amazon Quick" → "AWS Quick"\./m);
+  assert.match(body, /^- "on Monday" → "on Tuesday"\./m);
 });
 
 test('the decision row is filed once per PR: a pending row naming PR #<n> files nothing', () => {

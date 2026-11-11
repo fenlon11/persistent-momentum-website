@@ -314,3 +314,82 @@ test('the selection names the spare limit and is truncated to CAPS + SPARES in r
   assert.equal(draftPrompts.length, max);
   assert.deepEqual(rejected.map((r) => r.story), stories.slice(0, max).map((s) => s.working_title));
 });
+
+// Host probes before selection (fenlon11/pmOS#2569). Items on several hosts; the stub decides per host.
+const hostItem = (url, company = 'X') => ({ source: 's', company, tier: 1, title: url, url, published: null, first_seen: DATE, summary: '' });
+async function probeWeek({ items, fail = () => null, stories = [], delay = 0 }) {
+  const fetched = [];
+  const logs = [];
+  const prompts = [];
+  let inFlight = 0;
+  let maxInFlight = 0;
+  const askClaude = (prompt, schema) => {
+    if (schema === SELECT_SCHEMA) {
+      prompts.push(prompt);
+      return { stories };
+    }
+    return { skip_reason: 'test' };
+  };
+  const fetchPage = async (url) => {
+    fetched.push(url);
+    inFlight += 1;
+    maxInFlight = Math.max(maxInFlight, inFlight);
+    await new Promise((r) => setTimeout(r, delay));
+    inFlight -= 1;
+    const err = fail(url);
+    if (err) throw new Error(err);
+    return fakePage(url);
+  };
+  const result = await draftWeek({
+    items, sources, style: 'STYLE', existing: [], date: DATE, deps: { askClaude, fetchPage }, log: (l) => logs.push(l),
+  });
+  return { ...result, fetched, logs, prompt: prompts[0], maxInFlight };
+}
+
+test('draftWeek: a host that refuses the fetch (403) is left out of selection', async () => {
+  const items = [...newsItems(3), hostItem('https://www.anthropic.com/news/a', 'Anthropic')];
+  const { prompt, logs } = await probeWeek({ items, fail: (u) => (u.includes('openai.com') ? 'HTTP 403' : null) });
+  assert.ok(!prompt.includes('openai.com'), prompt);
+  assert.match(prompt, /anthropic\.com\/news\/a/);
+  assert.ok(logs.includes('hosts refused: openai.com (HTTP 403, 3 candidates removed)'), logs.join('\n'));
+  assert.ok(logs.includes('candidates: 1 tier-1/2 items on primary hosts (of 4 collected)'), logs.join('\n'));
+});
+
+test('draftWeek: a 401 is a refusal too, but a timeout or 503 keeps the host', async () => {
+  const items = [newsItems(1)[0], hostItem('https://www.anthropic.com/news/a'), hostItem('https://blogs.nvidia.com/blog/b')];
+  const fail = (u) => (u.includes('openai.com') ? 'HTTP 503' : u.includes('nvidia') ? 'The operation was aborted due to timeout' : 'HTTP 401');
+  const { prompt, logs } = await probeWeek({ items, fail });
+  assert.match(prompt, /openai\.com\/index\/story-0/);
+  assert.match(prompt, /blogs\.nvidia\.com\/blog\/b/);
+  assert.ok(!prompt.includes('anthropic.com'));
+  assert.ok(logs.includes('hosts refused: www.anthropic.com (HTTP 401, 1 candidates removed)'), logs.join('\n'));
+});
+
+test('draftWeek: a probed page that is then picked is fetched exactly once', async () => {
+  const items = newsItems(2);
+  const { fetched } = await probeWeek({ items, stories: [story('news', 'News 0', [0, 1])] });
+  assert.equal(fetched.filter((u) => u === pageUrl(0)).length, 1);
+  assert.equal(fetched.filter((u) => u === pageUrl(1)).length, 1);
+  assert.equal(fetched.length, 2);
+});
+
+test('draftWeek: one probe per host, at most 4 in flight', async () => {
+  const hosts = ['openai.com', 'www.anthropic.com', 'blogs.nvidia.com', 'deepmind.google', 'ai.meta.com', 'mistral.ai', 'x.ai', 'blog.google', 'huggingface.co', 'cohere.com'];
+  const items = hosts.flatMap((h) => [hostItem(`https://${h}/p1`), hostItem(`https://${h}/p2`)]);
+  const { fetched, maxInFlight, logs } = await probeWeek({ items, delay: 5 });
+  const probed = fetched.map((u) => new URL(u).hostname);
+  const distinct = new Set(items.filter((it) => isPrimary(it.url, prefixes)).map((it) => new URL(it.url).hostname));
+  assert.ok(distinct.size >= 5, `fixture needs several primary hosts, got ${[...distinct]}`);
+  assert.equal(probed.length, distinct.size);
+  assert.equal(new Set(probed).size, probed.length);
+  assert.ok(maxInFlight <= 4 && maxInFlight > 1, `max in flight ${maxInFlight}`);
+  assert.ok(logs.includes('hosts refused: none'));
+});
+
+test('draftWeek: with no refused host the selection prompt matches today\'s for the same candidates', async () => {
+  const items = [...newsItems(2), hostItem('https://www.anthropic.com/news/a')];
+  const { prompt, logs } = await probeWeek({ items, fail: (u) => (u.includes('anthropic') ? 'HTTP 503' : null) });
+  const expected = selectionPrompt(items.map((it, i) => ({ ...it, i })), [], DATE);
+  assert.equal(prompt, expected);
+  assert.ok(logs.includes('hosts refused: none'));
+});

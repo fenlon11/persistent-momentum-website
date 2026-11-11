@@ -31,6 +31,7 @@ export const CAPS = { news: 3, guide: 1 };
 // Ranked extra picks, drafted only to fill the slot of a dropped story (fenlon11/pmOS#2449).
 export const SPARES = 2;
 export const MAX_PICKS = CAPS.news + CAPS.guide + SPARES;
+export const PROBE_CONCURRENCY = 4; // pre-selection host probes in flight at once (fenlon11/pmOS#2569)
 export const AUTHOR = 'elle-evate';
 export const BUSINESS_HEADING = '## What it means for your business';
 const UA = 'pm-news-drafter/0.1 (+https://persistentmomentum.com)';
@@ -432,9 +433,32 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
   const ask = deps.askClaude ?? askClaude;
   const prefixes = primaryPrefixes(sources);
   const getPage = deps.fetchPage ?? ((url) => fetchPage(url, prefixes));
-  const candidates = items
+  const all = items
     .filter((it) => it.tier <= 2 && isPrimary(it.url, prefixes))
     .map((it, i) => ({ ...it, i }));
+
+  // Probe one URL per host before selection (fenlon11/pmOS#2569). A 401/403 means the host refuses our
+  // fetcher, so its stories could never be sourced: leave them out. Any other failure may be transient,
+  // so those candidates stay. A successful probe is cached and reused by the draft step.
+  const pageCache = new Map();
+  const host = (c) => new URL(c.url).hostname;
+  const probes = [...new Map(all.map((c) => [host(c), c.url])).entries()];
+  const refused = new Map();
+  let next = 0;
+  const worker = async () => {
+    while (next < probes.length) {
+      const [h, url] = probes[next++];
+      try {
+        pageCache.set(normUrl(url), await getPage(url));
+      } catch (e) {
+        if (/^HTTP 40[13]\b/.test(e.message)) refused.set(h, e.message);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(PROBE_CONCURRENCY, probes.length) }, worker));
+  const candidates = all.filter((c) => !refused.has(host(c)));
+  const refusedLog = [...refused].map(([h, why]) => `${h} (${why}, ${all.filter((c) => host(c) === h).length} candidates removed)`);
+  log(`hosts refused: ${refusedLog.join(', ') || 'none'}`);
   log(`candidates: ${candidates.length} tier-1/2 items on primary hosts (of ${items.length} collected)`);
 
   // Ranked best first and truncated to MAX_PICKS. A pick past its type's cap is a spare: drafted only
@@ -449,7 +473,6 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
   const existingPaths = new Set(existing.map((e) => e.path));
   const existingSlugs = new Set(existing.map((e) => `${e.type}/${e.slug}`));
   const cited = new Set();
-  const pageCache = new Map();
   const kept = { news: 0, guide: 0 };
   for (const story of stories) {
     if (kept.news >= CAPS.news && kept.guide >= CAPS.guide) break;

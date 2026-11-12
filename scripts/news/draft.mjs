@@ -534,7 +534,7 @@ export function prBody({ articles, rejected, date, itemsFile, itemCount }) {
   const lines = [
     `Weekly AI news drafts for ${date}, drafted by Elle Evate (AI, Head of AI Content) with \`${MODEL}\` from ${itemCount} collected items (\`${path.basename(itemsFile)}\`).`,
     '',
-    '**Merging publishes these articles (public brand content, `matt-only`).** Every article is `status: published` with `reviewedBy` empty, so this branch fails `next build` until a human reviewer from `content/reviewers.ts` is set on each article. Edit or delete any draft freely; nothing here merges itself.',
+    '**Merging publishes these articles (public brand content).** The merge is a delegated decision row (foundation §2.4), answered by Matt or the operator pass. Every article is `status: published` with `reviewedBy` empty, so this branch fails `next build` until a human reviewer from `content/reviewers.ts` is set on each article. Edit or delete any draft freely; nothing here merges itself.',
     '',
   ];
   for (const a of articles) {
@@ -575,8 +575,7 @@ function openPr({ repo, articles, body, date }) {
     git(wt, 'commit', '-q', '-m', `content: AI news week of ${date}\n\nDrafted by scripts/news/draft.mjs (fenlon11/pmOS#686). Needs human review before merge.`);
     git(wt, 'push', '-q', '-u', 'origin', branch);
     const gh = (...args) => execFileSync('gh', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-    gh('label', 'create', 'matt-only', '--repo', GH_REPO, '--force', '--color', 'B60205', '--description', 'Waits for Matt (foundation §2.4 closed set)');
-    return gh('pr', 'create', '--repo', GH_REPO, '--draft', '--base', 'main', '--head', branch, '--label', 'matt-only', '--title', `content: AI news week of ${date}`, '--body', body);
+    return gh('pr', 'create', '--repo', GH_REPO, '--draft', '--base', 'main', '--head', branch, '--title', `content: AI news week of ${date}`, '--body', body);
   } finally {
     spawnSync('git', ['-C', repo, 'worktree', 'remove', '--force', wt]);
     spawnSync('git', ['-C', repo, 'branch', '-D', branch], { stdio: 'ignore' });

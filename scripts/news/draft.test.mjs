@@ -165,6 +165,8 @@ test('draftWeek: caps, fetch failures, duplicates and drafter skips end up dropp
   const body = prBody({ articles, rejected, date: DATE, itemsFile: '/x/items-2026-10-12.json', itemCount: 3 });
   assert.match(body, /- \[ \] Set `reviewedBy` to a human reviewer from `content\/reviewers.ts`/);
   assert.match(body, /Stories dropped by the checks/);
+  assert.ok(!body.includes('matt-only'), 'public brand posts are delegated, not matt-only (fenlon11/pmOS#2573)');
+  assert.match(body, /delegated decision row \(foundation §2\.4\)/);
 });
 
 test('resolveStyle loads the PM_NEWS_STYLE_PATH file and names it (fenlon11/pmOS#1513)', () => {

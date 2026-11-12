@@ -13,6 +13,7 @@ Exits 1 when 3 or more tier-1 sources fail: the week's draft would be missing wh
 Usage: python3 scripts/news/collect.py [--days 8] [--out DIR]
 """
 import argparse
+import gzip
 import html
 import json
 import re
@@ -30,10 +31,17 @@ MAX_TIER1_FAILURES = 2
 MAX_PER_SOURCE = 30
 
 
+def decode_body(encoding, body):
+    """Some CDNs (DeepMind's) send gzip though we never ask for it; decompress it, raising if it is corrupt."""
+    if (encoding or "").strip().lower() == "gzip" or body[:2] == b"\x1f\x8b":
+        body = gzip.decompress(body)
+    return body.decode("utf-8", errors="replace")
+
+
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=20) as r:
-        return r.read().decode("utf-8", errors="replace")
+        return decode_body(r.headers.get("Content-Encoding"), r.read())
 
 
 def parse_date(text):

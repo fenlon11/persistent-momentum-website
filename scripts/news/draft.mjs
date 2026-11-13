@@ -2,7 +2,11 @@
 // Weekly AI news drafter (fenlon11/pmOS#686). Step 2 of the pipeline: collect.py -> this -> a draft PR
 // that a human reviews and merges. Merging publishes, so the merge is the human's (foundation §2.4).
 //
-//   node scripts/news/draft.mjs [--items <file|dir>] [--date YYYY-MM-DD] [--dry-run] [--out <dir>]
+//   node scripts/news/draft.mjs [--items <file|dir>] [--date YYYY-MM-DD] [--avoid <file>] [--dry-run] [--out <dir>]
+//
+// --avoid names a file of story titles, one per line, that the fact-check already dropped this week
+// (factcheck.mjs writes it before a redraft, fenlon11/pmOS#2622). They join the <existing> list so
+// selection never picks them again. A missing file is an error.
 //
 // 1. Headless Claude (pinned to a full model ID, never an alias, never Fable) picks at most 3 news
 //    stories and 1 evergreen guide from the collected tier-1/2 items. The cap is the human's review
@@ -258,7 +262,7 @@ export const DRAFT_SCHEMA = {
 const defang = (s) => s.replace(/</g, '‹').replace(/>/g, '›');
 export const fence = (tag, attrs, body) => `<${tag}${attrs}>\n${defang(body)}\n</${tag}>`;
 
-export function selectionPrompt(candidates, existing, date) {
+export function selectionPrompt(candidates, existing, date, avoid = []) {
   const items = candidates
     .map((c) => JSON.stringify({ i: c.i, company: c.company, title: c.title, url: c.url, published: c.published, first_seen: c.first_seen, summary: c.summary }))
     .join('\n');
@@ -277,7 +281,7 @@ After those, you may add up to ${SPARES} spare stories, so at most ${MAX_PICKS} 
 
 For each story give the item numbers ("i") it should be drafted from, most important first, at most 4.
 
-${fence('existing', '', existing.map((e) => `${e.type} | ${e.publishedAt} | ${e.title}`).join('\n') || '(none)')}
+${fence('existing', '', [...existing.map((e) => `${e.type} | ${e.publishedAt} | ${e.title}`), ...avoid.map((t) => `dropped this week | ${t}`)].join('\n') || '(none)')}
 
 ${fence('items', '', items)}`;
 }
@@ -421,6 +425,12 @@ export function loadExisting(root) {
   return out;
 }
 
+// Titles from an --avoid file: its non-empty lines, trimmed. A missing file is an error.
+export function readAvoid(file) {
+  if (!fs.existsSync(file)) throw new Error(`--avoid file not found: ${file}`);
+  return fs.readFileSync(file, 'utf8').split('\n').map((l) => l.trim()).filter(Boolean);
+}
+
 export function latestItemsFile(p) {
   if (fs.statSync(p).isFile()) return p;
   const files = fs.readdirSync(p).filter((f) => /^items-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort();
@@ -429,7 +439,7 @@ export function latestItemsFile(p) {
 }
 
 // Pick, fetch and draft. `deps` lets tests replace Claude and the network.
-export async function draftWeek({ items, sources, style, existing, date, deps = {}, log = console.log }) {
+export async function draftWeek({ items, sources, style, existing, avoid = [], date, deps = {}, log = console.log }) {
   const ask = deps.askClaude ?? askClaude;
   const prefixes = primaryPrefixes(sources);
   const getPage = deps.fetchPage ?? ((url) => fetchPage(url, prefixes));
@@ -463,7 +473,7 @@ export async function draftWeek({ items, sources, style, existing, date, deps = 
 
   // Ranked best first and truncated to MAX_PICKS. A pick past its type's cap is a spare: drafted only
   // while a dropped story has left that type's slot open (fenlon11/pmOS#2449).
-  const picked = ask(selectionPrompt(candidates, existing, date), SELECT_SCHEMA).stories.slice(0, MAX_PICKS);
+  const picked = ask(selectionPrompt(candidates, existing, date, avoid), SELECT_SCHEMA).stories.slice(0, MAX_PICKS);
   const ranks = { news: 0, guide: 0 };
   const stories = picked.map((s) => ({ ...s, spare: (ranks[s.type] += 1) > CAPS[s.type] }));
   log(`selected: ${stories.map((s) => `[${s.type}${s.spare ? ', spare' : ''}] ${s.working_title}`).join(' | ') || '(none)'}`);
@@ -583,11 +593,11 @@ function openPr({ repo, articles, body, date }) {
 }
 
 function parseArgs(argv) {
-  const args = { dryRun: false, items: path.join(HERE, 'out'), date: todayET(), repo: ROOT, out: null };
+  const args = { dryRun: false, items: path.join(HERE, 'out'), date: todayET(), repo: ROOT, out: null, avoid: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--dry-run') args.dryRun = true;
-    else if (['--items', '--date', '--repo', '--out'].includes(a)) args[a.slice(2)] = argv[++i];
+    else if (['--items', '--date', '--repo', '--out', '--avoid'].includes(a)) args[a.slice(2)] = argv[++i];
     else throw new Error(`unknown argument ${a}`);
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(args.date)) throw new Error('--date must be YYYY-MM-DD');
@@ -597,6 +607,8 @@ function parseArgs(argv) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const avoid = args.avoid === null ? [] : readAvoid(args.avoid);
+  if (avoid.length) console.log(`avoiding ${avoid.length} story title(s) dropped this week (${args.avoid})`);
   const itemsFile = latestItemsFile(args.items);
   const { items } = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
   const { sources } = JSON.parse(fs.readFileSync(path.join(HERE, 'sources.json'), 'utf8'));
@@ -605,7 +617,7 @@ async function main() {
   const existing = loadExisting(ROOT);
   console.log(`drafting ${args.date} from ${itemsFile} (${items.length} items), model ${MODEL}`);
 
-  const result = await draftWeek({ items, sources, style, existing, date: args.date });
+  const result = await draftWeek({ items, sources, style, existing, avoid, date: args.date });
   for (const r of result.rejected) console.log(`dropped: ${r.story}: ${r.reasons.join('; ')}`);
   if (!result.articles.length) {
     console.error('FAIL: no draft passed the checks');

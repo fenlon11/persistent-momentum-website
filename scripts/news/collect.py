@@ -29,6 +29,8 @@ OUT = HERE / "out"
 UA = "pm-news-collector/0.1 (+https://persistentmomentum.com)"
 MAX_TIER1_FAILURES = 2
 MAX_PER_SOURCE = 30
+# Press items (tier "press") are kept only when they name a tracked company or one of these (pmOS#2661).
+PRESS_TERMS = ["AI", "model", "models", "chip", "chips", "GPU", "GPUs", "data center", "data centers"]
 
 
 def decode_body(encoding, body):
@@ -58,6 +60,24 @@ def parse_date(text):
     return d if d.tzinfo else d.replace(tzinfo=timezone.utc)
 
 
+def heading_date(text, now, year=None):
+    """Dates written on release-notes pages: "November 12, 2026", "Nov 10, 2026", or "Nov 5" (in `year`,
+    the page's section year; without one, this year, or last year when that would be in the future)."""
+    text = clean(text)
+    for fmt in ("%B %d, %Y", "%b %d, %Y"):
+        try:
+            return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            pass
+    for fmt in ("%B %d", "%b %d"):
+        try:
+            d = datetime.strptime(f"{text} {year or now.year}", f"{fmt} %Y").replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        return d if year or d <= now + timedelta(days=1) else d.replace(year=now.year - 1)
+    return None
+
+
 def clean(text):
     return html.unescape(re.sub(r"<[^>]+>", "", text or "")).strip()
 
@@ -82,20 +102,28 @@ def parse_feed(body):
         yield clean(f["title"].text if "title" in f else ""), url, parse_date(when), clean(summary)[:400]
 
 
-def parse_html(body, src):
+def parse_html(body, src, now=None):
+    """Group 1 is the title (or slug). Optional named groups: `title`, `slug` (fills url_template) and
+    `date` (a heading date such as "November 12, 2026", which dates the item). A page whose dates carry no
+    year ("Nov 5") names its section headings in `year_from`, a pattern whose group 1 is the year."""
+    now = now or datetime.now(timezone.utc)
+    years = [(y.start(), int(y.group(1))) for y in re.finditer(src["year_from"], body)] if "year_from" in src else []
     seen = set()
     for m in re.finditer(src["pattern"], body, re.S):
-        raw = clean(m.group(1))
-        if not raw or raw in seen:
+        g = m.groupdict()
+        raw = clean(g["title"] if "title" in g else m.group(1))[:200]
+        slug = clean(g["slug"]) if "slug" in g else raw
+        if not raw or (slug, raw) in seen:
             continue
-        seen.add(raw)
+        seen.add((slug, raw))
         title = raw.replace("-", " ").capitalize() if src.get("title_from") == "slug" else raw
-        url = src["url_template"].format(raw) if "url_template" in src else src["url"]
-        yield title, url, None, ""
+        url = src["url_template"].format(slug) if "url_template" in src else src["url"]
+        year = next((y for pos, y in reversed(years) if pos < m.start()), None)
+        yield title, url, heading_date(g["date"], now, year) if g.get("date") else None, ""
 
 
-def keep(src, title, summary):
-    words = src.get("keywords")
+def keep(src, title, summary, press_words=()):
+    words = press_words if src["tier"] == "press" else src.get("keywords")
     if not words:
         return True
     text = f"{title} {summary}"
@@ -116,14 +144,15 @@ def main():
     first_run = not seen
 
     sources = json.loads((HERE / "sources.json").read_text())["sources"]
+    press_words = sorted({s["company"] for s in sources if s["tier"] != "press"}) + PRESS_TERMS
     items, report, taken = [], [], set()
     for src in sources:
         try:
             body = fetch(src["url"])
-            rows = parse_feed(body) if src["type"] == "feed" else parse_html(body, src)
+            rows = list(parse_feed(body) if src["type"] == "feed" else parse_html(body, src, now))
             count = 0
             for title, url, published, summary in rows:
-                if count >= MAX_PER_SOURCE or not keep(src, title, summary):
+                if count >= MAX_PER_SOURCE or not keep(src, title, summary, press_words):
                     continue
                 key = f"{src['id']}|{url}|{title}"
                 if (url, title) in taken:  # feeds repeat items (NVIDIA lists some twice)
@@ -135,12 +164,15 @@ def main():
                     continue
                 count += 1
                 items.append({
-                    "source": src["id"], "company": src["company"], "tier": src["tier"],
+                    "source": src["id"], "company": src["company"], "lab": src["lab"], "tier": src["tier"],
+                    **({"outlet": src["outlet"]} if src["tier"] == "press" else {}),
                     "title": title, "url": url,
                     "published": published.isoformat() if published else None,
                     "first_seen": first_seen, "summary": summary,
                 })
-            report.append((src["id"], "ok", count, src["tier"]))
+            # A page whose pattern matches nothing has changed shape: say so instead of reporting 0 as "ok".
+            report.append((src["id"], "ok" if rows or src["type"] == "feed" else "error: pattern matched nothing",
+                           count, src["tier"]))
         except Exception as e:  # one bad source must not stop the run; it's reported below
             report.append((src["id"], f"error: {type(e).__name__}: {e}"[:80], 0, src["tier"]))
 
@@ -153,8 +185,15 @@ def main():
     }, indent=1))
     for sid, status, n, _ in report:
         print(f"{n:3d}  {status:<10.80}  {sid}")
-    companies = sorted({i["company"] for i in items if i["tier"] < 3})
+    companies = sorted({i["company"] for i in items if i["tier"] in (1, 2)})
     print(f"\n{len(items)} items -> {out}\nprimary companies covered: {', '.join(companies)}")
+    top = sorted({s["company"] for s in sources if s["lab"] == "top"})
+    tier1 = {c: sum(1 for i in items if i["company"] == c and i["tier"] == 1) for c in top}
+    print("top labs, tier-1 items: " + ", ".join(f"{c} {n}" for c, n in tier1.items()))
+    if empty := [c for c, n in tier1.items() if n == 0]:
+        print(f"top labs with no tier-1 items this window: {', '.join(empty)}")
+    outlets = sorted({i["outlet"] for i in items if i["tier"] == "press"})
+    print(f"press outlets with items: {len(outlets)} ({', '.join(outlets)})")
     tier1_failed = [sid for sid, status, _, tier in report if tier == 1 and status != "ok"]
     if len(tier1_failed) > MAX_TIER1_FAILURES:
         print(f"FAIL: {len(tier1_failed)} tier-1 sources failed: {', '.join(tier1_failed)}")

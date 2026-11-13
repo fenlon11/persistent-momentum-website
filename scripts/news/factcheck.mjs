@@ -3,7 +3,7 @@
 // content/ai-news-* PR as a draft with `reviewedBy` empty; this stage checks it unattended and leaves
 // it ready for the human merge. Merging publishes, so the merge is Matt's (foundation §2.4).
 //
-//   node scripts/news/factcheck.mjs --pr <n> [--dry-run]
+//   node scripts/news/factcheck.mjs --pr <n> [--state <dir>] [--dry-run]
 //
 // 1. Checks the PR head out in a throwaway worktree (this checkout is never touched).
 // 2. Fetches every frontmatter source of each changed content/**/*.mdx with draft.mjs's fetchPage.
@@ -20,7 +20,13 @@
 // 7. One decision row asking to merge, filed as `--class classify` (a site article is a public brand post,
 //    delegated under foundation §2.4, so Matt or the operator pass answers it), deduped against
 //    `pm.js decisions pending`.
-// This script never merges. --dry-run does steps 1-4 and prints what it would write.
+// When nothing survives (fenlon11/pmOS#2622), steps 6-7 become a redraft instead: after the fact-check
+// comment, a second comment (marker `<!-- pm-news-redraft week=<monday> -->`) lists the dropped titles,
+// the PR is closed unmerged (its branch is kept), the titles are appended to <state>/avoid-<monday>.txt
+// when --state is given, and the CLI exits 3 so run.sh drafts again in the same run with those
+// stories excluded. <monday> is the Monday of the PR's week, the date run.sh reads the avoid file by.
+// This script never merges. --dry-run does steps 1-4 and prints what it would write (and the would-be
+// avoid list when nothing survives); it never closes, comments or writes the avoid file.
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -32,6 +38,8 @@ import { defaultReviewer } from '../../content/reviewers.ts';
 import { MODEL, askClaude, fence, fetchPage, todayET } from './draft.mjs';
 
 export const MARKER = 'pm-news-factcheck';
+export const REDRAFT_MARKER = 'pm-news-redraft';
+export const REDRAFT_EXIT = 3;
 export const REVIEWER = defaultReviewer.slug;
 const GH_REPO = 'fenlon11/persistent-momentum-website';
 const BRANCH_PREFIX = 'content/ai-news-';
@@ -213,11 +221,41 @@ export function commentBody({ week, head, reviews, today, dryRun = false }) {
     }
     if (!r.kept) lines.push('Dropped from the branch because:', ...r.reasons.map((x) => `- ${x}`), '');
   });
-  if (!kept.length) lines.push('Nothing survived the fact-check, so this PR stays a draft and no merge decision is filed.', '');
+  if (!kept.length) lines.push('Nothing survived the fact-check, so this PR is closed for a redraft (dropped stories excluded) and no merge decision is filed.', '');
   else lines.push(`Merge = publish = Matt. This stage never merges (\`scripts/news/factcheck.mjs\`, fenlon11/pmOS#2017).`);
   if (dryRun) lines.push('', '_Dry run: nothing was pushed, commented, readied or filed._');
   const out = lines.join('\n');
   return out.length > COMMENT_MAX ? `${out.slice(0, COMMENT_MAX)}\n\n…(truncated at ${COMMENT_MAX} characters)` : out;
+}
+
+// The Monday (YYYY-MM-DD) of the ISO week holding `date` (YYYY-MM-DD).
+export function mondayOf(date) {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+  return d.toISOString().slice(0, 10);
+}
+
+export function redraftBody(monday, titles) {
+  return [
+    `<!-- ${REDRAFT_MARKER} week=${monday} -->`,
+    `## Redrafting the week of ${monday}`,
+    '',
+    'The fact-check kept no article, so this PR is closed unmerged (branch kept) and the week is drafted again in the same run, excluding these stories:',
+    ...titles.map((t) => `- ${t.replace(/\s+/g, ' ').trim()}`),
+    '',
+    '`scripts/news/factcheck.mjs` (fenlon11/pmOS#2622). This stage never publishes.',
+  ].join('\n');
+}
+
+// Appends titles to the week's avoid file, one per line, keeping any already there (a second
+// redraft in the same week adds to the first's list). Returns the file path.
+export function writeAvoid(state, monday, titles) {
+  fs.mkdirSync(state, { recursive: true });
+  const file = path.join(state, `avoid-${monday}.txt`);
+  const prior = fs.existsSync(file) ? fs.readFileSync(file, 'utf8').split('\n').map((l) => l.trim()).filter(Boolean) : [];
+  const all = [...new Set([...prior, ...titles.map((t) => t.replace(/\s+/g, ' ').trim())])];
+  fs.writeFileSync(file, `${all.join('\n')}\n`);
+  return file;
 }
 
 export function decisionTitle(pr, week, k) {
@@ -272,7 +310,7 @@ export function defaultDeps(pmJs = pmJsPath()) {
   };
 }
 
-export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defaultDeps(), log = console.log, today = todayET() }) {
+export async function factcheckPr({ pr, dryRun = false, state = null, repo = ROOT, deps = defaultDeps(), log = console.log, today = todayET() }) {
   if (!dryRun && !deps.pmJsExists()) throw new Error(`pm.js not found at ${pmJsPath()} (set PMOS_REPO); stopping before any GitHub write`);
   const info = JSON.parse(deps.gh(['pr', 'view', String(pr), '--repo', GH_REPO, '--json', 'number,state,isDraft,headRefName,headRefOid,url,files,isCrossRepository']));
   if (!info.headRefName.startsWith(BRANCH_PREFIX)) throw new Error(`PR #${pr} head ${info.headRefName} is not a ${BRANCH_PREFIX}* branch`);
@@ -284,6 +322,7 @@ export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defa
   const other = files.filter((p) => !isContentFile(p));
   if (other.length) throw new Error(`PR #${pr} changes files outside content/**/*.mdx (${other.join(', ')}); refusing to build it`);
   const week = info.headRefName.slice(BRANCH_PREFIX.length);
+  const monday = mondayOf(week);
 
   deps.git(repo, 'fetch', '-q', 'origin', 'main', `+refs/pull/${pr}/head:refs/pm-news/factcheck-${pr}`);
   const wt = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-factcheck-'));
@@ -319,6 +358,7 @@ export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defa
     if (!reviews.length) throw new Error(`PR #${pr} changes no content/**/*.mdx file`);
 
     const kept = reviews.filter((r) => r.kept);
+    const avoid = kept.length ? [] : reviews.map((r) => r.title);
     const changed = [];
     for (const r of reviews) {
       const full = path.join(wt, r.path);
@@ -340,7 +380,8 @@ export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defa
       log(commentBody({ pr, week, head: info.headRefOid, reviews, today, dryRun }));
       log(`\nwould-be decision: ${kept.length ? decisionTitle(pr, week, kept.length) : '(none: nothing survived)'}`);
       log(`would-be changed files: ${changed.length ? `\n  ${changed.join('\n  ')}` : '(none)'}`);
-      log('dry run: no push, no comment, no gh pr ready, no decision row');
+      if (avoid.length) log(`would-be redraft: close PR #${pr}, avoid-${monday}.txt:\n  ${avoid.join('\n  ')}`);
+      log('dry run: no push, no comment, no gh pr ready, no decision row, no close, no avoid file');
       return { reviews, changed, dryRun: true };
     }
 
@@ -357,8 +398,13 @@ export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defa
     deps.gh(['pr', 'comment', String(pr), '--repo', GH_REPO, '--body-file', bodyFile]);
     fs.rmSync(bodyFile, { force: true });
     if (!kept.length) {
-      log(`PR #${pr}: nothing survived; left as a draft, no decision filed`);
-      return { reviews, changed, head };
+      fs.writeFileSync(bodyFile, redraftBody(monday, avoid));
+      deps.gh(['pr', 'comment', String(pr), '--repo', GH_REPO, '--body-file', bodyFile]);
+      fs.rmSync(bodyFile, { force: true });
+      deps.gh(['pr', 'close', String(pr), '--repo', GH_REPO]);
+      const avoidFile = state ? writeAvoid(state, monday, avoid) : null;
+      log(`PR #${pr}: nothing survived; closed for a redraft, no decision filed${avoidFile ? `; avoid list ${avoidFile}` : ''}`);
+      return { reviews, changed, head, redraft: true, avoid, avoidFile };
     }
     if (info.isDraft) deps.gh(['pr', 'ready', String(pr), '--repo', GH_REPO]);
     const decision = fileDecision({ pr, url: info.url, week, kept, pmjs: deps.pmjs });
@@ -371,20 +417,32 @@ export async function factcheckPr({ pr, dryRun = false, repo = ROOT, deps = defa
   }
 }
 
-function parseArgs(argv) {
-  const args = { pr: null, dryRun: false };
+export function parseArgs(argv) {
+  const args = { pr: null, dryRun: false, state: null };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--dry-run') args.dryRun = true;
     else if (argv[i] === '--pr') args.pr = argv[++i];
+    else if (argv[i] === '--state') args.state = argv[++i];
     else throw new Error(`unknown argument ${argv[i]}`);
   }
-  if (!/^\d+$/.test(args.pr ?? '')) throw new Error('usage: factcheck.mjs --pr <n> [--dry-run]');
+  if (!/^\d+$/.test(args.pr ?? '')) throw new Error('usage: factcheck.mjs --pr <n> [--state <dir>] [--dry-run]');
+  if (args.state === undefined) throw new Error('--state needs a directory');
   return { ...args, pr: Number(args.pr) };
 }
 
+// The CLI's exit code: REDRAFT_EXIT (3) when the PR was closed for a redraft, else 0. `opts` lets
+// tests pass stubbed deps.
+export async function cli(argv, opts = {}) {
+  const r = await factcheckPr({ ...parseArgs(argv), ...opts });
+  return r.redraft ? REDRAFT_EXIT : 0;
+}
+
 if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  factcheckPr(parseArgs(process.argv.slice(2))).catch((e) => {
-    console.error(`FAIL: ${e.message}`);
-    process.exit(1);
-  });
+  cli(process.argv.slice(2)).then(
+    (code) => { process.exitCode = code; },
+    (e) => {
+      console.error(`FAIL: ${e.message}`);
+      process.exit(1);
+    },
+  );
 }

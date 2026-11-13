@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import { BUSINESS_HEADING, buildArticle } from './draft.mjs';
-import { MARKER, applyFixes, commentBody, decisionTitle, factcheckPr, fileDecision, namesPr, reviewArticle, setReviewer } from './factcheck.mjs';
+import { MARKER, REDRAFT_MARKER, applyFixes, cli, commentBody, decisionTitle, factcheckPr, fileDecision, mondayOf, namesPr, reviewArticle, setReviewer } from './factcheck.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const WEEK = '2026-10-26';
@@ -322,6 +322,90 @@ test('a missing pm.js stops the run before any GitHub write', async () => {
   assert.equal(calls.gh.length, 0);
 });
 
+// ---------- redraft when nothing survives (fenlon11/pmOS#2622) ----------
+
+const allDropped = (deps) => {
+  deps.askClaude = () => ({ ...clean, unsupported: [{ text: '$2 per million', reason: 'not on the page' }] });
+  return deps;
+};
+
+test('mondayOf maps any weekday to its ISO-week Monday', () => {
+  assert.equal(mondayOf('2026-11-10'), '2026-11-09');
+  assert.equal(mondayOf('2026-11-09'), '2026-11-09');
+  assert.equal(mondayOf('2026-11-15'), '2026-11-09');
+  assert.equal(mondayOf('2026-10-26'), '2026-10-26');
+});
+
+test('redraft: every article dropped closes the PR with the redraft marker, writes the avoid file and returns redraft', async () => {
+  const fx = fixtureRepo();
+  const { deps, calls } = stubs(fx);
+  allDropped(deps);
+  const comments = [];
+  const gh = deps.gh;
+  deps.gh = (args) => {
+    if (args[1] === 'comment') comments.push(fs.readFileSync(args[args.indexOf('--body-file') + 1], 'utf8'));
+    return gh(args);
+  };
+  const state = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-state-'));
+  const r = await factcheckPr({ pr: 7, state, repo: fx.repo, deps, log: () => {}, today: '2026-10-27' });
+  assert.equal(r.redraft, true);
+  assert.equal(calls.gh.filter((a) => a[1] === 'close' && a[2] === '7').length, 1, 'gh pr close 7');
+  assert.equal(calls.gh.filter((a) => a[1] === 'ready').length, 0);
+  assert.equal(calls.pmjs.length, 0, 'no decision row');
+  assert.equal(comments.length, 2);
+  assert.ok(comments[0].startsWith(`<!-- ${MARKER} head=`));
+  assert.ok(comments[1].includes(`<!-- ${REDRAFT_MARKER} week=${WEEK} -->`));
+  for (const t of ['Example keepme', 'Example dropme']) assert.match(comments[1], new RegExp(`^- ${t}$`, 'm'));
+  assert.deepEqual(fs.readdirSync(state), [`avoid-${WEEK}.txt`]);
+  assert.equal(fs.readFileSync(path.join(state, `avoid-${WEEK}.txt`), 'utf8'), 'Example keepme\nExample dropme\n');
+  assert.ok(!calls.gh.flat().includes('merge'), 'gh never saw merge');
+  assert.equal(calls.build, 0);
+});
+
+test('redraft: the CLI exits 3 when everything is dropped and 0 when an article is kept', async () => {
+  const fx = fixtureRepo();
+  const dropped = stubs(fx);
+  allDropped(dropped.deps);
+  const s1 = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-state-'));
+  assert.equal(await cli(['--pr', '7', '--state', s1], { repo: fx.repo, deps: dropped.deps, log: () => {}, today: '2026-10-27' }), 3);
+
+  const fx2 = fixtureRepo();
+  const kept = stubs(fx2);
+  const s2 = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-state-'));
+  assert.equal(await cli(['--pr', '7', '--state', s2], { repo: fx2.repo, deps: kept.deps, log: () => {}, today: '2026-10-27' }), 0);
+  // Kept case is unchanged: ready + one decision, no close, no redraft comment, no avoid file.
+  assert.equal(kept.calls.gh.filter((a) => a[1] === 'close').length, 0);
+  assert.equal(kept.calls.gh.filter((a) => a[1] === 'ready').length, 1);
+  assert.equal(kept.calls.gh.filter((a) => a[1] === 'comment').length, 1);
+  assert.doesNotMatch(kept.calls.comment, new RegExp(REDRAFT_MARKER));
+  assert.equal(kept.calls.pmjs.filter((a) => a[1] === 'add').length, 1);
+  assert.deepEqual(fs.readdirSync(s2), []);
+});
+
+test('redraft: a second all-dropped PR in the same week adds to the avoid list, never replaces it', async () => {
+  const fx = fixtureRepo();
+  const state = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-state-'));
+  fs.writeFileSync(path.join(state, `avoid-${WEEK}.txt`), 'An earlier drop\nExample dropme\n');
+  const { deps } = stubs(fx);
+  await factcheckPr({ pr: 7, state, repo: fx.repo, deps: allDropped(deps), log: () => {}, today: '2026-10-27' });
+  assert.equal(fs.readFileSync(path.join(state, `avoid-${WEEK}.txt`), 'utf8'), 'An earlier drop\nExample dropme\nExample keepme\n');
+});
+
+test('redraft: --dry-run with everything dropped closes nothing, comments nothing, writes no file and logs the avoid list', async () => {
+  const fx = fixtureRepo();
+  const { deps, calls } = stubs(fx);
+  allDropped(deps);
+  const state = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-state-'));
+  const out = [];
+  const r = await factcheckPr({ pr: 7, dryRun: true, state, repo: fx.repo, deps, log: (s) => out.push(s), today: '2026-10-27' });
+  assert.notEqual(r.redraft, true);
+  assert.deepEqual(calls.gh.map((a) => a[1]), ['view']);
+  assert.deepEqual(fs.readdirSync(state), []);
+  assert.equal(sh(fx.origin, 'rev-parse', fx.branch), fx.head, 'nothing pushed');
+  const text = out.join('\n');
+  assert.match(text, new RegExp(`would-be redraft: close PR #7, avoid-${WEEK}\\.txt:\\n  Example keepme\\n  Example dropme`));
+});
+
 // ---------- run.sh decide-only path ----------
 
 function decide({ list, markers }) {
@@ -345,6 +429,13 @@ test('run.sh: a PR that already carries the marker comment is skipped', () => {
   assert.equal(decide({ list: `content/ai-news-${WEEK} 7 OPEN true`, markers: '1' }), 'decision: skip');
   assert.equal(decide({ list: `content/ai-news-${WEEK} 7 OPEN false`, markers: '0' }), 'decision: skip');
   assert.equal(decide({ list: `content/ai-news-${WEEK} 7 MERGED false`, markers: '0' }), 'decision: skip');
+});
+
+test('run.sh: a closed PR carrying the pm-news-redraft comment is redrafted; one without it is skipped', () => {
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 9 CLOSED false`, markers: '1' }), 'decision: redraft #9');
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 9 CLOSED true`, markers: '1' }), 'decision: redraft #9');
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 9 CLOSED false`, markers: '0' }), 'decision: skip');
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 9 MERGED false`, markers: '1' }), 'decision: skip');
 });
 
 test('run.sh: a week with no PR yet drafts', () => {

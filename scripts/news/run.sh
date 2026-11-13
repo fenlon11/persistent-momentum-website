@@ -8,6 +8,9 @@
 # Steps: IndexNow ping for last week's merged articles -> scripts/seo/gsc-report.mjs (read-only Search
 # Console index report; skipped without GSC_SERVICE_ACCOUNT_FILE) -> collect.py -> draft.mjs (opens a
 # draft PR, never merges); a later run that week -> factcheck.mjs (readies the PR, files the merge decision).
+# When the fact-check keeps no article it closes the PR with a pm-news-redraft comment, writes the dropped
+# titles to $PM_NEWS_STATE/avoid-<monday>.txt and exits 3; this run then drafts again (IndexNow, gsc-report,
+# collect, draft.mjs --avoid) instead of stopping, so the week still gets an article (fenlon11/pmOS#2622).
 # A human approves the article by merging its PR or by answering its merge decision "merge"; a later
 # run that week then executes that answer -> merge-approved.mjs (merges only on "merge", then reads the
 # article back from the live site; fenlon11/pmOS#2210).
@@ -39,20 +42,31 @@ echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') start, ref origin/$REF"
 # When that PR is open, still a draft and has no fact-check marker comment, the run fact-checks it
 # instead (factcheck.mjs, fenlon11/pmOS#2017); the Mon–Thu schedule gives that stage its retries.
 # When it is open, ready and carries the marker, the run checks its merge decision (merge-approved.mjs).
+# When it is CLOSED (not merged) and carries a pm-news-redraft comment from fenlon11, the fact-check closed it
+# for a redraft that did not finish (e.g. the draft step failed), so the run drafts again. A closed PR
+# without that marker was closed by a human on purpose: skip.
 # PM_NEWS_DECIDE_ONLY=1 prints the decision and exits before any write (tests use it).
 SINCE="$(date -u -r "$(date -v-mon -v0H -v0M -v0S +%s)" '+%Y-%m-%dT%H:%M:%SZ')"
 RECENT="$(gh pr list --repo fenlon11/persistent-momentum-website --state all --limit 100 --json number,headRefName,createdAt,state,isDraft \
   --jq "[.[] | select((.headRefName | startswith(\"content/ai-news-\")) and .createdAt >= \"$SINCE\")] | .[0] // empty | \"\\(.headRefName) \\(.number) \\(.state) \\(.isDraft)\"")"
 FACTCHECK_PR=""
 MERGE_PR=""
+REDRAFT_PR=""
 if [[ -n "$RECENT" ]]; then
   read -r RECENT_REF RECENT_PR RECENT_STATE RECENT_DRAFT <<< "$RECENT"
   MARKERS=0
+  REDRAFT_MARKERS=0
   if [[ "$RECENT_STATE" == "OPEN" ]]; then
     MARKERS="$(gh pr view "$RECENT_PR" --repo fenlon11/persistent-momentum-website --json comments \
       --jq '[.comments[] | select(.author.login == "fenlon11") | .body | select(contains("<!-- pm-news-factcheck "))] | length')"
+  elif [[ "$RECENT_STATE" == "CLOSED" ]]; then
+    REDRAFT_MARKERS="$(gh pr view "$RECENT_PR" --repo fenlon11/persistent-momentum-website --json comments \
+      --jq '[.comments[] | select(.author.login == "fenlon11") | .body | select(contains("<!-- pm-news-redraft "))] | length')"
   fi
-  if [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "true" && "$MARKERS" == "0" ]]; then
+  if [[ "$RECENT_STATE" == "CLOSED" && "$REDRAFT_MARKERS" != "0" ]]; then
+    REDRAFT_PR="$RECENT_PR"
+    echo "[pm-news-drafts] this week's PR #$RECENT_PR ($RECENT_REF) was closed for a redraft; drafting again"
+  elif [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "true" && "$MARKERS" == "0" ]]; then
     FACTCHECK_PR="$RECENT_PR"
     echo "[pm-news-drafts] already drafted this week ($RECENT_REF, PR #$RECENT_PR, draft, not fact-checked); fact-checking it"
   elif [[ "$RECENT_STATE" == "OPEN" && "$RECENT_DRAFT" == "false" && "$MARKERS" != "0" ]]; then
@@ -67,6 +81,7 @@ fi
 if [[ -n "${PM_NEWS_DECIDE_ONLY:-}" ]]; then
   if [[ -n "$FACTCHECK_PR" ]]; then echo "decision: factcheck #$FACTCHECK_PR"
   elif [[ -n "$MERGE_PR" ]]; then echo "decision: merge-check #$MERGE_PR"
+  elif [[ -n "$REDRAFT_PR" ]]; then echo "decision: redraft #$REDRAFT_PR"
   else echo "decision: draft"; fi
   exit 0
 fi
@@ -81,9 +96,14 @@ cd "$WT"
 npm ci --no-audit --no-fund --ignore-scripts --loglevel=error
 
 if [[ -n "$FACTCHECK_PR" ]]; then
-  node scripts/news/factcheck.mjs --pr "$FACTCHECK_PR"
-  echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
-  exit 0
+  FC_STATUS=0
+  node scripts/news/factcheck.mjs --pr "$FACTCHECK_PR" --state "$STATE" || FC_STATUS=$?
+  if [[ "$FC_STATUS" != "3" ]]; then
+    [[ "$FC_STATUS" == "0" ]] || exit "$FC_STATUS"
+    echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
+    exit 0
+  fi
+  echo "[pm-news-drafts] fact-check kept nothing on PR #$FACTCHECK_PR; redrafting this week"
 fi
 if [[ -n "$MERGE_PR" ]]; then
   node scripts/news/merge-approved.mjs --pr "$MERGE_PR"
@@ -93,5 +113,10 @@ fi
 node scripts/news/indexnow-since.mjs --state "$STATE" || echo "[pm-news-drafts] WARN: IndexNow ping failed; it retries next run"
 node scripts/seo/gsc-report.mjs --state "$STATE" || echo "[pm-news-drafts] WARN: gsc-report failed; it retries next run"
 python3 scripts/news/collect.py --out "$STATE/items"
-node scripts/news/draft.mjs --items "$STATE/items"
+AVOID="$STATE/avoid-$(date -v-mon '+%Y-%m-%d').txt"
+if [[ -f "$AVOID" ]]; then
+  node scripts/news/draft.mjs --items "$STATE/items" --avoid "$AVOID"
+else
+  node scripts/news/draft.mjs --items "$STATE/items"
+fi
 echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"

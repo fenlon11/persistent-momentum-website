@@ -2,13 +2,14 @@
 // prove that what the drafter writes passes the real content schema (lib/content/schema.ts).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { frontmatterSchema } from '../../lib/content/schema.ts';
 import {
-  BUSINESS_HEADING, CAPS, DRAFT_SCHEMA, SELECT_SCHEMA, SPARES, buildArticle, checkArticle, claudeFailureMessage, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, resolveStyle, selectionPrompt,
+  BUSINESS_HEADING, CAPS, DRAFT_SCHEMA, SELECT_SCHEMA, SPARES, buildArticle, checkArticle, claudeFailureMessage, draftPrompt, draftWeek, extractPage, isPrimary, normUrl, prBody, primaryPrefixes, readAvoid, resolveStyle, selectionPrompt,
 } from './draft.mjs';
 
 const { sources } = JSON.parse(fs.readFileSync(new URL('./sources.json', import.meta.url), 'utf8'));
@@ -394,4 +395,47 @@ test('draftWeek: with no refused host the selection prompt matches today\'s for 
   const expected = selectionPrompt(items.map((it, i) => ({ ...it, i })), [], DATE);
   assert.equal(prompt, expected);
   assert.ok(logs.includes('hosts refused: none'));
+});
+
+// --avoid: titles the fact-check dropped this week join the <existing> list (fenlon11/pmOS#2622).
+const existingBlock = (prompt) => /<existing>\n([\s\S]*?)\n<\/existing>/.exec(prompt)[1];
+
+test('--avoid: selectionPrompt lists each avoided title inside the <existing> fence, marked dropped this week', () => {
+  const existing = [{ type: 'news', publishedAt: '2026-11-03', title: 'An older story' }];
+  const avoid = ['Amazon Quick adds Smart Approvals', 'Example Labs ships <a> model'];
+  const block = existingBlock(selectionPrompt([], existing, DATE, avoid));
+  assert.deepEqual(block.split('\n'), [
+    'news | 2026-11-03 | An older story',
+    'dropped this week | Amazon Quick adds Smart Approvals',
+    'dropped this week | Example Labs ships ‹a› model',
+  ]);
+  assert.match(selectionPrompt([], [], DATE, ['Only a drop']), /<existing>\ndropped this week \| Only a drop\n<\/existing>/);
+  // No avoid list (or an empty one) changes nothing.
+  assert.equal(selectionPrompt([], existing, DATE, []), selectionPrompt([], existing, DATE));
+});
+
+test('--avoid: draftWeek passes the avoid list to the selection prompt', async () => {
+  const prompts = [];
+  await draftWeek({
+    items: [], sources, style: '', existing: [], avoid: ['A dropped story'], date: DATE, log: () => {},
+    deps: { askClaude: (prompt) => { prompts.push(prompt); return { stories: [] }; }, fetchPage: async () => { throw new Error('offline'); } },
+  });
+  assert.match(existingBlock(prompts[0]), /^dropped this week \| A dropped story$/m);
+});
+
+test('--avoid: readAvoid keeps non-empty trimmed lines; an empty file gives none; a missing file is an error naming it', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-avoid-'));
+  fs.writeFileSync(path.join(dir, 'a.txt'), '  First title \n\nSecond title\n');
+  fs.writeFileSync(path.join(dir, 'empty.txt'), '');
+  assert.deepEqual(readAvoid(path.join(dir, 'a.txt')), ['First title', 'Second title']);
+  assert.deepEqual(readAvoid(path.join(dir, 'empty.txt')), []);
+  const missing = path.join(dir, 'avoid-2026-11-09.txt');
+  assert.throws(() => readAvoid(missing), new RegExp(`--avoid file not found: ${missing.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}`));
+});
+
+test('--avoid: draft.mjs --avoid <missing file> exits non-zero naming the file', () => {
+  const missing = path.join(os.tmpdir(), `pm-news-no-such-avoid-${process.pid}.txt`);
+  const r = spawnSync(process.execPath, [new URL('./draft.mjs', import.meta.url).pathname, '--avoid', missing, '--dry-run'], { encoding: 'utf8' });
+  assert.notEqual(r.status, 0);
+  assert.ok(r.stderr.includes(`--avoid file not found: ${missing}`), r.stderr);
 });

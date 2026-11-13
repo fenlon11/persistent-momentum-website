@@ -53,6 +53,7 @@ const BANNED = [
 // ---------- sources and URLs ----------
 
 // URL prefixes we accept as primary: the hosts of tier-1/2 sources, narrowed to org/repo on GitHub.
+// Tier 1 and 2 only, named: tier "press" (fenlon11/pmOS#2661) is a string, and `"press" > 2` is false.
 // The style rules live in pmOS (fenlon11/pmOS#1513). STYLE.md here is the fallback snapshot, read only
 // when that path is missing; `log` names the file loaded so a silent fallback is visible in the run log.
 export const CANONICAL_STYLE = 'pmOS/projects/persistent-momentum/hubspot/02-rules/ai-newsletter-style.md';
@@ -67,7 +68,7 @@ export function resolveStyle({ env = process.env, home = os.homedir(), here = HE
 export function primaryPrefixes(sources) {
   const prefixes = new Set();
   for (const s of sources) {
-    if (s.tier > 2) continue;
+    if (s.tier !== 1 && s.tier !== 2) continue;
     for (const raw of [s.url, s.url_template].filter(Boolean)) {
       const u = new URL(raw.replace('{0}', 'x'));
       const host = u.host.replace(/^www\./, '');
@@ -444,7 +445,7 @@ export async function draftWeek({ items, sources, style, existing, avoid = [], d
   const prefixes = primaryPrefixes(sources);
   const getPage = deps.fetchPage ?? ((url) => fetchPage(url, prefixes));
   const all = items
-    .filter((it) => it.tier <= 2 && isPrimary(it.url, prefixes))
+    .filter((it) => (it.tier === 1 || it.tier === 2) && isPrimary(it.url, prefixes))
     .map((it, i) => ({ ...it, i }));
 
   // Probe one URL per host before selection (fenlon11/pmOS#2569). A 401/403 means the host refuses our

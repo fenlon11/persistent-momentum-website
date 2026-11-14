@@ -140,6 +140,49 @@ test('a title holding ": " and a double quote still round-trips through gray-mat
   assert.equal(frontmatterSchema.safeParse(data).success, true);
 });
 
+// Rewrites one frontmatter key as a folded scalar wrapped over two lines, as a human or YAML dumper would.
+const fold = (mdx, field, first, second) =>
+  mdx.replace(new RegExp(`^${field}:.*(?:\\r?\\n[ \\t]+.*)*$`, 'm'), () => `${field}: >-\n  ${first}\n  ${second}`);
+
+test('a title fix copied from a folded title (line break + indent in old) applies once and keeps the article', () => {
+  const a = titled('placeholder');
+  const raw = fold(a.mdx, 'title', 'Mistral Studio adds managed agents you can run on', 'your own infrastructure');
+  assert.equal(matter(raw).data.title, 'Mistral Studio adds managed agents you can run on your own infrastructure');
+  const old = 'run on\n  your own infrastructure';
+  const r = reviewArticle({ path: a.path, raw, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', old, 'run in your own cloud')] } });
+  assert.equal(r.kept, true, r.reasons.join('; '));
+  const { data } = matter(r.mdx);
+  assert.equal(data.title, 'Mistral Studio adds managed agents you can run in your own cloud');
+  assert.equal(r.title, data.title);
+  assert.equal(frontmatterSchema.safeParse(data).success, true);
+  assert.equal(r.applied[0].old, old); // the model's own old text is kept for the PR comment
+  const body = commentBody({ week: WEEK, head: 'a'.repeat(40), reviews: [r], today: WEEK });
+  assert.match(body, /^- title: "run on your own infrastructure" → "run in your own cloud"\./m);
+});
+
+test('a description fix copied from a folded description applies once and keeps the article', () => {
+  const a = titled('Example');
+  const raw = fold(a.mdx, 'description', 'Amazon Quick now routes approvals', 'to the right owner.');
+  const r = reviewArticle({ path: a.path, raw, fetches: okFetches, result: { ...clean, fixes: [fmFix('description', 'approvals\n  to the right owner.', 'approvals to an owner.')] } });
+  assert.equal(r.kept, true, r.reasons.join('; '));
+  const { data } = matter(r.mdx);
+  assert.equal(data.description, 'Amazon Quick now routes approvals to an owner.');
+  assert.equal(data.title, 'Example');
+  assert.equal(frontmatterSchema.safeParse(data).success, true);
+});
+
+test('a folded-title fix whose normalised old occurs 0 times is still skipped and drops the article', () => {
+  const a = titled('placeholder');
+  const raw = fold(a.mdx, 'title', 'Mistral Studio adds managed agents you can run on', 'your own infrastructure');
+  const old = 'run on\n  their own servers';
+  const r = reviewArticle({ path: a.path, raw, fetches: okFetches, result: { ...clean, fixes: [fmFix('title', old, 'x')] } });
+  assert.equal(r.kept, false);
+  assert.equal(r.applied.length, 0);
+  assert.equal(r.skipped[0].old, old);
+  assert.match(r.reasons[0], /old text not found in the title/);
+  assert.equal(matter(r.mdx).data.title, 'Mistral Studio adds managed agents you can run on your own infrastructure');
+});
+
 test('a body fix never edits the frontmatter, even when old also appears in the title', () => {
   const a = buildArticle('news', { ...draft('bodyonly', 'Amazon Quick shipped on Monday.'), title: 'Amazon Quick ships' }, WEEK);
   for (const fix of [

@@ -152,9 +152,14 @@ export function applyFrontmatterFixes(head, fixes) {
   for (const field of FRONTMATTER_FIELDS) {
     const mine = fixes.filter((f) => f.field === field);
     if (!mine.length) continue;
-    const r = applyFixes(typeof data[field] === 'string' ? data[field] : '', mine, field);
-    applied.push(...r.applied);
-    skipped.push(...r.skipped);
+    // The parsed value of a folded scalar (`title: >-`) is one line, but the model copies `old` from the
+    // raw file with its line break and indent, so match on `old` with every whitespace run made one space.
+    // applied/skipped keep the model's own fix object, original `old` included, for the PR comment.
+    const folded = mine.map((f) => ({ ...f, old: f.old.replace(/\s+/g, ' ').trim(), rawOld: f.old }));
+    const r = applyFixes(typeof data[field] === 'string' ? data[field] : '', folded, field);
+    const unfold = ({ rawOld, ...f }) => ({ ...f, old: rawOld });
+    applied.push(...r.applied.map(unfold));
+    skipped.push(...r.skipped.map(unfold));
     if (r.applied.length) {
       out = out.replace(new RegExp(`^${field}:.*(?:\r?\n[ \t]+.*)*$`, 'm'), () => `${field}: ${JSON.stringify(r.body)}`);
     }

@@ -19,6 +19,7 @@ export default function NewsletterSignup({
   const id = useId();
   const [state, setState] = useState<'idle' | 'sending' | 'done'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>(SUCCESS_MESSAGE);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,6 +40,7 @@ export default function NewsletterSignup({
       });
       const json = await res.json().catch(() => ({}));
       if (res.ok) {
+        if (typeof json.message === 'string') setMessage(json.message);
         setState('done');
         return;
       }
@@ -59,7 +61,7 @@ export default function NewsletterSignup({
         className="w-full max-w-xl text-lg font-semibold"
         style={{ color: dark ? 'var(--color-glow-white)' : 'var(--color-text-dark)' }}
       >
-        {SUCCESS_MESSAGE}
+        {message}
       </p>
     );
   }

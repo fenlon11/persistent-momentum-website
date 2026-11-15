@@ -1,6 +1,7 @@
 // Live HubSpot forms only from Vercel production (fenlon11/pmOS#2343). A local `next start` once
 // inherited the shell's form GUIDs and sent test inquiries to the live portal; outside production
-// this returns undefined, so the handlers take their existing "form GUID not set" path.
+// this returns undefined, so the handlers take their existing "form GUID not set" path. The PW
+// newsletter list slug goes through the same guard (fenlon11/pmOS#2706).
 export function liveFormGuid(
   guid: string | undefined,
   env: Record<string, string | undefined> = process.env,

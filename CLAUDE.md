@@ -14,6 +14,7 @@ Next.js 15 (App Router) + React 19 + Tailwind v4 site with two jobs (set 2026-10
 - **pmOS platform** (dashboard reads, project `klrrjnzpkvdlfucjrasy`): `PMOS_SUPABASE_URL` / `PMOS_SUPABASE_SERVICE_KEY` → `lib/supabase-platform.ts` (read-only; no-ops gracefully when unset).
 - Dashboard gate: `DASHBOARD_PIN` (Matt-only). `/dashboard` and its `/api/*` routes live in the public prod app — treat platform-key handling as sensitive.
 - Contact email: `RESEND_API_KEY`, `NOTIFICATION_EMAIL`.
+- Newsletter destination (set 2026-11-15, fenlon11/pmOS#2706): `PM_NEWSLETTER_DESTINATION` = `hubspot` | `both` | `pw` (unset = `hubspot`); `PM_NEWSLETTER_PW_LIST_SLUG` = PM's list public slug in Persistent Workforce. PW calls go out only from Vercel production (`lib/live-forms.ts`).
 
 ## Brand rules (BRAND.md is law on this surface)
 

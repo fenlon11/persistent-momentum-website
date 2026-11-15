@@ -3,10 +3,14 @@
 // Signups post to HubSpot portal 247620603's form "PM – The Momentum Update subscribe" through the
 // unauthenticated v3 submit endpoint, and every address is also saved to Supabase
 // `newsletter_signups` so a HubSpot failure never loses it.
+// fenlon11/pmOS#2706: Persistent Workforce (PW) is the second destination, chosen by
+// PM_NEWSLETTER_DESTINATION (`hubspot` | `both` | `pw`, default `hubspot`). Each destination fails on
+// its own; the visitor sees success if either accepted.
 import { z } from 'zod';
 import {
   COMMUNICATIONS_TEXT,
   CONSENT_TO_PROCESS_TEXT,
+  CONFIRM_MESSAGE,
   CONVERSION_FORM,
   HUBSPOT_PORTAL_ID,
   NEWSLETTER_PERSONA,
@@ -31,10 +35,27 @@ export type SignupRow = {
   page_uri: string | null;
   hubspot_status: number | null;
   hubspot_error: string | null;
+  // Present only when PW is a destination, so a deploy that lands before the pw_* columns
+  // migration still saves HubSpot-only rows.
+  pw_status?: number | null;
+  pw_error?: string | null;
 };
+
+export type Destination = 'hubspot' | 'both' | 'pw';
+
+export function newsletterDestination(value: string | undefined): Destination {
+  return value === 'both' || value === 'pw' ? value : 'hubspot';
+}
+
+// PW's public subscribe endpoint (persistent-workforce#814). PW runs double opt-in, so the reader
+// gets a confirm email from PW.
+export const PW_SUBSCRIBE_URL = 'https://workforce.persistentmomentum.com/api/public/subscribe';
 
 export type SignupDeps = {
   formGuid: string | undefined;
+  // PM's list public slug in PW. undefined outside Vercel production (lib/live-forms.ts guard).
+  pwListSlug?: string;
+  destination?: Destination;
   fetch: typeof fetch;
   save: (row: SignupRow) => Promise<void>;
   log?: (...args: unknown[]) => void;
@@ -99,23 +120,80 @@ export async function handleSignup(body: unknown, hutk: string | undefined, deps
     hubspot_error: null,
   };
 
-  let result: SignupResult;
-  if (!deps.formGuid) {
-    row.hubspot_error = 'HUBSPOT_PM_NEWSLETTER_FORM_GUID not set';
-    log('[newsletter] form GUID missing; address saved to Supabase only');
-    result = { status: 503, body: { error: RETRY_MESSAGE } };
-  } else {
-    result = await submitToHubSpot(deps, input, hutk, row, log);
+  const destination = deps.destination ?? 'hubspot';
+  const toHubSpot = destination !== 'pw';
+  const toPw = destination !== 'hubspot';
+
+  let hubspot: SignupResult | null = null;
+  if (toHubSpot) {
+    if (!deps.formGuid) {
+      row.hubspot_error = 'HUBSPOT_PM_NEWSLETTER_FORM_GUID not set';
+      log('[newsletter] form GUID missing; address saved to Supabase only');
+      hubspot = { status: 503, body: { error: RETRY_MESSAGE } };
+    } else {
+      hubspot = await submitToHubSpot(deps, input, hutk, row, log);
+    }
   }
+
+  let pw: SignupResult | null = null;
+  if (toPw) {
+    row.pw_status = null;
+    row.pw_error = null;
+    if (!deps.pwListSlug) {
+      row.pw_error = 'PM_NEWSLETTER_PW_LIST_SLUG not set';
+      log('[newsletter] PW list slug missing; PW skipped');
+      pw = { status: 503, body: { error: RETRY_MESSAGE } };
+    } else {
+      pw = await submitToPw(deps, deps.pwListSlug, input, row, log);
+    }
+  }
+
+  // PW's confirm email is the next step whenever PW took the address.
+  let result: SignupResult;
+  if (pw && pw.status === 200) result = { status: 200, body: { success: true, message: CONFIRM_MESSAGE } };
+  else if (hubspot && hubspot.status === 200) result = hubspot;
+  else result = (hubspot ?? pw) as SignupResult;
 
   try {
     await deps.save(row);
   } catch (err) {
     log('[newsletter] Supabase save failed', err);
-    // HubSpot has the address, so the signup still counts. If neither has it, say so.
+    // A destination has the address, so the signup still counts. If none has it, say so.
     if (result.status >= 500) return { status: 500, body: { error: RETRY_MESSAGE } };
   }
   return result;
+}
+
+async function submitToPw(
+  deps: SignupDeps,
+  slug: string,
+  input: z.infer<typeof signupSchema>,
+  row: SignupRow,
+  log: (...args: unknown[]) => void,
+): Promise<SignupResult> {
+  let res: Response;
+  try {
+    res = await deps.fetch(PW_SUBSCRIBE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug, email: input.email, name: input.firstname }),
+    });
+  } catch (err) {
+    row.pw_error = `network: ${err instanceof Error ? err.message : String(err)}`.slice(0, 500);
+    log('[newsletter] PW request failed', err);
+    return { status: 502, body: { error: RETRY_MESSAGE } };
+  }
+
+  row.pw_status = res.status;
+  if (res.ok) return { status: 200, body: { success: true, message: CONFIRM_MESSAGE } };
+
+  const text = await res.text().catch(() => '');
+  row.pw_error = text.slice(0, 500) || null;
+  log('[newsletter] PW rejected submission', res.status);
+  if (res.status === 400) {
+    return { status: 400, body: { error: 'Validation failed', fields: { email: 'Please enter a valid email address' } } };
+  }
+  return { status: 502, body: { error: RETRY_MESSAGE } };
 }
 
 async function submitToHubSpot(

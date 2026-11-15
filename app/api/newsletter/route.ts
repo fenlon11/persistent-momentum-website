@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { createRateLimiter, handleSignup, type SignupRow } from '@/lib/newsletter';
+import { createRateLimiter, handleSignup, newsletterDestination, type SignupRow } from '@/lib/newsletter';
 import { liveFormGuid } from '@/lib/live-forms';
 
-// Newsletter signup → HubSpot form + Supabase backup (fenlon11/pmOS#682). Logic lives in
+// Newsletter signup → HubSpot form and/or Persistent Workforce + Supabase backup (fenlon11/pmOS#682, fenlon11/pmOS#2706). Logic lives in
 // lib/newsletter.ts so it can be unit-tested without Next.
 const allow = createRateLimiter();
 
@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
 
   const result = await handleSignup(body, request.cookies.get('hubspotutk')?.value, {
     formGuid: liveFormGuid(process.env.HUBSPOT_PM_NEWSLETTER_FORM_GUID),
+    pwListSlug: liveFormGuid(process.env.PM_NEWSLETTER_PW_LIST_SLUG),
+    destination: newsletterDestination(process.env.PM_NEWSLETTER_DESTINATION),
     fetch,
     save,
   });

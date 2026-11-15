@@ -21,3 +21,6 @@ export const CONSENT_TO_PROCESS_PARTS = [
 export const CONSENT_TO_PROCESS_TEXT = CONSENT_TO_PROCESS_PARTS.join('');
 
 export const SUCCESS_MESSAGE = "You're in. The next issue lands in your inbox.";
+// Shown when Persistent Workforce took the address: its double opt-in sends a confirm email first
+// (fenlon11/pmOS#2706).
+export const CONFIRM_MESSAGE = 'Almost done. Check your inbox to confirm your subscription.';

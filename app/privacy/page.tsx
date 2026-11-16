@@ -165,6 +165,10 @@ export default function PrivacyPolicy() {
                 <li>CRM systems</li>
                 <li>Payment processing</li>
               </ul>
+              <p>
+                Newsletter sign-ups are stored in Persistent Workforce, our own
+                email product, and in HubSpot.
+              </p>
 
               <SubHeading>3.3 Business transfers</SubHeading>
               <p>

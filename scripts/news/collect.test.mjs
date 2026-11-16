@@ -177,3 +177,9 @@ test('sources.json: every source has lab; the five top labs are the only "top"; 
   const press = sources.filter((s) => s.tier === 'press');
   assert.ok(press.length >= 6 && press.every((s) => s.outlet));
 });
+
+test('sources.json: the 403 chatgpt-release-notes source is gone and OpenAI keeps a tier-1 source', () => {
+  const { sources } = JSON.parse(execFileSync('cat', ['sources.json'], { cwd: dir }).toString());
+  assert.ok(!sources.some((s) => s.id === 'chatgpt-release-notes'), 'help.openai.com answers 403 to the collector (pmOS#2789)');
+  assert.ok(sources.some((s) => s.company === 'OpenAI' && s.tier === 1), 'OpenAI still has a tier-1 source');
+});

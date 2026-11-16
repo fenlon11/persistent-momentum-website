@@ -46,8 +46,6 @@
      "pattern": "<h3 id=\"[a-z]+-\\d{1,2}-\\d{4}\"[^>]*>(?P<date>[A-Z][a-z]+ \\d{1,2}, \\d{4})</h3>.{0,200}?<li[^>]*>(?P<title>.*?)</li>", "title_from": "text"},
     {"id": "claude-app-release-notes", "company": "Anthropic", "lab": "top", "tier": 1, "type": "html", "url": "https://support.claude.com/en/articles/12138966-release-notes",
      "pattern": "<h3[^>]*>(?P<date>[A-Z][a-z]+ \\d{1,2}, \\d{4})</h3>.{0,300}?<p>(?P<title>.*?)</p>", "title_from": "text"},
-    {"id": "chatgpt-release-notes", "company": "OpenAI", "lab": "top", "tier": 1, "type": "html", "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
-     "pattern": "<h1>(?P<date>[A-Z][a-z]+ \\d{1,2}, \\d{4})</h1>\\s*<h2>(?P<title>.*?)</h2>", "title_from": "text"},
     {"id": "openai-api-changelog", "company": "OpenAI", "lab": "top", "tier": 1, "type": "html", "url": "https://platform.openai.com/docs/changelog",
      "pattern": "data-variant=\"outline\">(?P<date>[A-Z][a-z]{2} \\d{1,2})</div>.{0,1500}?_ChangelogMarkdown[^\"]*\">(?P<title>.*?)</div>", "title_from": "text",
      "year_from": "_ChangelogSectionTitle[^>]*>[A-Z][a-z]+, (\\d{4})<"},

@@ -1,3 +1,11 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "git": {
+    "deploymentEnabled": {
+      "loop/**": false,
+      "analyze/**": false,
+      "market/**": false,
+      "plan/**": false
+    }
+  }
 }

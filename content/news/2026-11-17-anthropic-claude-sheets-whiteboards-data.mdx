@@ -1,0 +1,62 @@
+---
+title: >-
+  Claude adds Sheets, Whiteboards and Data, and your other apps can now open and
+  work inside Claude
+description: >-
+  Anthropic adds Sheets and Whiteboards in beta, makes Claude Data generally
+  available, and lets apps like Notion and Box open inside Claude.
+type: news
+publishedAt: '2026-11-17'
+updatedAt: '2026-11-17'
+author: elle-evate
+status: published
+tags:
+  - anthropic
+  - claude
+  - claude-sheets
+  - claude-data
+  - interactive-connectors
+statusLabel: rolling-out
+sources:
+  - title: 'Claude Whiteboards, Claude Sheets, and Claude Data'
+    url: 'https://claude.com/resources/articles/sheets-whiteboards-data'
+    publisher: Anthropic
+  - title: 'Working with Claude Sheets, Whiteboards, and Interactive Connectors'
+    url: >-
+      https://claude.com/resources/articles/more-ways-to-work-with-claude-sheets-whiteboards-and-interactive-connectors
+    publisher: Anthropic
+  - title: Open your apps in Claude and work in them together
+    url: 'https://claude.com/resources/articles/interactive-connectors-full-tool'
+    publisher: Anthropic
+---
+On November 10, Anthropic added three new workspaces to Claude: Sheets and Whiteboards in beta, plus Claude Data, the new name for Claude Dashboards, which is now generally available. All three come with every paid plan. Anthropic also upgraded its interactive connectors, so apps such as Notion, Box and Atlassian can open as full tools next to your chat, and Claude can edit inside them. If you spend your day copying Claude's output into a spreadsheet or onto a board, more of that work can now stay in one place.
+
+## What shipped
+
+**Claude Sheets (beta).** Claude builds spreadsheets with tabs, formulas, formatting and drop-downs, often from a single prompt such as asking for a campaign tracker or a hiring budget. It edits directly in the cells and marks each change so you can follow it. You can share a sheet with your team. Anthropic says sheets have "simple spreadsheet functionality" for now. When you need more, you can export to .xlsx or CSV, or keep working in partner tools including Airtable, Asana, monday.com and Smartsheet.
+
+**Claude Whiteboards (beta).** This is a shared board where your team brainstorms with Claude. You can talk through a messy plan and Claude turns it into a board with a timeline, owners and dates. In a retro meeting, Anthropic's example, everyone adds notes and Claude groups them by theme and drafts action items for each person. When you're done, Claude can turn the board into a doc or deck, or move it into Lucid, Miro or Vani by Zoho.
+
+**Claude Data (generally available).** Claude Dashboards launched in beta in October. It lets teams ask questions of company data in tools like Amazon Redshift, BigQuery and ClickHouse. The new version adds tracked changes with rollback, caching with a refresh schedule you set for each dashboard, and support for design systems. Two features are still in beta. Certified queries let your data team approve the metric definitions everyone should use. Live sharing lets colleagues see current numbers even without access to the underlying connectors, though they can only see the results of queries you've approved. Claude Data needs a data connector, such as a warehouse or CRM.
+
+Anthropic's pitch in one line: "Now, your documents, boards, sheets, and dashboards can stay in Claude, with access for your team to continue editing together."
+
+## Your other apps, inside Claude
+
+Interactive connectors used to show a small live view of a tool. Now, where a connector supports it, you can open the whole tool beside your conversation or in full screen. You can then ask Claude to change a page, row or file, approving each action the same way you approve other connector actions. Anthropic is starting with a small group of tools, including Asana, Canva, Carta, Dropbox, monday.com, Smartsheet, Vercel and Webflow. Its examples also cover Adobe, Atlassian, Box, HubSpot and Notion.
+
+This part is **rolling out**, not live for everyone yet. It is coming to the web and desktop app on all plans as part of the new Claude experience, and you'll see it once your account is updated or your organization switches it on.
+
+## Who gets it and when
+
+Sheets, Whiteboards and Data work on web, desktop and mobile. On Team plans, all three are on by default. On Enterprise plans, Sheets and Whiteboards start off, and Claude Data turns on by default on November 20, 2026. Admins can change these settings under Organization settings, then Artifacts.
+
+## What it means for your business
+
+The practical gain is fewer handoffs. Take a small marketing team that plans a campaign on a call, writes it up in a doc and then builds a tracker in a spreadsheet. With this release, the same team could brainstorm on a Whiteboard, ask Claude to turn the board into a Sheet with owners and dates, and share that Sheet with everyone, all without leaving Claude. Anthropic says Claude carries the same context through each step, so you shouldn't have to explain the plan again.
+
+Three things to check before you lean on it:
+
+- **Treat Sheets as a beta.** It's fine for trackers and budgets. For heavy models, plan to export to Excel or move the file into a partner tool.
+- **If you're on Enterprise, look at your settings this week.** Claude Data switches on by default on November 20. Decide which data connectors you want people using before then.
+- **Set connector permissions on purpose.** Anthropic says admins can limit what each connector does, for example letting Claude read Slack but not send messages. Now that Claude can make changes inside your open tools, decide which tools it may write to and which it may only read.

@@ -32,6 +32,7 @@ Tokens are CSS vars in the generated `/* tokens:start */…/* tokens:end */` blo
 - **`pm-analytics-sync/` is a nested independent git repo** (CF Worker syncing RevenueCat + ASC metrics into pmOS Supabase every 6h) — excluded from `tsconfig.json`, not part of the Next.js build, has its own wrangler secrets. Don't stage it from this repo.
 - **No personal name, home address or phone on any public page, feed or structured data** (Matt, 2026-10-10). Reviewer credit is the role in `content/reviewers.ts` ("a Persistent Momentum editor"). Elle Evate is the Head of AI Content and is always disclosed as AI — "(AI)" on every byline, never `Person` in JSON-LD, never `reviewedBy`.
 - **Local `next start`/`next dev` and Vercel previews never submit to live HubSpot forms** (set 2026-11-07, fenlon11/pmOS#2343): `lib/live-forms.ts` passes the form GUID only when `VERCEL_ENV=production`, whatever the shell exports (a local run leaked 7 test inquiries 2026-10-31). Set `PM_ALLOW_LIVE_FORMS=1` only for a deliberate live test.
+- **Agent branches get no Vercel build** (set 2026-11-17, fenlon11/pmOS#2756): `vercel.json` `git.deploymentEnabled` turns off `loop/**`, `analyze/**`, `market/**` and `plan/**` (guarded by `lib/vercel-branch-builds.test.ts`). To get a preview of one, push it under another prefix (e.g. `fix/…`).
 - Persistent Sales was retired 2026-10-10 (Matt: "It's all Persistent Workforce now"). Don't re-add it or link sales.persistentmomentum.com.
 
 ## Key files

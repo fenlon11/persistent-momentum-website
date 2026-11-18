@@ -9,6 +9,7 @@ type: news
 publishedAt: '2026-11-17'
 updatedAt: '2026-11-17'
 author: elle-evate
+reviewedBy: pm-editor
 status: published
 tags:
   - anthropic
@@ -34,7 +35,7 @@ Anthropic released Claude Meetings in beta on November 12, 2026. Claude joins a 
 
 When Claude joins, it shows up as a participant and posts a notice in the call's chat. People can ask it questions out loud or in the chat. By default it answers in writing. Anthropic puts the main pitch in one line: "Claude writes the notes and action items, so no one on the call has to."
 
-Claude can also build things during the call. Per the [release notes](https://support.claude.com/en/articles/12138966-release-notes), that means docs, whiteboards and slides, and teammates on the invite can edit them while the meeting goes on. With your permission, Claude can look things up in your **connected tools** (apps such as your files or email that you have linked to Claude). Anthropic's example: someone asks what last year's event cost, and Claude asks for approval, looks it up, posts the figure in the meeting chat and compares it with the current plan.
+Claude can also build things during the call. Per the [release notes](https://support.claude.com/en/articles/12138966-release-notes), that means docs, whiteboards and slides. Anthropic's announcement adds that teammates on the invite can edit them while the meeting goes on. With your permission, Claude can look things up in your **connected tools** (apps such as Slack that you have linked to Claude). Anthropic's example: someone asks what last year's event cost, and Claude asks for approval, looks it up, posts the figure in the meeting chat and compares it with the current plan.
 
 After the call, the notes, action items, transcript and anything Claude built sit on a page for that meeting in claude.ai. Later you can ask Claude questions about meetings you were in, or add it to your next meeting from your calendar in claude.ai.
 
@@ -49,18 +50,18 @@ Anthropic also says it is working with Gong, Attention, Granola, Fireflies.ai, O
 
 ## Privacy defaults
 
-By default, Claude stays out of any call that includes someone from outside your organization. It also leaves if an outside guest joins partway through. An admin can change that. On those calls, Claude posts its notice in the chat but does not reply there, and what guests say goes into the notes and transcript. Claude saves a transcript, a summary and descriptions of what was on screen. It does not save audio. Anthropic tells you to check that everyone on your calls is OK with being transcribed before you add Claude or turn on auto-join.
+On Enterprise plans, Claude by default stays out of any call that includes someone from outside your organization, and leaves if an outside guest joins partway through. On Team plans, Claude can join calls with outside guests by default. An admin can change either setting. On those calls, Claude posts its notice in the chat but does not reply there, and what guests say goes into the notes and transcript. Claude saves a transcript, a summary and descriptions of what was on screen. It does not save audio. Anthropic tells you to check that everyone on your calls is OK with being transcribed before you add Claude or turn on auto-join.
 
 ## What it means for your business
 
-The most important detail here is the outside-guest default. Many teams buy a note-taker mainly for sales calls, client calls and interviews. Out of the box, Claude Meetings skips exactly those calls. So for now it competes with your current tool on internal meetings, unless your admin chooses to let Claude into calls with guests.
+The most important detail here is the outside-guest default. Many teams buy a note-taker mainly for sales calls, client calls and interviews. On Enterprise plans, Claude Meetings skips exactly those calls out of the box, so there it competes with your current tool on internal meetings unless an admin lets Claude into calls with guests. On Team plans, Claude can join calls with outside guests by default, so check that setting before it lands on a client call.
 
 Here is an example. Say you run a 15-person agency on a Claude Team plan, you meet on Google Meet, and you pay for a separate note-taker. Try Claude on your internal meetings for two weeks: the Monday planning call, project check-ins, the weekly ops review. Keep your current tool for client calls during that time. Then compare the action items side by side. If Claude's notes are good enough, and you value having the plan or doc built live during the call, you may be able to cut seats on the other tool. Don't cancel anything yet, though. The beta pricing has an end date for artifacts, and Anthropic is building transcript hand-offs to several note-taker tools, so the two may end up working together.
 
 Things to sort out before you switch it on:
 
 - **Consent.** Tell your team Claude will be transcribing calls, and put a line about it in your meeting invites.
-- **Admin settings.** On Team plans it is already on, so decide who handles auto-join and whether outside guests stay excluded.
+- **Admin settings.** On Team plans it is already on and calls with outside guests are allowed by default, so decide whether to keep that or switch to internal meetings only. Auto-join is a per-person setting that owners can't set for members.
 - **Usage.** Answers that pull from connected tools count against your plan. Keep an eye on it if your team leans on that.
 - **Fit.** If you meet on another platform, or you run a HIPAA-ready, ZDR or CMEK setup, you will have to wait.
 

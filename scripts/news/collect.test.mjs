@@ -183,3 +183,15 @@ test('sources.json: the 403 chatgpt-release-notes source is gone and OpenAI keep
   assert.ok(!sources.some((s) => s.id === 'chatgpt-release-notes'), 'help.openai.com answers 403 to the collector (pmOS#2789)');
   assert.ok(sources.some((s) => s.company === 'OpenAI' && s.tier === 1), 'OpenAI still has a tier-1 source');
 });
+
+test('sources.json: anthropic-research replaces the dead anthropic-engineering page and its pattern finds post slugs (pmOS#2664)', () => {
+  const { sources } = JSON.parse(execFileSync('cat', ['sources.json'], { cwd: dir }).toString());
+  assert.ok(!sources.some((s) => s.id === 'anthropic-engineering'), '/engineering serves no post links (pmOS#2662)');
+  const src = sources.find((s) => s.id === 'anthropic-research');
+  assert.ok(src && src.tier === 2 && src.lab === 'top');
+  const page = '<a href="/research">Research</a><a href="/research/effective-context-engineering-for-ai-agents">A</a>'
+    + '<a href="/research/building-effective-agents">B</a><a href="/news/other">C</a>';
+  assert.deepEqual(parseHtml(src, page).map((r) => r[1]), [
+    'https://www.anthropic.com/research/effective-context-engineering-for-ai-agents',
+    'https://www.anthropic.com/research/building-effective-agents']);
+});

@@ -195,3 +195,16 @@ test('sources.json: anthropic-research replaces the dead anthropic-engineering p
     'https://www.anthropic.com/research/effective-context-engineering-for-ai-agents',
     'https://www.anthropic.com/research/building-effective-agents']);
 });
+
+test('sources.json: ibm-newsroom reads the announcements RSS feed and keeps comma slugs (pmOS#2920)', () => {
+  const { sources } = JSON.parse(execFileSync('cat', ['sources.json'], { cwd: dir }).toString());
+  const src = sources.find((s) => s.id === 'ibm-newsroom');
+  assert.equal(src.type, 'feed');
+  assert.equal(src.url, 'https://newsroom.ibm.com/announcements?pagetemplate=rss');
+  assert.ok(!('pattern' in src) && !('url_template' in src) && !('title_from' in src));
+  const url = 'https://newsroom.ibm.com/2026-11-16-ibm,-fermilab,-and-nvidia-announce-quantum-work';
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>IBM - Announcements</title>
+    <item><title>IBM, Fermilab, and NVIDIA Announce Quantum Work</title><link>${url}</link>
+    <pubDate>Mon, 16 Nov 2026 08:00:00 -0500</pubDate></item></channel></rss>`;
+  assert.deepEqual(feedUrls(xml), [url]);
+});

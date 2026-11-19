@@ -16,7 +16,6 @@ const DISPLAY: Record<string, DisplayConfig> = {
     name: 'Persistent Workforce',
     icon: '🎯',
     domain: 'workforce.persistentmomentum.com',
-    pricing: 'Recruiter $49/mo · Company $149/mo',
   },
   'persistent-marketer': {
     name: 'Persistent Marketer',

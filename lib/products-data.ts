@@ -22,16 +22,16 @@ export const products: Product[] = [
     id: 'persistent-recruiter',
     name: 'Persistent Workforce',
     category: 'Web platforms',
-    tagline: 'The recruiting software small teams actually use.',
+    tagline: 'AI employees that do real work, and never drop the ball.',
     description:
-      'Candidate pipelines, branded public forms and pages, Discovery Videos, and automated outreach — one app on Next.js + Supabase. Built for solo recruiters and small hiring teams.',
+      'AI employees that confirm appointments, answer customer calls and texts, and book meetings with your leads — working every hour of every day, so nothing slips.',
     status: 'live',
     externalUrl: 'https://workforce.persistentmomentum.com/pricing',
     features: [
-      'Candidate pipelines',
-      'Branded public forms & pages',
-      'Discovery Videos',
-      'Automated outreach',
+      'Appointment confirmations',
+      'Customer calls and texts answered',
+      'Meetings booked with your leads',
+      'Working every hour of every day',
     ],
   },
 ];

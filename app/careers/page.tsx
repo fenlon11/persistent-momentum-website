@@ -36,7 +36,7 @@ const areas = [
   {
     label: 'Persistent Workforce',
     detail:
-      'Our live product. Web platform for recruiters and small hiring teams — pipelines, outreach, Discovery Videos.',
+      'Our live product. AI employees that confirm appointments, answer customer calls and texts, and book meetings with your leads.',
   },
   {
     label: 'The next product',

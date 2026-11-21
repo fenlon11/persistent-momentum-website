@@ -13,7 +13,10 @@
 # collect, draft.mjs --avoid) instead of stopping, so the week still gets an article (fenlon11/pmOS#2622).
 # A human approves the article by merging its PR or by answering its merge decision "merge"; a later
 # run that week then executes that answer -> merge-approved.mjs (merges only on "merge", then reads the
-# article back from the live site; fenlon11/pmOS#2210).
+# article back from the live site; fenlon11/pmOS#2210) -> IndexNow ping for the just-merged articles, so
+# they reach the IndexNow engines at merge time, not at next week's draft run (fenlon11/pmOS#2985). A
+# merge check that does not merge finds nothing new to ping; a URL not live (merge-approved.mjs exit 1)
+# stops the run before the ping, and the next run retries it.
 # Runs in a throwaway worktree. State (seen.json, items, IndexNow baseline, gsc-report-*.json) lives in $PM_NEWS_STATE.
 # Exits non-zero when the collector loses 3+ tier-1 sources or no draft passes.
 #
@@ -107,6 +110,7 @@ if [[ -n "$FACTCHECK_PR" ]]; then
 fi
 if [[ -n "$MERGE_PR" ]]; then
   node scripts/news/merge-approved.mjs --pr "$MERGE_PR"
+  node scripts/news/indexnow-since.mjs --state "$STATE" || echo "[pm-news-drafts] WARN: IndexNow ping failed; it retries next run"
   echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
   exit 0
 fi

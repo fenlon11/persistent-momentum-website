@@ -1,0 +1,17 @@
+# fenlon11/pmOS#2986 G2 — dry run on the mini, 2026-11-21 04:38 EST
+# Real CLI (PR #63 is already merged, so the gate stops it before planning):
+$ node scripts/news/merge-approved.mjs --pr 63 --dry-run
+PR #63: not merging: PR #63 is MERGED, not OPEN; mergeable is UNKNOWN
+
+# Harness: real gh reads of PR #63's head (real readHead via the contents API, real clock); only the PR state and
+# decision rows are overridden. gh is limited to 'pr view' + 'api' reads; commitRedate and fetch throw if called.
+PR #63 head bbbe0892d920f7b256eabb1028871bf6655af418; files: ADDED content/guides/chatgpt-google-ai-answers-business-visibility.mdx, ADDED content/news/2026-11-17-anthropic-claude-meetings-google-meet.mdx, ADDED content/news/2026-11-17-anthropic-claude-sheets-whiteboards-data.mdx, ADDED content/news/2026-11-17-google-gemini-4-hydrogen.mdx
+dry run: would re-date content/guides/chatgpt-google-ai-answers-business-visibility.mdx: publishedAt 2026-11-17 -> 2026-11-21
+dry run: would re-date content/news/2026-11-17-anthropic-claude-meetings-google-meet.mdx: publishedAt 2026-11-17 -> 2026-11-21, renamed to content/news/2026-11-21-anthropic-claude-meetings-google-meet.mdx
+dry run: would re-date content/news/2026-11-17-anthropic-claude-sheets-whiteboards-data.mdx: publishedAt 2026-11-17 -> 2026-11-21, renamed to content/news/2026-11-21-anthropic-claude-sheets-whiteboards-data.mdx
+dry run: would re-date content/news/2026-11-17-google-gemini-4-hydrogen.mdx: publishedAt 2026-11-17 -> 2026-11-21, renamed to content/news/2026-11-21-google-gemini-4-hydrogen.mdx
+dry run: would squash-merge PR #63 at the re-date commit on bbbe0892d920f7b256eabb1028871bf6655af418 on decision g2harnes ("merge"); nothing written
+result: wouldMerge=true plan=4 writes=0
+
+# Branch tip after the run (unchanged, bbbe089 = PR #63 head):
+bbbe0892d920f7b256eabb1028871bf6655af418	refs/heads/content/ai-news-2026-11-17

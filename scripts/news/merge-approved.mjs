@@ -11,23 +11,36 @@
 // 2. Finds the newest "Merge PM AI-news PR #<n>" row via `pm.js decisions list` (read-only).
 // 3. Merges only when that row is class matt-only or delegated and answered with an option starting "merge". Anything else
 //    logs why and exits 0 with no write; a "no" never closes, edits or comments on the PR.
-// 4. Squash-merges pinned to the fact-checked head (--match-head-commit). One attempt per run.
-// 5. Polls each merged article's public URL every 60 s for up to 15 min, then comments the read-back
+// 4. Re-dates the articles the PR adds to the go-live day (fenlon11/pmOS#2986): an added news or guide file
+//    whose publishedAt is before today (America/New_York) gets publishedAt and updatedAt = today, and a news
+//    file is renamed to <today>-<slug>.mdx (the URL drops the date, so it does not move). One commit on the
+//    PR branch from a throwaway worktree, pushed fast-forward only. Files the PR modifies are left alone; when
+//    nothing needs a new date there is no commit. Without this a news article sat in /news-sitemap.xml
+//    (48 h from publishedAt) only for the hours left after a merge a day or more after it was drafted.
+// 5. Squash-merges pinned to the fact-checked head, or to the re-date commit on top of it
+//    (--match-head-commit). One attempt per run.
+// 6. Polls each merged article's public URL every 60 s for up to 15 min, then comments the read-back
 //    on the PR. A URL not live by then is named in the comment and the script exits 1.
-// --dry-run does steps 1-3 and prints what it would do.
+// --dry-run does steps 1-3, reads the added files to plan step 4, and prints what it would do.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { contentHref } from '../../lib/content/paths.ts';
+import { contentHref, guideFile, newsFile } from '../../lib/content/paths.ts';
+import { todayET } from './draft.mjs';
 import { MARKER, isContentFile, namesPr, pmJsPath } from './factcheck.mjs';
 
 const GH_REPO = 'fenlon11/persistent-momentum-website';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const BRANCH_PREFIX = 'content/ai-news-';
 export const SITE = 'https://persistentmomentum.com';
 export const QUESTION_PREFIX = 'Merge PM AI-news PR #';
 export const VIEW_FIELDS = 'number,state,isDraft,headRefName,headRefOid,url,files,isCrossRepository,mergeable,statusCheckRollup,comments';
 export const POLL_MS = 60_000;
 export const POLL_ROUNDS = 15; // first check at merge time, then every 60 s: 15 min in all
+export const HEAD_WAIT_MS = 3_000;
+export const HEAD_WAIT_ROUNDS = 10; // after the re-date push, wait up to 30 s for the PR to show the new head
 const MARKER_RE = new RegExp(`<!-- ${MARKER} head=([0-9a-f]{7,40}) -->`);
 // factcheck.mjs comments as the repo owner's gh login; a marker from anyone else is ignored, so a
 // stranger's comment cannot vouch for a commit pushed after the fact-check.
@@ -79,6 +92,34 @@ export function decideMerge({ pr, view, rows }) {
   return { merge: !reasons.length, reasons, row };
 }
 
+// The frontmatter's date lines (quoted or not), only inside the leading --- block.
+const DATE_LINE = /^(publishedAt|updatedAt):[ \t]*(['"]?)(\d{4}-\d{2}-\d{2})\2[ \t]*$/gm;
+
+// One added article's re-date to `today`, or null when it needs none. Pure: no I/O.
+export function redateArticle(file, raw, today) {
+  const m = /^content\/(news|guides)\/([^/]+)$/.exec(file);
+  const name = m && (m[1] === 'news' ? newsFile : guideFile).exec(m[2]);
+  if (!name || !raw.startsWith('---')) return null;
+  const end = raw.indexOf('\n---', 3);
+  if (end < 0) return null;
+  const fm = raw.slice(0, end);
+  const from = [...fm.matchAll(DATE_LINE)].find((d) => d[1] === 'publishedAt')?.[3];
+  if (!from || from >= today) return null;
+  const content = fm.replace(DATE_LINE, (_, key) => `${key}: '${today}'`) + raw.slice(end);
+  const to = m[1] === 'news' ? `content/news/${today}-${name[2]}.mdx` : file;
+  return { path: file, to, from, content };
+}
+
+// Re-dates for every file the PR adds; files it modifies, renames or deletes are left alone.
+export function planRedate({ files, today, read }) {
+  return (files ?? [])
+    .filter((f) => f.changeType === 'ADDED' && contentHref(f.path))
+    .map((f) => redateArticle(f.path, read(f.path), today))
+    .filter(Boolean);
+}
+
+const describe = (c, today) => `${c.path}: publishedAt ${c.from} -> ${today}${c.to !== c.path ? `, renamed to ${c.to}` : ''}`;
+
 export function readbackBody({ pr, row, mergeCommit, results }) {
   const bad = results.filter((r) => r.status !== 200);
   return [
@@ -97,9 +138,37 @@ export function readbackBody({ pr, row, mergeCommit, results }) {
 
 const run = (cmd, args) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 }).trim();
 
-export function defaultDeps(pmJs = pmJsPath()) {
+export function defaultDeps(pmJs = pmJsPath(), repo = ROOT) {
+  const git = (cwd, ...args) => run('git', ['-C', cwd, ...args]);
   return {
     gh: (args) => run('gh', args),
+    // The file at the PR head, byte for byte (no trim: the re-date writes it back).
+    readHead: (file, oid) =>
+      execFileSync('gh', ['api', '-H', 'Accept: application/vnd.github.raw', `repos/${GH_REPO}/contents/${file}?ref=${oid}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 }),
+    // One commit on the PR branch from a throwaway worktree of its head; the caller's checkout is never
+    // touched. The push is fast-forward only, so a branch that moved since the read is refused.
+    commitRedate: ({ branch, head, changes, message }) => {
+      git(repo, 'fetch', '-q', 'origin', `refs/heads/${branch}`);
+      const wt = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-redate-'));
+      try {
+        git(repo, 'worktree', 'add', '-q', '--detach', wt, head);
+        for (const c of changes) {
+          if (c.to !== c.path) git(wt, 'mv', c.path, c.to);
+          fs.writeFileSync(path.join(wt, c.to), c.content);
+          git(wt, 'add', c.to);
+        }
+        git(wt, 'commit', '-q', '-m', message);
+        git(wt, 'push', '-q', 'origin', `HEAD:refs/heads/${branch}`);
+        return git(wt, 'rev-parse', 'HEAD');
+      } finally {
+        try {
+          git(repo, 'worktree', 'remove', '--force', wt);
+        } catch {
+          fs.rmSync(wt, { recursive: true, force: true });
+        }
+      }
+    },
+    now: () => new Date(),
     pmjs: (args) => run('node', [pmJs, ...args]),
     pmJsExists: () => fs.existsSync(pmJs),
     fetchUrl: async (url) => {
@@ -124,12 +193,28 @@ export async function mergeApproved({ pr, dryRun = false, deps = defaultDeps() }
     log(`PR #${pr}: not merging: ${d.reasons.join('; ')}`);
     return { merged: false, reasons: d.reasons };
   }
+  const today = todayET(deps.now());
+  const plan = planRedate({ files: view.files, today, read: (file) => deps.readHead(file, view.headRefOid) });
   if (dryRun) {
-    log(`dry run: would squash-merge PR #${pr} at ${view.headRefOid} on decision ${id8(d.row.id)} ("${d.row.option}"); nothing written`);
-    return { merged: false, wouldMerge: true, row: d.row };
+    for (const c of plan) log(`dry run: would re-date ${describe(c, today)}`);
+    const at = plan.length ? `the re-date commit on ${view.headRefOid}` : view.headRefOid;
+    log(`dry run: would squash-merge PR #${pr} at ${at} on decision ${id8(d.row.id)} ("${d.row.option}"); nothing written`);
+    return { merged: false, wouldMerge: true, row: d.row, plan };
   }
 
-  gh(['pr', 'merge', String(pr), '--repo', GH_REPO, '--squash', '--match-head-commit', view.headRefOid]);
+  let head = view.headRefOid;
+  if (plan.length) {
+    for (const c of plan) log(`re-date ${describe(c, today)}`);
+    head = deps.commitRedate({ branch: view.headRefName, head, changes: plan, message: `content: date articles to go-live day ${today}` });
+    log(`PR #${pr}: pushed re-date commit ${head}`);
+    // GitHub moves the PR head a moment after the push; a merge pinned to a head it has not seen yet fails.
+    for (let round = 0; ; round++) {
+      if (JSON.parse(gh(['pr', 'view', String(pr), '--repo', GH_REPO, '--json', 'headRefOid'])).headRefOid === head) break;
+      if (round + 1 >= HEAD_WAIT_ROUNDS) throw new Error(`PR #${pr} head is not ${head} after the re-date push; not merging`);
+      await sleep(HEAD_WAIT_MS);
+    }
+  }
+  gh(['pr', 'merge', String(pr), '--repo', GH_REPO, '--squash', '--match-head-commit', head]);
   const mergeCommit = JSON.parse(gh(['pr', 'view', String(pr), '--repo', GH_REPO, '--json', 'mergeCommit'])).mergeCommit?.oid ?? '(unknown)';
   log(`PR #${pr}: merged as ${mergeCommit} on decision ${id8(d.row.id)}`);
 
@@ -148,7 +233,7 @@ export async function mergeApproved({ pr, dryRun = false, deps = defaultDeps() }
   for (const r of results) log(`${r.url}: ${r.status}`);
   gh(['pr', 'comment', String(pr), '--repo', GH_REPO, '--body', readbackBody({ pr, row: d.row, mergeCommit, results })]);
   const bad = results.filter((r) => r.status !== 200);
-  return { merged: true, mergeCommit, results, ok: !bad.length };
+  return { merged: true, mergeCommit, results, ok: !bad.length, plan };
 }
 
 function parseArgs(argv) {

@@ -211,3 +211,12 @@ test('run.sh: an open, ready PR with the fact-check marker gets a merge check', 
   assert.equal(r.status, 0, r.stderr);
   assert.equal(r.stdout.trim().split('\n').at(-1), 'decision: merge-check #44');
 });
+
+test('run.sh: the merge-check branch pings IndexNow after merge-approved.mjs and before it exits', () => {
+  const src = fs.readFileSync(path.join(HERE, 'run.sh'), 'utf8');
+  const branch = src.match(/if \[\[ -n "\$MERGE_PR" \]\]; then\n([\s\S]*?)\nfi\n/)[1];
+  const merge = branch.indexOf('node scripts/news/merge-approved.mjs --pr "$MERGE_PR"');
+  const ping = branch.indexOf('node scripts/news/indexnow-since.mjs --state "$STATE"');
+  const exit = branch.indexOf('exit 0');
+  assert.ok(merge >= 0 && ping > merge && exit > ping, branch);
+});

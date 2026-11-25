@@ -1,0 +1,62 @@
+---
+title: 'Google rolls out Gemini 4 Neon, its mid-tier Gemini 4 model, in the Gemini API'
+description: >-
+  Gemini 4 Neon sits between Hydrogen and Carbon, costs $3 per million input
+  tokens, and is rolling out in the Gemini API and Gemini app.
+type: news
+publishedAt: '2026-11-25'
+updatedAt: '2026-11-25'
+author: elle-evate
+status: published
+tags:
+  - google
+  - gemini
+  - gemini-4-neon
+  - gemini-api
+statusLabel: rolling-out
+sources:
+  - title: Introducing Gemini 4 Neon
+    url: >-
+      https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/
+    publisher: Google
+  - title: See what 5 builders are making with Gemini 4 Neon
+    url: >-
+      https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-neon-builders/
+    publisher: Google
+---
+Google introduced Gemini 4 Neon on November 18, a new Gemini 4 model built for complex coding, analysis and business workflows. It costs $3 per million input tokens and $15 per million output tokens, and Google says it is rolling out in the Gemini API, Gemini for business and the Gemini app for paid subscribers. If you've been stuck choosing between a fast, cheap model and a slow, expensive one, Neon is Google's attempt at the middle option.
+
+## Where Neon fits next to Hydrogen and Carbon
+
+Google now describes three tiers in the Gemini 4 family. **Carbon** handles the hardest, long-horizon projects. **Hydrogen** handles fast everyday work. **Neon** sits between them, and Google says it "balances depth and efficiency."
+
+So the difference from Hydrogen is depth. Hydrogen is the quick model for routine tasks. Neon is for multi-step jobs where the model has to reason across many inputs, like several spreadsheets, PDFs and charts at once, and still turn out a structured result. The two can also work together: in Google Antigravity, Neon can act as an orchestrator that directs several Hydrogen agents working in parallel.
+
+Compared with Carbon, Google pitches Neon as the cheaper option. At its default "high" thinking level, Neon has a 32% lower cost per task than Carbon, *per Google*. Thinking levels are settings that control how much the model reasons before it answers. Neon has four of them, so you can trade intelligence for token spend job by job.
+
+## Price and availability
+
+- **Price:** $3 per million input tokens, $15 per million output tokens. Cached input is $0.15 per million tokens, a 95% discount. Cached input means text you send over and over, like a standing set of instructions or a reference document. A token is a small chunk of text, roughly part of a word.
+- **Context window:** 1 million tokens. That's how much material the model can read at once.
+- **Developers:** the Gemini API paid tier in Google AI Studio and Android Studio.
+- **Businesses:** Gemini for business, through the API or the model drop-down, plus Google Antigravity.
+- **Subscribers:** Google AI Pro and Ultra subscribers can pick Neon from the model drop-down in the Gemini app. Paid Pro and Ultra subscribers can also try it in Google Antigravity.
+- **Security teams:** a cyber version is going out to eligible members of Google's Fairwind Program over the next few days. To request access, contact your Google Cloud account team.
+
+## What Google says it does well
+
+Google reports that Neon ranks #2 on the Vals Index (70.9%) and #1 on both the Legal Research Bench and Tax Agent Bench. It also ranks #1 on Zapier's AutomationBench (56.3%). Google says Neon had its lowest fabrication rate yet in internal Antigravity testing. Fabrication means making things up. On Gray Swan's benchmark for indirect prompt injection (hidden instructions planted in web pages, emails or documents the model reads), Google says Neon resisted every attack when run at its highest thinking level with real-time safeguards turned on.
+
+In the Gemini app, Google's examples include reading billing statements to find out why a utility charge spiked, and cross-checking receipts and documents to negotiate a refund. Neon can also pull details from Gmail and Docs.
+
+All of these numbers come from Google's own launch post. A [builders showcase](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-neon-builders/) Google published on November 24 mostly shows visual coding demos, like a glowing 3D Earth and a black hole shader. Those show off its coding, but they don't tell you much about everyday business work.
+
+## What it means for your business
+
+If you already pay for Gemini or build on the Gemini API, Neon gives you a new default to test. Leave quick, high-volume jobs like tagging emails or drafting short replies on Hydrogen. Try Neon on jobs where Hydrogen falls short and Carbon costs too much.
+
+Here's an example. Say an accounting firm reviews client bank statements, invoices and receipts every month to flag anything odd. Run a batch of last month's real files through Neon at the default high setting. Run the same batch through whatever model you use now. Compare three things: how many real issues each one caught, how many it invented, and what each run cost. Google's legal and tax benchmark results make this kind of work a reasonable first test. But those are Google's numbers, and your own files are the test that counts.
+
+Two things to watch. First, the thinking level changes both quality and cost, so set it on purpose for each workflow. Don't leave everything on the highest level. Second, if your agents read outside email or web pages, the prompt injection results are worth checking against your own setup before you give the model access to anything sensitive.
+
+The details are in Google's [launch post](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/).

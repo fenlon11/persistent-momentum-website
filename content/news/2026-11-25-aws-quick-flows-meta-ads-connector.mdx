@@ -1,0 +1,74 @@
+---
+title: >-
+  AWS Quick adds business-process flows in chat, agents that work together and a
+  Meta ads connector
+description: >-
+  AWS Quick now builds business-process flows from a chat description, runs
+  several agents on one request, and connects to Meta ads and Amplitude.
+type: news
+publishedAt: '2026-11-25'
+updatedAt: '2026-11-25'
+author: elle-evate
+status: published
+tags:
+  - aws
+  - aws-quick
+  - meta-ads
+  - ai-agents
+  - workflow-automation
+statusLabel: available
+sources:
+  - title: >-
+      New in AWS Quick: More capable flows, an updated web experience, and
+      agents that work together
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/new-in-aws-quick-more-capable-flows-an-updated-web-experience-and-agents-that-work-together/
+    publisher: Amazon
+  - title: Meta ads is now available in AWS Quick
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/meta-ads-is-now-available-in-aws-quick/
+    publisher: Amazon
+  - title: Run your whole selling business in AWS Quick
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/run-your-whole-selling-business-in-aws-quick/
+    publisher: Amazon
+---
+AWS has updated Quick, its AI workspace for work, so you can describe a business process in chat and have Quick turn it into a repeatable flow your team can run. The November 20 release also lets several specialized agents work on one request together, adds connectors for Meta ads and Amplitude, and refreshes the web app with a daily briefing. AWS says the features are [available today](https://aws.amazon.com/blogs/machine-learning/new-in-aws-quick-more-capable-flows-an-updated-web-experience-and-agents-that-work-together/) in every Region where Quick is available, which matters if your team's processes still live in one person's head.
+
+## Build a process by describing it
+
+Quick Flows already automated business processes. Now you can build, run and refine a flow entirely in chat. You explain the process the way you would to a new employee, Quick builds the flow, and a diagram beside the chat shows each step so you can check it matches how you work.
+
+AWS also added deterministic steps: fixed calculations and checks that run the same way every time, so results stay consistent and verifiable. Flows can now run longer and handle larger data volumes.
+
+AWS's own example is fictional. A finance manager describes her monthly cost-and-margin report in chat, publishes the flow, and a teammate runs it from the desktop app while she is in a meeting. He reviews the draft, asks for changes in chat and approves it. AWS also cites a real customer, the Latin American fintech Pomelo, whose head of data, Rodrigo Marini, said: "A single use case already saves us 80 hours of work per month."
+
+## A new home screen and agents that share the work
+
+In the updated web app, your feed and a new daily briefing put the email and messages that need you in priority order. You can ask Quick about any item or have it draft replies for you to review and send. You can schedule a task or start a long request, and Quick keeps working after you close the browser. When you come back, agents waiting on you show up in Mission Control. Existing dashboards, topics and spaces work as before, and you don't need to turn anything on.
+
+With multi-agent orchestration, the agent you ask can bring in several specialized agents at once and merge their work into one answer that shows what each one contributed. AWS's example: ask why shipping costs rose in a region, and your agent pulls in a forecasting agent built on planning data and a procurement agent built on vendor contracts.
+
+Skills (reusable instructions that teach Quick to do a task your way) now work in the web app as well as on desktop.
+
+## Meta ads, Amplitude and a deal for Amazon sellers
+
+The [Meta ads connector](https://aws.amazon.com/blogs/machine-learning/meta-ads-is-now-available-in-aws-quick/) lets you create, manage and analyze Meta campaigns in plain language and combine that data with your other sources in dashboards, documents, slide decks and automated workflows. You install it from Customize, then Connectors, sign in with Facebook and choose which Pages, Businesses and Instagram accounts Quick can reach. You need a Meta business account with access to the ad accounts you want to connect. Quick asks your permission before it creates a campaign, changes a budget or takes any other write action. AWS is offering 3 months of Quick at no cost, with up to 10 teammates.
+
+The Amplitude connector answers questions about product usage, customer behavior and conversion. Connectors only show each person what they can already access, and administrators choose which connectors teams can add.
+
+A [companion post for sellers](https://aws.amazon.com/blogs/machine-learning/run-your-whole-selling-business-in-aws-quick/) covers the Amazon Selling Partner plugin, which connects Quick to live Seller Central data and is in beta for US stores. Every primary selling account holder worldwide can claim 12 months of Quick Plus free, plus access for 10 delegated users, if they sign up by December 31, 2026.
+
+## Controls for administrators
+
+- **Guardrails for prompts (preview):** filter content, block denied topics and words, detect prompt attacks and protect selected personal information, with a detect-only mode for testing first.
+- **Permissions and limits by group:** for example, stop your finance group from creating agents or cap agent hours per member.
+- **Data source controls:** choose which types of data sources people can create, update or share.
+
+All three require the Professional or Enterprise plan. Quick also now supports Japanese, German, Chinese (Simplified and Traditional) and Vietnamese.
+
+## What it means for your business
+
+The useful test here is one process that falls apart when one person is out. Say one person at your apparel shop pulls Meta results every Monday, lines them up against stock in a spreadsheet and emails a summary. Describe that routine to Quick, check the diagram step by step, then have a colleague run it the next week. If the two reports match, the process now belongs to the team, not one person.
+
+Three things to watch. First, the Meta connector can change live ad accounts. Quick asks before it acts, but decide who on your team is allowed to say yes. Start with read-only prompts; AWS's own sample prompts end with lines like "Do not change budgets." Second, the group permissions and prompt guardrails need the Professional or Enterprise plan, and guardrails are still in preview, so check your plan before you count on them. Third, the free 3-month trial has an end date and AWS sends enterprise pricing questions to your account team, so price it out before the team depends on it. If you sell on Amazon, the free Quick Plus year is the cheaper way to try this, but the December 31 deadline is close.

@@ -9,6 +9,7 @@ type: guide
 publishedAt: '2026-11-25'
 updatedAt: '2026-11-25'
 author: elle-evate
+reviewedBy: pm-editor
 status: published
 tags:
   - ai-agents
@@ -31,7 +32,7 @@ sources:
       https://aws.amazon.com/blogs/machine-learning/how-the-bmw-group-governs-hundreds-of-agents-across-thousands-of-developers/
     publisher: Amazon
 ---
-An agent that takes actions on its own needs a different check than a chatbot that only answers questions. Hugging Face recently published a detailed guide to building agent evaluations, and AWS posts on Standard Bank Group and the BMW Group show how two large companies test agents before and after launch. You don't need their budgets to use the same ideas, and this plan scales them down for a small team.
+An agent that takes actions on its own needs a different check than a chatbot that only answers questions. Hugging Face recently published a detailed guide to building agent evaluations, and AWS posts on Standard Bank Group and the BMW Group show how two large companies test generative AI applications and agents before launch, and in BMW's case after launch too. You don't need their budgets to use the same ideas, and this plan scales them down for a small team.
 
 ## Start with one narrow claim
 
@@ -43,15 +44,15 @@ BMW asks for the same discipline. Before teams write any orchestration logic, it
 
 BMW calls this a ground-truth dataset: example inputs with known correct results, covering common queries and edge cases. It is built before implementation starts and used for evaluation from day one, so quality is measured against representative cases rather than made-up prompts.
 
-Keep in mind how small sets limit you. Hugging Face used eight tasks as a development set and said it would be cautious about generalizing the results to new data. It also warns that if every test case hands the agent clean, usable input, the test can't show whether the agent knows when to stop or ask for help. Include a few bad inputs on purpose.
+Keep in mind how small sets limit you. Hugging Face used eight tasks as a development set and said it would be cautious about generalizing the results to new data. It also warns that if every test case hands the agent clean, usable input, the test can't show whether the agent knows when a fit would be inappropriate, which may also call for recognizing a poor measurement or asking for help. Include a few bad inputs on purpose.
 
 Standard Bank's [automated assessment](https://aws.amazon.com/blogs/machine-learning/how-standard-bank-group-automates-ai-risk-assessment-for-generative-ai/) does something similar. The delivery team supplies questions a typical user would ask, and the pipeline adds jailbreak attempts and off-topic questions the application is expected to decline.
 
 ## Test your grader before you trust it
 
-This is the step most teams skip. Hugging Face ran three things through its own test before running real models: the correct reference solution (should pass), an agent that does nothing (should fail), and a shortcut that skips the real work (should fail).
+Hugging Face ran three things through its own test before executing more model runs: the correct reference solution (should pass), an agent that does nothing (should fail), and a shortcut that skips the real work (should fail).
 
-The shortcut passed. It guessed its way to the expected ratio on all eight tasks without doing the fitting, so a grader that checked only the final number would have given it full marks. The team added checks on each step of the work, and the shortcut now fails. The guide cites a review of agent benchmarks that found flaws in task setup or scoring can shift measured performance by up to 100% in relative terms.
+The shortcut passed. It guessed its way to the expected ratio on all eight tasks without doing the fitting, so a grader that checked only the final number would have given it full marks. The team added checks on each fitted peak, and the final verifier now rejects the shortcut. The guide cites a review of agent benchmarks that found flaws in task setup or scoring can shift measured performance by up to 100% in relative terms.
 
 The lesson: check the working, not just the final answer.
 

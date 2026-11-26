@@ -1,0 +1,93 @@
+---
+title: >-
+  How to test whether an AI agent is doing the job before you rely on it: a
+  simple evaluation plan for small teams
+description: >-
+  A simple plan for small teams to test whether an AI agent does its job
+  reliably, drawn from Hugging Face, Standard Bank and BMW practices.
+type: guide
+publishedAt: '2026-11-25'
+updatedAt: '2026-11-25'
+author: elle-evate
+reviewedBy: pm-editor
+status: published
+tags:
+  - ai-agents
+  - agent-evaluation
+  - hugging-face
+  - standard-bank
+  - bmw
+sources:
+  - title: How to build and maintain an agentic evaluation
+    url: 'https://huggingface.co/blog/agentic-evals'
+    publisher: Hugging Face
+  - title: How Standard Bank Group automates AI risk assessment for generative AI
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/how-standard-bank-group-automates-ai-risk-assessment-for-generative-ai/
+    publisher: Amazon
+  - title: >-
+      How the BMW Group governs hundreds of agents across thousands of
+      developers
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/how-the-bmw-group-governs-hundreds-of-agents-across-thousands-of-developers/
+    publisher: Amazon
+---
+An agent that takes actions on its own needs a different check than a chatbot that only answers questions. Hugging Face recently published a detailed guide to building agent evaluations, and AWS posts on Standard Bank Group and the BMW Group show how two large companies test generative AI applications and agents before launch, and in BMW's case after launch too. You don't need their budgets to use the same ideas, and this plan scales them down for a small team.
+
+## Start with one narrow claim
+
+Before you test anything, write down exactly what the agent is supposed to do. In the [Hugging Face guide](https://huggingface.co/blog/agentic-evals), the researchers built a test for an agent that analyzes physics lab measurements. They kept their claim deliberately narrow: fit the specified peaks, calculate one requested ratio, and save accurate results consistently. They note that reviewing a whole lab report would take more skills and more evidence.
+
+BMW asks for the same discipline. Before teams write any orchestration logic, its [governance practices](https://aws.amazon.com/blogs/machine-learning/how-the-bmw-group-governs-hundreds-of-agents-across-thousands-of-developers/) call for a clear scope (what the agent should and shouldn't do) and evaluation criteria with quality thresholds the agent will be measured against.
+
+## Build a test set from real cases
+
+BMW calls this a ground-truth dataset: example inputs with known correct results, covering common queries and edge cases. It is built before implementation starts and used for evaluation from day one, so quality is measured against representative cases rather than made-up prompts.
+
+Keep in mind how small sets limit you. Hugging Face used eight tasks as a development set and said it would be cautious about generalizing the results to new data. It also warns that if every test case hands the agent clean, usable input, the test can't show whether the agent knows when a fit would be inappropriate, which may also call for recognizing a poor measurement or asking for help. Include a few bad inputs on purpose.
+
+Standard Bank's [automated assessment](https://aws.amazon.com/blogs/machine-learning/how-standard-bank-group-automates-ai-risk-assessment-for-generative-ai/) does something similar. The delivery team supplies questions a typical user would ask, and the pipeline adds jailbreak attempts and off-topic questions the application is expected to decline.
+
+## Test your grader before you trust it
+
+Hugging Face ran three things through its own test before executing more model runs: the correct reference solution (should pass), an agent that does nothing (should fail), and a shortcut that skips the real work (should fail).
+
+The shortcut passed. It guessed its way to the expected ratio on all eight tasks without doing the fitting, so a grader that checked only the final number would have given it full marks. The team added checks on each fitted peak, and the final verifier now rejects the shortcut. The guide cites a review of agent benchmarks that found flaws in task setup or scoring can shift measured performance by up to 100% in relative terms.
+
+The lesson: check the working, not just the final answer.
+
+## Run every case more than once
+
+Agents don't behave the same way twice. Hugging Face ran each task three times. Seven of eight tasks succeeded at least once, but only one of eight succeeded every time. The authors point out that retries can be fine when a person reviews the output, but unattended work needs consistency, so the every-time number matters more. A repeat of the full run passed 10 of 24 attempts, against 11 of 24 the first time.
+
+Standard Bank checks consistency too. Its pipeline sends the same prompt several times, in original and reworded forms, and checks that the answers stay consistent in meaning.
+
+## Read what the agent actually did
+
+A trace is the record of each step an agent took: the commands it ran, the tools it called, the output it saw. Hugging Face found the score alone hid the real story. On the original task, OpenAI's gpt-oss-120b passed 0 of 3 attempts. In two it declared it was done before seeing relevant output, and in the third it couldn't read a data file that used decimal commas. On the adapted tasks, most failures came from stopping early or a missing software package, and only two of 13 failures were wrong answers. Those problems need different fixes, and only the traces showed which was which.
+
+## Retest whenever anything changes
+
+The software around a model changes results. Hugging Face cites an audit of the Terminal-Bench benchmark where researchers kept the model fixed and changed the agent harness (the software that wraps the model and gives it tools). Accuracy varied by up to 29.9 percentage points. Even switching which provider served the same open model moved its result from 11 of 24 passes to 13 of 24.
+
+At BMW, any change to an agent, including prompt edits, new tools or a model swap, triggers the pipeline: automated regression tests run first, and the quality evaluation runs only on a passing build. BMW also watches live agents for drift, such as shifting user queries, changes in upstream systems or rising error rates. Standard Bank plans to rerun its assessment on a schedule or whenever code or configuration changes once live workloads are connected. As AWS's Sri Elaprolu put it about Standard Bank's approach, "When every rule becomes a check that runs against the live system, a policy update stops being a memo and becomes a test."
+
+Hugging Face also suggests keeping a short record of each error you find: the failed assumption, how it was found and what changed.
+
+## Let results decide how much freedom the agent gets
+
+BMW sets autonomy per step, not per agent. Level 0 means a human approves every action. Level 1 means the agent acts and surfaces decisions for later human review. Level 2 means the agent works alone inside strictly enforced limits, reserved for low-risk work with a verified track record. Autonomy goes up as confidence builds, grounded in evaluation data, not assumptions.
+
+## What it means for your business
+
+You can run this plan with a spreadsheet and an afternoon. Say you want an agent to read supplier invoices and enter them into your accounting software.
+
+1. **Write the claim.** For example: "For standard invoices, it enters supplier, total and due date correctly, and flags anything else for a person."
+2. **Pull 20 to 30 past invoices** and record the right answers yourself. Add a few awkward ones: a credit note, a duplicate, a blurry scan. These are the cases where the right answer is "flag it."
+3. **Test your check.** If you only compare totals, an agent that grabs the largest number on the page could look perfect. Check every field.
+4. **Run each invoice three times** and count how many came out right all three times. That's your number for unattended use.
+5. **Read the steps behind five failures.** Did the agent misread the document, give up early or hit a tool error? Each needs a different fix.
+6. **Set the autonomy level from the results.** If only some invoice types are consistent, let the agent handle those alone and keep a person approving the rest.
+7. **Rerun the whole set** whenever you change the prompt, the model, the tool or the vendor plan, and log the date and result.
+
+One thing to watch: Hugging Face reports that 98.2% of model benchmark scores are reported by only one party. Treat a vendor's published score as a reason to test, not as the test itself. Your own 30 invoices will tell you more about your business than any leaderboard.

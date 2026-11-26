@@ -1,0 +1,72 @@
+---
+title: >-
+  Claude's Enterprise Frontier Safeguards enter public beta with zero data
+  retention, and Amazon Bedrock adds data controls
+description: >-
+  Anthropic opens Enterprise Frontier Safeguards to public beta, so eligible
+  firms can keep Claude data in their own cloud while misuse monitoring still
+  runs.
+type: news
+publishedAt: '2026-11-25'
+updatedAt: '2026-11-25'
+author: elle-evate
+reviewedBy: pm-editor
+status: published
+tags:
+  - anthropic
+  - claude
+  - amazon-bedrock
+  - aws
+  - data-privacy
+statusLabel: rolling-out
+sources:
+  - title: Zero data retention with Enterprise Frontier Safeguards is now in beta
+    url: >-
+      https://claude.com/resources/articles/zero-data-retention-with-enterprise-frontier-safeguards
+    publisher: Anthropic
+  - title: >-
+      Introducing the Amazon Bedrock Trusted Access API, with Enterprise
+      Frontier Safeguards and Enterprise Data Controls for Claude models
+    url: >-
+      https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-bedrock-trusted-access-api-with-anthropics-enterprise-frontier-safeguards-and-enterprise-data-controls/
+    publisher: Amazon
+  - title: 'Release v2.14.0, anthropics/anthropic-sdk-python'
+    url: 'https://github.com/anthropics/anthropic-sdk-python/releases/tag/v2.14.0'
+    publisher: Anthropic
+---
+On November 23, Anthropic opened **Enterprise Frontier Safeguards (EFS)** to public beta. EFS lets eligible business customers use Claude with zero data retention while Anthropic still checks for serious misuse. Zero data retention means neither Anthropic nor the cloud provider keeps a copy of your prompts and responses. The same day, AWS put EFS and a second option, **Enterprise Data Controls (EDC)**, into public preview on Amazon Bedrock. If your firm handles client data under strict rules, this changes what you can ask a vendor for.
+
+## What Anthropic announced
+
+Anthropic first announced EFS in September. It says it has since built the product with over 100 customers, including a quarter of the Fortune 100 and many companies in healthcare, financial services and law. Bridgewater, Salesforce and Stripe evaluated it in private beta.
+
+Here's the problem it solves. Claude's classifiers screen one request at a time, but Anthropic says sophisticated attacks usually spread across many requests, each of which looks harmless on its own. To catch those, Anthropic runs **automated safety monitoring**, which looks for patterns across many requests. With EFS, that monitoring reads data stored on infrastructure you control, not Anthropic's.
+
+Anthropic lists three guarantees:
+
+- **Zero data retention.** You bring your own storage. Inputs and outputs are deleted promptly once they're written there, and you encrypt them with your own keys.
+- **No operator human review.** Anthropic and cloud provider staff don't access your inputs and outputs. Only the automated monitoring does.
+- **No training.** Your data is never used to train models or classifiers.
+
+When the monitoring finds a risk, it creates a **Safety Case** for your team to review. Cases don't include the inputs and outputs, and you can feed them into a SIEM (security information and event management system, the software security teams use to track alerts). EFS works on the Claude Platform, Claude Platform on AWS, Amazon Bedrock and Claude on Google Cloud, and Anthropic says Microsoft Foundry support is coming soon. Eligible customers will be notified with instructions on how to get started.
+
+## What AWS added on Bedrock
+
+AWS made its new **trusted access program API** generally available. It's one place to find, request and enroll in model providers' trusted access programs. EFS and EDC are the first two offerings, and both are in public preview.
+
+- **EFS on Bedrock:** retained data sits only in your own Amazon S3 bucket, encrypted with your own AWS KMS key. You pay the usual S3 and KMS charges.
+- **EDC:** retained data sits in Amazon-managed storage under AWS-managed keys for up to 30 days, so there's no bucket or key to set up. Per AWS, cases aren't delivered during the EDC public preview.
+
+Three details stand out in the AWS post. Bedrock stops serving the covered models 24 hours after it loses access to your key or bucket. Joining the preview turns off the interim zero data retention exception that AWS says runs through at least June 30, 2027 for current Claude Fable models used internally. And to join the preview, you work with your AWS account team, and it's for customers already enrolled in EFS ZDR.
+
+Anthropic's Python SDK, version 2.14.0, released November 24, also adds Google-managed data controls for Google Cloud projects and support for compliance review cases.
+
+As Stripe's Head of Security, Matthew Kemelhar, put it in Anthropic's post: "It will also let us retain conversation logs in Stripe's AWS environment, with access and review governed by Stripe's security controls."
+
+## What it means for your business
+
+This is aimed at large, regulated companies, and access is by eligibility, so most smaller firms won't enroll directly. It still matters to you in two ways.
+
+First, if you buy AI software built on Claude, you now have a sharper question to ask the vendor: are you on EFS, EDC or neither, and where does my data sit? Take a 20-person accounting firm weighing an AI tool for client tax files. "We don't train on your data" is no longer enough. Ask where the logs are stored, who holds the encryption keys, and whether anyone at the vendor or the cloud provider can read them.
+
+Second, if you run Claude on your own AWS or Google Cloud account, EFS hands you work. Someone has to review Safety Cases, and if your key or bucket breaks, the AWS post says the covered models stop after 24 hours. If you already rely on the interim exception, read the AWS terms closely before you join the preview, because joining turns that exception off. Anthropic also names Accenture, Deloitte, KPMG and PwC as partners that can deploy it for you.

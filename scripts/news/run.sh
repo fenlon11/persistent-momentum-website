@@ -2,6 +2,9 @@
 # Weekly AI news pipeline (fenlon11/pmOS#686), fired by LaunchAgent com.pmos.pm-news-drafts Mon–Thu
 # 07:00 (the mini's local time, America/New_York). The first run of the week to open a draft PR wins;
 # later runs exit 0 at the guard below, so a failed Monday is retried Tuesday (fenlon11/pmOS#1625).
+# The schedule may also include late-week (Fri–Sun) runs: those only fact-check and merge this week's
+# PR and never open or redraft one, since a late draft cannot finish its stages inside the week
+# (fenlon11/pmOS#3258).
 # launchd runs this file straight from origin/$PM_NEWS_REF (see com.pmos.pm-news-drafts.plist), so the
 # code is always the merged version and the repo's main checkout is never touched.
 #
@@ -81,6 +84,15 @@ if [[ -n "$RECENT" ]]; then
     exit 0
   fi
 fi
+# No new draft after Thursday (fenlon11/pmOS#3258): on Fri–Sun a draft or redraft decision is a skip;
+# fact-check and merge-check run on any day. PM_NEWS_WEEKDAY (1=Mon..7=Sun) lets tests set the day.
+WEEKDAY="${PM_NEWS_WEEKDAY:-$(date +%u)}"
+day_name() { local d=(_ Monday Tuesday Wednesday Thursday Friday Saturday Sunday); echo "${d[$WEEKDAY]}"; }
+if [[ "$WEEKDAY" -ge 5 && -z "$FACTCHECK_PR" && -z "$MERGE_PR" ]]; then
+  echo "[pm-news-drafts] $(day_name): no new draft after Thursday; nothing to do"
+  [[ -n "${PM_NEWS_DECIDE_ONLY:-}" ]] && echo "decision: skip"
+  exit 0
+fi
 if [[ -n "${PM_NEWS_DECIDE_ONLY:-}" ]]; then
   if [[ -n "$FACTCHECK_PR" ]]; then echo "decision: factcheck #$FACTCHECK_PR"
   elif [[ -n "$MERGE_PR" ]]; then echo "decision: merge-check #$MERGE_PR"
@@ -104,6 +116,10 @@ if [[ -n "$FACTCHECK_PR" ]]; then
   if [[ "$FC_STATUS" != "3" ]]; then
     [[ "$FC_STATUS" == "0" ]] || exit "$FC_STATUS"
     echo "[pm-news-drafts] $(date '+%Y-%m-%d %H:%M:%S %Z') done"
+    exit 0
+  fi
+  if [[ "$WEEKDAY" -ge 5 ]]; then
+    echo "[pm-news-drafts] fact-check kept nothing on PR #$FACTCHECK_PR; $(day_name): no new draft after Thursday; nothing to do"
     exit 0
   fi
   echo "[pm-news-drafts] fact-check kept nothing on PR #$FACTCHECK_PR; redrafting this week"

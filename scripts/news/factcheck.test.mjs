@@ -451,14 +451,14 @@ test('redraft: --dry-run with everything dropped closes nothing, comments nothin
 
 // ---------- run.sh decide-only path ----------
 
-function decide({ list, markers }) {
+function decide({ list, markers, weekday = '2' }) {
   const bin = fs.mkdtempSync(path.join(os.tmpdir(), 'pm-news-gh-'));
   const gh = path.join(bin, 'gh');
   fs.writeFileSync(gh, `#!/bin/sh\nif [ "$2" = list ]; then printf '%s' "$GH_LIST"; else printf '%s' "$GH_MARKERS"; fi\n`);
   fs.chmodSync(gh, 0o755);
   const r = spawnSync('bash', [path.join(HERE, 'run.sh')], {
     encoding: 'utf8',
-    env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, PM_NEWS_DECIDE_ONLY: '1', GH_LIST: list, GH_MARKERS: markers },
+    env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, PM_NEWS_DECIDE_ONLY: '1', PM_NEWS_WEEKDAY: weekday, GH_LIST: list, GH_MARKERS: markers },
   });
   assert.equal(r.status, 0, r.stderr);
   return r.stdout.trim().split('\n').at(-1);
@@ -483,4 +483,26 @@ test('run.sh: a closed PR carrying the pm-news-redraft comment is redrafted; one
 
 test('run.sh: a week with no PR yet drafts', () => {
   assert.equal(decide({ list: '', markers: '0' }), 'decision: draft');
+});
+
+// ---------- run.sh late-week runs (fenlon11/pmOS#3258) ----------
+
+test('run.sh: Friday with no PR this week skips; no new draft after Thursday', () => {
+  assert.equal(decide({ list: '', markers: '0', weekday: '5' }), 'decision: skip');
+});
+
+test('run.sh: Saturday with a closed redraft-marked PR skips; no redraft after Thursday', () => {
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 9 CLOSED false`, markers: '1', weekday: '6' }), 'decision: skip');
+});
+
+test('run.sh: Friday with an open draft PR without the marker still fact-checks it', () => {
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 7 OPEN true`, markers: '0', weekday: '5' }), 'decision: factcheck #7');
+});
+
+test('run.sh: Saturday with an open ready PR carrying the marker still runs the merge check', () => {
+  assert.equal(decide({ list: `content/ai-news-${WEEK} 7 OPEN false`, markers: '1', weekday: '6' }), 'decision: merge-check #7');
+});
+
+test('run.sh: Tuesday with no PR still drafts (Mon–Thu unchanged)', () => {
+  assert.equal(decide({ list: '', markers: '0', weekday: '2' }), 'decision: draft');
 });
